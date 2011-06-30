@@ -1,4 +1,4 @@
-package eu.aniketos.wp5.components.trustworthiness;
+package eu.aniketos.wp2.components.trustworthiness;
 
 
 public interface TrustworthinessService {

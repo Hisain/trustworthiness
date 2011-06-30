@@ -1,4 +1,4 @@
-package eu.aniketos.wp5.components.trustworthiness.impl;
+package eu.aniketos.wp2.components.trustworthiness.impl;
 
 
 import java.util.Dictionary;
@@ -8,7 +8,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-import eu.aniketos.wp5.components.trustworthiness.TrustworthinessService;
+import eu.aniketos.wp2.components.trustworthiness.TrustworthinessService;
 
 public class Activator implements BundleActivator {
     private ServiceRegistration registration;

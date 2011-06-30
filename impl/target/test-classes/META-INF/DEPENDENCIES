@@ -7,7 +7,7 @@ Apache CXF Distributed OSGi DSW Reference Implementation
 
 
 From: 'an unknown organization'
-  - Aniketos Trustworthiness Interface Bundle  eu.aniketos.wp5.components:wp5-components-trustworthiness-interface:bundle:1.0-SNAPSHOT
+  - Aniketos Trustworthiness Interface Bundle  eu.aniketos.wp2.components:wp2-components-trustworthiness-interface:bundle:1.0-SNAPSHOT
 
 
 From: 'OSGi Alliance' (http://www.osgi.org/)

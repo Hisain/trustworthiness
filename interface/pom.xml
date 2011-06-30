@@ -1,22 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>eu.aniketos.wp5.components</groupId>
-    <artifactId>wp5-components-trustworthiness-interface</artifactId>
+    <groupId>eu.aniketos.wp2.components</groupId>
+    <artifactId>wp2-components-trustworthiness-interface</artifactId>
     <packaging>bundle</packaging>
     <name>Aniketos Trustworthiness Interface Bundle</name>
     <version>1.0-SNAPSHOT</version>
 
     <parent>
-      <groupId>eu.aniketos.wp5.components</groupId>
-      <artifactId>wp5-components-parent</artifactId>
+      <groupId>eu.aniketos.wp2.components</groupId>
+      <artifactId>wp2-components-parent</artifactId>
       <version>1.0-SNAPSHOT</version>
       <relativePath>../../parent/pom.xml</relativePath>
     </parent>
 
     <properties>
         <bundle.import.package>*</bundle.import.package>
-        <bundle.export.package>eu.aniketos.wp5.components.trustworthiness</bundle.export.package>
+        <bundle.export.package>eu.aniketos.wp2.components.trustworthiness</bundle.export.package>
     </properties>
 
     <dependencies>
