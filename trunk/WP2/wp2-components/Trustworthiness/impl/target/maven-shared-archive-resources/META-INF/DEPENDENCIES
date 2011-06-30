@@ -1,0 +1,25 @@
+// ------------------------------------------------------------------
+// Transitive dependencies of this project determined from the
+// maven pom organized by organization.
+// ------------------------------------------------------------------
+
+Apache CXF Distributed OSGi DSW Reference Implementation
+
+
+From: 'an unknown organization'
+  - Aniketos Trustworthiness Interface Bundle  eu.aniketos.wp2.components:wp2-components-trustworthiness-interface:bundle:1.0-SNAPSHOT
+
+
+From: 'OSGi Alliance' (http://www.osgi.org/)
+  - OSGi R4 Compendium Bundle (http://felix.apache.org/org.osgi.compendium/) org.apache.felix:org.osgi.compendium:bundle:1.2.0
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - OSGi R4 Core Bundle (http://felix.apache.org/org.osgi.core/) org.apache.felix:org.osgi.core:bundle:1.2.0
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+From: 'The Apache Software Foundation' (http://www.apache.org/)
+  - Apache Felix Framework (http://felix.apache.org/org.apache.felix.framework/) org.apache.felix:org.apache.felix.framework:bundle:1.8.0
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+
+
