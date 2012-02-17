@@ -1,5 +1,7 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.rules.service;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Dictionary;
@@ -13,11 +15,8 @@ import java.util.Properties;
 
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
-import org.springframework.osgi.extensions.annotation.ServiceReference;
-import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.log4j.Logger;
-import org.drools.runtime.ExecutionResults;
 import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.AlertEventImpl;
 import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEventImpl;
@@ -138,6 +137,7 @@ public class ScoreUpdateImpl extends Observable implements ScoreUpdate {
 		Collection<?> results = ruleExecuter.execute(facts,
 				property.toLowerCase(), "Score", "score");
 		Iterator<?> scoreIterator = results.iterator();
+		
 		if (scoreIterator.hasNext()) {
 			scoreMap = (Map) scoreIterator.next();
 
@@ -151,7 +151,12 @@ public class ScoreUpdateImpl extends Observable implements ScoreUpdate {
 		}
 
 		if (scoreMap.containsKey("score")) {
-			score.setScore((Double) scoreMap.get("score"));
+			Double scoreValue = (Double) scoreMap.get("score");
+			BigDecimal scoreBD = new BigDecimal(String.valueOf(scoreValue)).setScale(6, BigDecimal.ROUND_HALF_UP);
+
+			scoreValue = Double.parseDouble(scoreBD.toString());
+			
+			score.setScore(scoreValue);
 			score.setRecency((Long) scoreMap.get("recency"));
 			score.setProperty((String) scoreMap.get("property"));
 

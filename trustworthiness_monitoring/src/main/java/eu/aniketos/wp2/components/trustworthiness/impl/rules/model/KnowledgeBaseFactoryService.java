@@ -7,18 +7,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.drools.KnowledgeBase;
 import org.drools.KnowledgeBaseConfiguration;
 import org.drools.KnowledgeBaseFactory;
+import org.drools.SystemEventListener;
+import org.drools.SystemEventListenerFactory;
 import org.drools.builder.KnowledgeBuilder;
 import org.drools.builder.KnowledgeBuilderFactory;
 import org.drools.builder.ResourceType;
-import org.drools.conf.EventProcessingOption;
 import org.drools.io.ResourceFactory;
 import org.drools.io.Resource;
-import org.drools.rule.builder.dialect.java.JavaDialectConfiguration;
-import org.drools.compiler.PackageBuilder;
-import org.drools.compiler.PackageBuilderConfiguration;;
 
 //note that builder configuration nor knowledge base configuration is supplied
 //maybe easy to add as another constructor arguments? via util.properties?
@@ -31,7 +30,9 @@ import org.drools.compiler.PackageBuilderConfiguration;;
 public class KnowledgeBaseFactoryService implements
 		KnowledgeBaseFactoryManagement {
 
-	private KnowledgeBase knowledgeBase = KnowledgeBaseFactory.newKnowledgeBase();
+	private static Logger logger = Logger.getLogger(KnowledgeBaseFactoryService.class);
+	
+	private KnowledgeBase knowledgeBase;
 
 	
 
@@ -44,9 +45,12 @@ public class KnowledgeBaseFactoryService implements
 	 *             in case of problems while reading resources
 	 */
 	public void create() throws IOException {
-		
+				
+		knowledgeBase = KnowledgeBaseFactory.newKnowledgeBase();
+				
 		KnowledgeBuilder builder = KnowledgeBuilderFactory
 				.newKnowledgeBuilder();
+		
 
 		Map<Resource, ResourceType> resourceMap = new HashMap<Resource, ResourceType>();
 		/**
@@ -93,5 +97,8 @@ public class KnowledgeBaseFactoryService implements
 		// TODO Auto-generated method stub
 
 	}
+	
+	
 
 }
+
