@@ -1,0 +1,98 @@
+package eu.aniketos.wp2.components.trustworthiness.impl.rules.service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.drools.ObjectFilter;
+import org.drools.command.Command;
+import org.drools.command.CommandFactory;
+import org.drools.command.runtime.rule.FireAllRulesCommand;
+import org.drools.command.runtime.rule.GetObjectsCommand;
+import org.drools.runtime.ExecutionResults;
+import org.drools.runtime.StatefulKnowledgeSession;
+import org.drools.runtime.rule.WorkingMemoryEntryPoint;
+import eu.aniketos.wp2.components.trustworthiness.impl.rules.persistence.KnowledgeSessionLookup;
+import eu.aniketos.wp2.components.trustworthiness.rules.service.ReportFactory;
+import eu.aniketos.wp2.components.trustworthiness.rules.service.RuleExecuter;
+import eu.aniketos.wp2.components.trustworthiness.impl.rules.util.RuleNameEqualsAgendaFilter;
+import eu.aniketos.wp2.components.trustworthiness.impl.rules.util.RuleNameMatchesAgendaFilter;
+
+/**
+ * Session Bean implementation class RuleExecuterImpl
+ * @author Hisain Elshaafi (TSSG)
+ *
+ */
+public class RuleExecuterImpl implements RuleExecuter {
+
+	private static Logger logger = Logger.getLogger(RuleExecuterImpl.class);
+
+	private ReportFactory reportFactory;
+
+	private KnowledgeSessionLookup sessionLookup;
+
+	/**
+	 * Default constructor.
+	 */
+	public RuleExecuterImpl() {
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * creates multiple commands, calls session.execute and returns results back
+	 */
+	public Collection<?> execute(Collection<Object> objects,
+			String ruleNamePattern, final String filterType, String filterOut) {
+
+		StatefulKnowledgeSession session = sessionLookup.newSession();
+
+		// ValidationReport validationReport = reportFactory
+		// .createValidationReport();
+		List<Command<?>> commands = new ArrayList<Command<?>>();
+		// commands.add(CommandFactory.newSetGlobal("validationReport",
+		// validationReport, true));
+		commands.add(CommandFactory.newInsertElements(objects));
+		// TODO: may use RuleNameMatchesAgendaFilter for rule selection
+		commands.add(new FireAllRulesCommand(new RuleNameEqualsAgendaFilter(
+				ruleNamePattern, true)));
+		if (filterType != null && filterOut != null) {
+			GetObjectsCommand getObjectsCommand = new GetObjectsCommand(
+					new ObjectFilter() {
+						public boolean accept(Object object) {
+							return object instanceof Map
+									&& ((Map) object).get("_type_").equals(
+											filterType);
+						}
+					});
+			getObjectsCommand.setOutIdentifier(filterOut);
+			commands.add(getObjectsCommand);
+		}
+
+		ExecutionResults results = session.execute(CommandFactory
+				.newBatchExecution(commands));
+		
+		if (logger.isDebugEnabled()) {
+			logger.debug("attempted fire rule " + ruleNamePattern);
+		}
+		
+		return (List<?>)results.getValue("score");
+	}
+
+	public ReportFactory getReportFactory() {
+		return reportFactory;
+	}
+
+	public void setReportFactory(ReportFactory reportFactory) {
+		this.reportFactory = reportFactory;
+	}
+
+	public KnowledgeSessionLookup getSessionLookup() {
+		return sessionLookup;
+	}
+
+	public void setSessionLookup(KnowledgeSessionLookup sessionLookup) {
+		this.sessionLookup = sessionLookup;
+	}
+}

@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Log4jproperties
+Bundle-SymbolicName: log4jproperties
+Bundle-Version: 1.2.15
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Fragment-Host: com.springsource.org.apache.log4j;bundle-version="1.2.15"
