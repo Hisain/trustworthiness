@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="qosSender"
+		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.QoSMetricsSender"
+		init-method="initialize">
+		<constructor-arg>
+			<ref bean="qosMetric" />
+		</constructor-arg>
+	</bean>
+	<bean id="twRequester"
+		class="eu.aniketos.wp2.components.trustworthiness.mock.trust.management.atomic.TrustworthinessRequester"
+		init-method="requestTrustworthiness">
+		<constructor-arg>
+			<ref bean="trustworthinessPredictionService" />
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="compositeTrustworthinessPredictionService" />
+		</constructor-arg>
+	</bean>
+
+</beans>

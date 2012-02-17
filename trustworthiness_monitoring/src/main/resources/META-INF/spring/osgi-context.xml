@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                      http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+                      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                      ">
+	<osgi:reference id="configService"
+		interface="eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement" />
+		
+	<osgi:reference id="serviceEntityService"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService" />
+		
+	<osgi:reference id="scoreEntityService"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.ScoreEntityService" />
+		
+	<osgi:reference id="trustFactory"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory" />
+		
+	<osgi:service ref="qosMetric"
+		interface="eu.aniketos.wp2.components.trustworthiness.messaging.QoSMetricsService"
+		 />
+
+	<osgi:reference id="eventAdminService" interface="org.osgi.service.event.EventAdmin"/>
+
+	<osgi:reference id="transactionManager"
+		interface="org.springframework.transaction.PlatformTransactionManager" />
+	<tx:annotation-driven transaction-manager="transactionManager" />
+</beans>
