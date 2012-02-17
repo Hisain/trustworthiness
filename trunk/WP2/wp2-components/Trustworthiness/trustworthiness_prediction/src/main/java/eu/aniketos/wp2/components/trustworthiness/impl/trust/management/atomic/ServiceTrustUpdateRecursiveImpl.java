@@ -1,6 +1,8 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.trust.management.atomic;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
@@ -325,6 +327,15 @@ public class ServiceTrustUpdateRecursiveImpl implements
 			logger.info("trustworthiness for " + service + " " + score);
 		}
 
+		BigDecimal scoreBD = new BigDecimal(String.valueOf(score)).setScale(3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal confidenceBD = new BigDecimal(String.valueOf(confidence)).setScale(3, BigDecimal.ROUND_HALF_UP);
+		
+		score = Double.parseDouble(scoreBD.toString());
+		confidence = Double.parseDouble(confidenceBD.toString());
+		
+		Trustworthiness trust = new ServiceTrustworthiness(service.getId(),
+				score, confidence);
+		
 		service.setTrustScore(score);
 		service.setDeviation(d);
 		service.setConfidence(confidence);
@@ -332,12 +343,6 @@ public class ServiceTrustUpdateRecursiveImpl implements
 		service.setMovingWt(totalScoreWt);
 		
 		serviceEntityService.updateAtomic(service);
-
-		DecimalFormat df = new DecimalFormat("#.###");
-		score = Double.parseDouble(df.format(score));
-		confidence = Double.parseDouble(df.format(confidence));
-		Trustworthiness trust = new ServiceTrustworthiness(service.getId(),
-				score, confidence);
 		
 		//send alert if trustworthiness < alert threshold
 		if (score < config.getConfig().getDouble("alert_threshold")) {

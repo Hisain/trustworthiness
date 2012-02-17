@@ -58,9 +58,10 @@ public StatefulKnowledgeSession newSession() {
     registerWorkItemHandlers(session);*/
 	  
 	  StatefulKnowledgeSession session = knowledgeBaseFactory.getKnowledgeBase().newStatefulKnowledgeSession(); 
-	  KnowledgeRuntimeLogger logger = KnowledgeRuntimeLoggerFactory.newFileLogger(session, "drools.log");
 	  
-	  KnowledgeRuntimeLoggerFactory.newConsoleLogger(session);
+	  KnowledgeRuntimeLoggerFactory.newFileLogger(session, "log/drools");
+	  //KnowledgeRuntimeLoggerFactory.newConsoleLogger(session);
+	  
 	  return session;
   }
 

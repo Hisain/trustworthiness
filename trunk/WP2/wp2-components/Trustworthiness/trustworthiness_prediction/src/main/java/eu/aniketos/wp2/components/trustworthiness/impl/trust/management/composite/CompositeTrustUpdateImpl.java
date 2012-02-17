@@ -1,5 +1,6 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.trust.management.composite;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -56,6 +57,11 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 			twScore *= score;
 			twConfidence *= confidence;
 		}
+		BigDecimal scoreBD = new BigDecimal(String.valueOf(twScore)).setScale(3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal confidenceBD = new BigDecimal(String.valueOf(twConfidence)).setScale(3, BigDecimal.ROUND_HALF_UP);
+		
+		twScore = Double.parseDouble(scoreBD.toString());
+		twConfidence = Double.parseDouble(confidenceBD.toString());
 		
 		tw.setScore(twScore);
 		tw.setConfidence(twConfidence);

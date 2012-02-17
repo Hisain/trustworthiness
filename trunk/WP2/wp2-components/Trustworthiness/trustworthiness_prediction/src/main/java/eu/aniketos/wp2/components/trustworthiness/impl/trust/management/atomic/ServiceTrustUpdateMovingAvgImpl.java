@@ -1,5 +1,6 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.trust.management.atomic;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -270,9 +271,11 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		logger.debug("updating service with moving average values..");
 		serviceEntityService.updateAtomic(service);
 
-		DecimalFormat df = new DecimalFormat("#.###");
-		twScore = Double.parseDouble(df.format(twScore));
-		twConfidence = Double.parseDouble(df.format(twConfidence));
+		BigDecimal scoreBD = new BigDecimal(String.valueOf(twScore)).setScale(3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal confidenceBD = new BigDecimal(String.valueOf(twConfidence)).setScale(3, BigDecimal.ROUND_HALF_UP);
+		
+		twScore = Double.parseDouble(scoreBD.toString());
+		twConfidence = Double.parseDouble(confidenceBD.toString());
 		Trustworthiness trust = new ServiceTrustworthiness(service.getId(),
 				twScore, twConfidence);
 
@@ -399,9 +402,12 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		logger.debug("updating service with moving average values..");
 		serviceEntityService.updateAtomic(service);
 
-		DecimalFormat df = new DecimalFormat("#.###");
-		twScore = Double.parseDouble(df.format(twScore));
-		twConfidence = Double.parseDouble(df.format(twConfidence));
+		BigDecimal scoreBD = new BigDecimal(String.valueOf(twScore)).setScale(3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal confidenceBD = new BigDecimal(String.valueOf(twConfidence)).setScale(3, BigDecimal.ROUND_HALF_UP);
+		
+		twScore = Double.parseDouble(scoreBD.toString());
+		twConfidence = Double.parseDouble(confidenceBD.toString());
+		
 		Trustworthiness tw = new ServiceTrustworthiness(service.getId(),
 				twScore, twConfidence);
 

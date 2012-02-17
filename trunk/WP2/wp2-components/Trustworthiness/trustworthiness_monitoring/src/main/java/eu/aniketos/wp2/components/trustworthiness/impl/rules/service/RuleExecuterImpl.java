@@ -13,12 +13,10 @@ import org.drools.command.runtime.rule.FireAllRulesCommand;
 import org.drools.command.runtime.rule.GetObjectsCommand;
 import org.drools.runtime.ExecutionResults;
 import org.drools.runtime.StatefulKnowledgeSession;
-import org.drools.runtime.rule.WorkingMemoryEntryPoint;
 import eu.aniketos.wp2.components.trustworthiness.impl.rules.persistence.KnowledgeSessionLookup;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.ReportFactory;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RuleExecuter;
 import eu.aniketos.wp2.components.trustworthiness.impl.rules.util.RuleNameEqualsAgendaFilter;
-import eu.aniketos.wp2.components.trustworthiness.impl.rules.util.RuleNameMatchesAgendaFilter;
 
 /**
  * Session Bean implementation class RuleExecuterImpl
@@ -37,7 +35,7 @@ public class RuleExecuterImpl implements RuleExecuter {
 	 * Default constructor.
 	 */
 	public RuleExecuterImpl() {
-		// TODO Auto-generated constructor stub
+	
 	}
 
 	/**
