@@ -1,6 +1,6 @@
 # Please copy this template (along with the batch file) and use it in your module directory.
 # Fill in the below parameters, but do not change the @INCLUDE line
-@INCLUDE = "$(ANIKETOS_SVN_ROOT)\svn-aniketos\WP8\Templates\DoxyConfig\doxygen_general.cnf"
+@INCLUDE = "$(ANIKETOS_SVN_ROOT)\WP8\Templates\DoxyConfig\doxygen_general.cnf"
 
 # The PROJECT_NAME tag is a single word (or sequence of words) that should
 # identify the project. Note that if you do not use Doxywizard you need
