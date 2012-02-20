@@ -205,9 +205,9 @@
 		<module>trustworthiness_transactional</module>
 		<!-- <module>trustworthiness_test</module> -->
 		<module>trustworthiness_mock</module>
-		<module>datasource_tests</module>
+		<!--	<module>datasource_tests</module> -->
 		<module>log4jproperties</module>
-		<module>antlr-hibernate-fragment</module>
+		<!--<module>antlr-hibernate-fragment</module> -->
 	</modules>
 
 	<repositories>
