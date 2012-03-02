@@ -3,12 +3,12 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.aniketos.wp2.components.trustworthiness</groupId>
-	<artifactId>trustworthiness-mock</artifactId>
+	<artifactId>wp2-components-trustworthiness-mock</artifactId>
 	<packaging>bundle</packaging>
 	<name>Aniketos Mock Bundle</name>
 	<parent>
 		<groupId>eu.aniketos.wp2.components</groupId>
-		<artifactId>trustworthiness-parent</artifactId>
+		<artifactId>wp2-components-trustworthiness</artifactId>
 		<version>1.0.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
