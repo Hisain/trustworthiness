@@ -7,7 +7,7 @@
 	<packaging>bundle</packaging>
 	<parent>
 			<groupId>eu.aniketos.wp2.components</groupId>
-			<artifactId>trustworthiness-parent</artifactId>
+			<artifactId>wp2-components-trustworthiness</artifactId>
 			<version>1.0.0</version>
 			<relativePath>../pom.xml</relativePath>
 	</parent>
