@@ -3,13 +3,13 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.aniketos.wp2.components.trustworthiness</groupId>
-	<artifactId>trustworthiness-datasource</artifactId>
+	<artifactId>wp2-components-trustworthiness-datasource</artifactId>
 	<packaging>bundle</packaging>
 	<name>Aniketos Trustworthiness Datasource Bundle</name>
 	
 	<parent>
 		<groupId>eu.aniketos.wp2.components</groupId>
-		<artifactId>trustworthiness-parent</artifactId>
+		<artifactId>wp2-components-trustworthiness</artifactId>
 		<version>1.0.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
