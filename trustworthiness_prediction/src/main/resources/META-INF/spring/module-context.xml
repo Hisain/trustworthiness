@@ -33,6 +33,8 @@
 		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.management.composite.CompositeTrustUpdateImpl">
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 		<property name="trustUpdate" ref="trustUpdatePolicyRecursive"></property>
+		<property name="eventAdmin" ref="eventAdminService"/>
+		<property name="config" ref="configService"></property>
 	</bean>
 	
 	<!-- <bean name="compositeManager"

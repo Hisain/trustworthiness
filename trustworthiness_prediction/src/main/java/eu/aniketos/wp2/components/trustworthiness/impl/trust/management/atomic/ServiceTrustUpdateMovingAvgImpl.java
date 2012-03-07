@@ -421,6 +421,9 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 			Event osgiEvent = new Event("eu/aniketos/trustworthiness/alert",
 					props);
 			eventAdmin.sendEvent(osgiEvent);
+			logger.debug("trustworthiness below threshold, sent an alert.");
+		} else {
+			logger.debug("trustworthiness above threshold.");
 		}
 
 		return tw;

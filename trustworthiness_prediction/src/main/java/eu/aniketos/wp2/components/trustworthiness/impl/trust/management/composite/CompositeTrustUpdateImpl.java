@@ -1,10 +1,15 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.trust.management.composite;
 
 import java.math.BigDecimal;
+import java.util.Dictionary;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 
+import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.management.atomic.ServiceTrustworthiness;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Composite;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
@@ -15,61 +20,88 @@ import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntitySer
 
 /**
  * @author Hisain Elshaafi (TSSG)
- *
+ * 
  */
 public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 
-	private static Logger logger = Logger.getLogger(CompositeTrustUpdateImpl.class);
-	
-	ServiceEntityService serviceEntityService;
-	
-	ServiceTrustUpdatePolicy trustUpdate;
-	
-	public Trustworthiness aggregateTrustworthiness(String serviceId) throws Exception{
-		
-		Composite compositeService = serviceEntityService.getComposite(serviceId);
-		
+	private static Logger logger = Logger
+			.getLogger(CompositeTrustUpdateImpl.class);
+
+	private ServiceEntityService serviceEntityService;
+
+	private ServiceTrustUpdatePolicy trustUpdate;
+
+	private ConfigurationManagement config;
+
+	private EventAdmin eventAdmin;
+
+	public Trustworthiness aggregateTrustworthiness(String serviceId)
+			throws Exception {
+
+		Composite compositeService = serviceEntityService
+				.getComposite(serviceId);
+
 		Trustworthiness tw = new ServiceTrustworthiness();
-		
+
 		double twScore = 1;
+
 		double twConfidence = 1;
-		
+
 		/**
 		 * TODO: update component trustworthiness before aggregation
 		 */
 		Set<Atomic> componentServices = compositeService.getComponentServices();
-		if (componentServices==null || componentServices.size()==0){
+		if (componentServices == null || componentServices.size() == 0) {
 			logger.error("no component service found for " + serviceId);
 		}
-		
-		
-		//TODO update atomic trust before aggregation
-		for (Atomic service : componentServices){
+
+		// TODO update atomic trust before aggregation
+		for (Atomic service : componentServices) {
 			logger.debug("component service " + service.getId());
 			tw = trustUpdate.calculateTrust(service.getId());
-			
+
 			double score = tw.getScore();
 			double confidence = tw.getConfidence();
-			
-			if (logger.isDebugEnabled()){
-				logger.debug(service + " trustworthiness " + score + "," + confidence);
+
+			if (logger.isDebugEnabled()) {
+				logger.debug(service + " trustworthiness " + score + ","
+						+ confidence);
 			}
 			twScore *= score;
 			twConfidence *= confidence;
 		}
-		BigDecimal scoreBD = new BigDecimal(String.valueOf(twScore)).setScale(3, BigDecimal.ROUND_HALF_UP);
-		BigDecimal confidenceBD = new BigDecimal(String.valueOf(twConfidence)).setScale(3, BigDecimal.ROUND_HALF_UP);
 		
+		BigDecimal scoreBD = new BigDecimal(String.valueOf(twScore)).setScale(
+				3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal confidenceBD = new BigDecimal(String.valueOf(twConfidence))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
+
 		twScore = Double.parseDouble(scoreBD.toString());
 		twConfidence = Double.parseDouble(confidenceBD.toString());
-		
+
 		tw.setScore(twScore);
 		tw.setConfidence(twConfidence);
-		
+
+		// send alert if trustworthiness < alert threshold
+		if (twScore < config.getConfig().getDouble("alert_threshold")) {
+			Dictionary props = new Properties();
+			props.put("service.id", serviceId);
+			props.put("trustworthiness.score", Double.toString(twScore));
+			props.put("trustworthiness.confidence",
+					Double.toString(twConfidence));
+
+			Event osgiEvent = new Event("eu/aniketos/trustworthiness/alert",
+					props);
+			eventAdmin.sendEvent(osgiEvent);
+			logger.debug("trustworthiness below threshold, sent an alert.");
+		} else {
+			logger.debug("trustworthiness above threshold.");
+		}
+
 		return tw;
-	
+
 	}
-	
+
 	public ServiceEntityService getServiceEntityService() {
 		return serviceEntityService;
 	}
@@ -77,7 +109,7 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 	public void setServiceEntityService(ServiceEntityService sEntityService) {
 		this.serviceEntityService = sEntityService;
 	}
-	
+
 	public ServiceTrustUpdatePolicy getTrustUpdate() {
 		return trustUpdate;
 	}
@@ -85,6 +117,21 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 	public void setTrustUpdate(ServiceTrustUpdatePolicy trustUpdate) {
 		this.trustUpdate = trustUpdate;
 	}
+	
+	public ConfigurationManagement getConfig() {
+		return config;
+	}
 
+	public void setConfig(ConfigurationManagement config) {
+		this.config = config;
+	}
+	
+	public EventAdmin getEventAdmin() {
+		return eventAdmin;
+	}
+	
+	public void setEventAdmin(EventAdmin eventAdmin) {
+		this.eventAdmin = eventAdmin;
+	}
 
 }
