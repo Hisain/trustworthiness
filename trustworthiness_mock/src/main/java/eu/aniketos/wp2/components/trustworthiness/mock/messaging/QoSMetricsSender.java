@@ -170,7 +170,7 @@ public class QoSMetricsSender {
 			metric.put("type", "metric");
 			metric.put("property", "reliability");
 			metric.put("subproperty", "error");
-			metric.put("value", Double.toString(0.9 + r.nextDouble() / 10));
+			metric.put("value", Double.toString(0.5 + r.nextDouble() / 10));
 			try {
 				qosMetrics.receiveMetrics(metric);
 			} catch (Exception e) {
