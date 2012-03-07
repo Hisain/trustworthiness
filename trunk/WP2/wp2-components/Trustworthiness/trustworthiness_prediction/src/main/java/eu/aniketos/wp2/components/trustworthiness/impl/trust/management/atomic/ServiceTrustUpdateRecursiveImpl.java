@@ -38,7 +38,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 	private ScoreEntityService scoreEntityService;
 
 	private ConfigurationManagement config;
-	
+
 	private EventAdmin eventAdmin;
 
 	/* set default score (0.0) if not configured */
@@ -121,7 +121,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 	}
 
 	/**
-	 * @throws Exception 
+	 * @throws Exception
 	 * 
 	 */
 	public Trustworthiness calculateTrust(Score ratingScore) throws Exception {
@@ -177,8 +177,8 @@ public class ServiceTrustUpdateRecursiveImpl implements
 
 		serviceScores = scoreEntityService
 				.getScoresByServiceId(service.getId());
-		
-		if (serviceScores == null || serviceScores.size()==0) {
+
+		if (serviceScores == null || serviceScores.size() == 0) {
 
 			if (logger.isInfoEnabled()) {
 				logger.info("no recorded ratings for service " + serviceId);
@@ -327,32 +327,40 @@ public class ServiceTrustUpdateRecursiveImpl implements
 			logger.info("trustworthiness for " + service + " " + score);
 		}
 
-		BigDecimal scoreBD = new BigDecimal(String.valueOf(score)).setScale(3, BigDecimal.ROUND_HALF_UP);
-		BigDecimal confidenceBD = new BigDecimal(String.valueOf(confidence)).setScale(3, BigDecimal.ROUND_HALF_UP);
-		
+		BigDecimal scoreBD = new BigDecimal(String.valueOf(score)).setScale(3,
+				BigDecimal.ROUND_HALF_UP);
+		BigDecimal confidenceBD = new BigDecimal(String.valueOf(confidence))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
+
 		score = Double.parseDouble(scoreBD.toString());
 		confidence = Double.parseDouble(confidenceBD.toString());
-		
+
 		Trustworthiness trust = new ServiceTrustworthiness(service.getId(),
 				score, confidence);
-		
+
 		service.setTrustScore(score);
 		service.setDeviation(d);
 		service.setConfidence(confidence);
 		service.setCalcTime(nowInHour);
 		service.setMovingWt(totalScoreWt);
-		
+
 		serviceEntityService.updateAtomic(service);
-		
-		//send alert if trustworthiness < alert threshold
+
+		// send alert if trustworthiness < alert threshold
 		if (score < config.getConfig().getDouble("alert_threshold")) {
 			Dictionary props = new Properties();
 			props.put("service.id", serviceId);
 			props.put("trustworthiness.score", Double.toString(score));
 			props.put("trustworthiness.confidence", Double.toString(confidence));
-			
-			Event osgiEvent = new Event("eu/aniketos/trustworthiness/alert", props);
+
+			Event osgiEvent = new Event("eu/aniketos/trustworthiness/alert",
+					props);
 			eventAdmin.sendEvent(osgiEvent);
+			
+			logger.debug("trustworthiness below threshold, sent an alert.");
+		} else {
+			logger.debug("trustworthiness above threshold.");
+
 		}
 
 		return trust;
@@ -382,11 +390,11 @@ public class ServiceTrustUpdateRecursiveImpl implements
 	public void setConfig(ConfigurationManagement config) {
 		this.config = config;
 	}
-	
+
 	public EventAdmin getEventAdmin() {
 		return eventAdmin;
 	}
-	
+
 	public void setEventAdmin(EventAdmin eventAdmin) {
 		this.eventAdmin = eventAdmin;
 	}
