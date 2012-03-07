@@ -10,6 +10,7 @@
 			<ref bean="qosMetric" />
 		</constructor-arg>
 	</bean>
+	
 	<bean id="twRequester"
 		class="eu.aniketos.wp2.components.trustworthiness.mock.trust.management.atomic.TrustworthinessRequester"
 		init-method="requestTrustworthiness">
@@ -19,6 +20,10 @@
 		<constructor-arg>
 			<ref bean="compositeTrustworthinessPredictionService" />
 		</constructor-arg>
+	</bean>
+	
+	<bean id="alertEventHandler"
+		class="eu.aniketos.wp2.components.trustworthiness.mock.trust.alerts.Notification">
 	</bean>
 
 </beans>

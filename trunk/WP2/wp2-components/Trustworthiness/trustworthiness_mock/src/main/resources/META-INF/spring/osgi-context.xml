@@ -6,10 +6,19 @@
 
 	<osgi:reference id="trustworthinessPredictionService"
 		interface="eu.aniketos.wp2.components.trustworthiness.messaging.ITrustworthinessPrediction" />
-		
+
 	<osgi:reference id="qosMetric"
 		interface="eu.aniketos.wp2.components.trustworthiness.messaging.QoSMetricsService" />
 
 	<osgi:reference id="compositeTrustworthinessPredictionService"
 		interface="eu.aniketos.wp2.components.trustworthiness.messaging.ICompositeTrustworthinessPrediction" />
+
+	<osgi:service ref="alertEventHandler" interface="org.osgi.service.event.EventHandler">
+		<osgi:service-properties>
+			<entry key="event.topics" value="eu/aniketos/trustworthiness/alert" />
+		</osgi:service-properties>
+	</osgi:service>
+
+	<osgi:reference id="eventAdminService" interface="org.osgi.service.event.EventAdmin" />
+
 </beans>
