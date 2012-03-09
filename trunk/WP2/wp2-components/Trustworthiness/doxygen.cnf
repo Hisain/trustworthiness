@@ -25,8 +25,15 @@ PROJECT_BRIEF          = "Trustworthiness module"
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  = .\impl\ \   
-                         .\interface\
+INPUT                  = .\trustworthiness_api\ \
+                         .\trustworthiness_configuration\ \
+                         .\trustworthiness_dao\ \
+                         .\trustworthiness_datasource\ \
+                         .\trustworthiness_domain\ \
+                         .\trustworthiness_mock\ \
+                         .\trustworthiness_monitoring\ \
+                         .\trustworthiness_prediction\ \
+                         .\trustworthiness_transactional\
 
 # The EXCLUDE tag can be used to specify files and/or directories that should be
 # excluded from the INPUT source files. This way you can easily exclude a
