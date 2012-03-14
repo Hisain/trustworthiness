@@ -11,7 +11,7 @@
 	<osgi:reference id="alert"
 		interface="eu.aniketos.wp4.components.notification.IAlert" />
 
-	<osgi:service ref="alertEventHandler" interface="org.osgi.service.event.EventHandler">
+	<osgi:service ref="trustworthinessChangeAlerter" interface="org.osgi.service.event.EventHandler">
 		<osgi:service-properties>
 			<entry key="event.topics" value="eu/aniketos/trustworthiness/alert" />
 		</osgi:service-properties>
