@@ -18,8 +18,6 @@ public class TrustworthinessChangeAlerter implements EventHandler {
 
 	private IAlert alert;
 	
-	private static final String UNTRUSTED_SERVICE_COMPOSITION = "Untrusted service composition";
-	public static final String TRUST_LEVEL_CHANGE = "TrustLevelChange";
 
 	public void handleEvent(Event event) {
 
@@ -46,6 +44,7 @@ public class TrustworthinessChangeAlerter implements EventHandler {
 
 				alert.alert(serviceId, Notification.TRUST_LEVEL_CHANGE, trustScore,
 						AlertDescription.UNTRUSTED_SERVICE_COMPOSITION);
+				
 				if (logger.isDebugEnabled()) {
 					logger.debug("Sent alert on composition trust change of "
 							+ serviceId);
@@ -53,6 +52,7 @@ public class TrustworthinessChangeAlerter implements EventHandler {
 				
 			} else {
 				alert.alert(serviceId, Notification.TRUST_LEVEL_CHANGE, trustScore);
+				
 				if (logger.isDebugEnabled()) {
 					logger.debug("Sent alert on atomic service trust change of "
 							+ serviceId);
@@ -82,10 +82,6 @@ public class TrustworthinessChangeAlerter implements EventHandler {
 
 	public void setAlert(IAlert alert) {
 		this.alert = alert;
-	}
-
-	public static String getTrustLevelChange() {
-		return TRUST_LEVEL_CHANGE;
 	}
 
 }
