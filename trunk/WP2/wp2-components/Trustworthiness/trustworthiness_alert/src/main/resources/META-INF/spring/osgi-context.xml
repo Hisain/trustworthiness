@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                      http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd">
+
+	
+	<osgi:reference id="serviceEntityService"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService" />
+
+	<osgi:reference id="alert"
+		interface="eu.aniketos.wp4.components.notification.IAlert" />
+
+	<osgi:service ref="alertEventHandler" interface="org.osgi.service.event.EventHandler">
+		<osgi:service-properties>
+			<entry key="event.topics" value="eu/aniketos/trustworthiness/alert" />
+		</osgi:service-properties>
+	</osgi:service>
+
+	<osgi:reference id="eventAdminService" interface="org.osgi.service.event.EventAdmin" />
+
+</beans>
