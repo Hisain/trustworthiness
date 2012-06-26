@@ -4,6 +4,8 @@ import org.drools.runtime.rule.Activation;
 import org.drools.runtime.rule.AgendaFilter;
 
 /**
+ * filter for rule selection through equal rule name
+ * 
  * @author Hisain Elshaafi (TSSG)
  *
  */
@@ -13,18 +15,28 @@ public class RuleNameEqualsAgendaFilter implements
 
   private final boolean accept;
 
-  public RuleNameEqualsAgendaFilter(final String name) {
+  /**
+ * @param name
+ */
+public RuleNameEqualsAgendaFilter(final String name) {
       this( name,
             true );
   }
 
-  public RuleNameEqualsAgendaFilter(final String name,
+  /**
+ * @param name
+ * @param accept
+ */
+public RuleNameEqualsAgendaFilter(final String name,
                                     final boolean accept) {
       this.name = name;
       this.accept = accept;
   }
 
-  public boolean accept(Activation activation) {
+  /* (non-Javadoc)
+ * @see org.drools.runtime.rule.AgendaFilter#accept(org.drools.runtime.rule.Activation)
+ */
+public boolean accept(Activation activation) {
       if ( activation.getRule().getName().equals( this.name ) ) {
           return this.accept;
       } else {

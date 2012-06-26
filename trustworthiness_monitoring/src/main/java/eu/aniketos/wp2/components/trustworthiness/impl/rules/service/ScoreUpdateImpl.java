@@ -1,7 +1,6 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.rules.service;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Dictionary;
@@ -48,6 +47,9 @@ public class ScoreUpdateImpl extends Observable implements ScoreUpdate {
 
 	private EventAdmin eventAdmin;
 
+	/**
+	 * 
+	 */
 	public void initialize() {
 		// replaced with osgi events *whiteboard*
 		// monitorHelperService.setupObservers(this);
@@ -59,6 +61,10 @@ public class ScoreUpdateImpl extends Observable implements ScoreUpdate {
 		 */
 	}
 
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.rules.service.ScoreUpdate#updateScore(java.util.Map)
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void updateScore(Map<String, String> event) throws Exception {
 
 		String serviceId = event.get("serviceId");
@@ -177,56 +183,119 @@ public class ScoreUpdateImpl extends Observable implements ScoreUpdate {
 	}
 
 	// needs testing
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param o
+	 */
 	public void addRemoteObserver(Observer o) {
 		addObserver(o);
 
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return
+	 */
 	public ConfigurationManagement getConfig() {
 		return config;
 	}
 
+	/**
+	 * @param config
+	 */
 	public void setConfig(ConfigurationManagement config) {
 		this.config = config;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return
+	 */
 	public ServiceEntityService getServiceEntityService() {
 		return serviceEntityService;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param serviceEntityService
+	 */
 	public void setServiceEntityService(
 			ServiceEntityService serviceEntityService) {
 		this.serviceEntityService = serviceEntityService;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return
+	 */
 	public ScoreEntityService getScoreEntityService() {
 		return scoreEntityService;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param scoreEntityService
+	 */
 	public void setScoreEntityService(ScoreEntityService scoreEntityService) {
 		this.scoreEntityService = scoreEntityService;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return
+	 */
 	public TrustFactory getTrustFactory() {
 		return trustFactory;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param trustFactory
+	 */
 	public void setTrustFactory(TrustFactory trustFactory) {
 		this.trustFactory = trustFactory;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return
+	 */
 	public RuleExecuter getRuleExecuter() {
 		return ruleExecuter;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param ruleExecuter
+	 */
 	public void setRuleExecuter(RuleExecuter ruleExecuter) {
 		this.ruleExecuter = ruleExecuter;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return OSGi event admin
+	 */
 	public EventAdmin getEventAdmin() {
 		return eventAdmin;
 	}
 	
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param eventAdmin OSGi event admin
+	 */
 	public void setEventAdmin(EventAdmin eventAdmin) {
 		this.eventAdmin = eventAdmin;
 	}

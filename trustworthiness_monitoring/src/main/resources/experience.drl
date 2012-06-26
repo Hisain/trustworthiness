@@ -69,7 +69,7 @@ function double calcMetric(String metricValueString, String contractValueString,
 }
 
 function double calcAlert(String alertValueString, String contractValueString, String type, String limit){
-System.out.println("calculating score");
+	//System.out.println("calculating score");
 	
 	double contractValue = 0;
 	double alertValue = 0;
@@ -130,7 +130,7 @@ rule security
 		
 	then 
 		#
-		System.out.println("executed rule \"security\"");
+		//System.out.println("executed rule \"security\"");
 		modify ($scoreMap) {
 		put ("score", calcMetric($metricValue,$contractValue, $type, $limit)), 
 		put ("recency",System.currentTimeMillis() / 3600000),
@@ -150,7 +150,7 @@ end
 		
 	then 
 		#
-		System.out.println("executed rule \"availability\"");
+		//System.out.println("executed rule \"availability\"");
 		modify ($scoreMap) {
 		put ("score", calcMetric($metricValue,$contractValue, $type, $limit)), 
 		put ("recency",System.currentTimeMillis() / 3600000),
@@ -170,7 +170,7 @@ rule reliability
 		
 	then 
 		#
-		System.out.println("executed rule \"reliability\"");
+		//System.out.println("executed rule \"reliability\"");
 		modify ($scoreMap) {
 		put ("score", calcMetric($metricValue,$contractValue, $type, $limit)), 
 		put ("recency",System.currentTimeMillis()/ 3600000),
@@ -190,7 +190,7 @@ rule performance
 		
 	then 
 		#
-		System.out.println("executed rule \"performance\"");
+		//System.out.println("executed rule \"performance\"");
 		modify ($scoreMap) {
 		put ("score", calcMetric($metricValue,$contractValue, $type, $limit)), 
 		put ("recency",System.currentTimeMillis() / 3600000),
@@ -208,7 +208,7 @@ rule sla
 		
 	then 
 		#
-		System.out.println("executed rule \"sla\"");
+		//System.out.println("executed rule \"sla\"");
 		modify ($scoreMap) {
 		put ("score", calcMetric($metricValue,$contractValue, $type, $limit)), 
 		put ("recency",System.currentTimeMillis() / 3600000),
@@ -225,7 +225,7 @@ rule "port-scanning"
 		
 	then 
 		#
-		System.out.println("executed rule \"port-scanning\"");
+		//System.out.println("executed rule \"port-scanning\"");
 		modify ($scoreMap) {
 		put ("score", calcAlert($alertValue,$contractValue, $type, $limit)), 
 		put ("recency",System.currentTimeMillis() / 3600000),

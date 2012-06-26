@@ -9,6 +9,10 @@ import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustw
  */
 public interface TrustworthinessPredictionJms {
 
+	/**
+	 * @param trust a trustworthiness object
+	 * @throws Exception
+	 */
 	public abstract void sendTrustworthiness(Trustworthiness trust) throws Exception;
 
 }

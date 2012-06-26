@@ -20,8 +20,9 @@ import eu.aniketos.wp2.components.trustworthiness.impl.rules.util.RuleNameEquals
 
 /**
  * Session Bean implementation class RuleExecuterImpl
+ * 
  * @author Hisain Elshaafi (TSSG)
- *
+ * 
  */
 public class RuleExecuterImpl implements RuleExecuter {
 
@@ -35,7 +36,7 @@ public class RuleExecuterImpl implements RuleExecuter {
 	 * Default constructor.
 	 */
 	public RuleExecuterImpl() {
-	
+
 	}
 
 	/**
@@ -58,6 +59,7 @@ public class RuleExecuterImpl implements RuleExecuter {
 		if (filterType != null && filterOut != null) {
 			GetObjectsCommand getObjectsCommand = new GetObjectsCommand(
 					new ObjectFilter() {
+						@SuppressWarnings("rawtypes")
 						public boolean accept(Object object) {
 							return object instanceof Map
 									&& ((Map) object).get("_type_").equals(
@@ -70,26 +72,46 @@ public class RuleExecuterImpl implements RuleExecuter {
 
 		ExecutionResults results = session.execute(CommandFactory
 				.newBatchExecution(commands));
-		
+
 		if (logger.isDebugEnabled()) {
 			logger.debug("attempted fire rule " + ruleNamePattern);
 		}
-		
-		return (List<?>)results.getValue("score");
+
+		return (List<?>) results.getValue("score");
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return
+	 */
 	public ReportFactory getReportFactory() {
 		return reportFactory;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param reportFactory
+	 */
 	public void setReportFactory(ReportFactory reportFactory) {
 		this.reportFactory = reportFactory;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return KnowledgeSessionLookup object for new or existing session lookup
+	 */
 	public KnowledgeSessionLookup getSessionLookup() {
 		return sessionLookup;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param sessionLookup
+	 */
 	public void setSessionLookup(KnowledgeSessionLookup sessionLookup) {
 		this.sessionLookup = sessionLookup;
 	}

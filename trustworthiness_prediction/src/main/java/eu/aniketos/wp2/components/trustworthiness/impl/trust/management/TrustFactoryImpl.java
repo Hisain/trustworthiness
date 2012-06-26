@@ -14,7 +14,10 @@ import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score;
  */
 public class TrustFactoryImpl implements TrustFactory {
 
-  public Atomic createService(String serviceId) {
+  /* (non-Javadoc)
+ * @see eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory#createService(java.lang.String)
+ */
+public Atomic createService(String serviceId) {
     Atomic service = new Atomic(serviceId);    
    
    // Score score = new ScoreImpl(); 
@@ -22,7 +25,10 @@ public class TrustFactoryImpl implements TrustFactory {
     return service;
    }
 
-  public Score createScore(Service service) {
+  /* (non-Javadoc)
+ * @see eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory#createScore(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Service)
+ */
+public Score createScore(Service service) {
     Score score = new Score();
     score.setService(service);
     //id should be shared with member table
@@ -31,6 +37,9 @@ public class TrustFactoryImpl implements TrustFactory {
     return score; 
   }
 
+/* (non-Javadoc)
+ * @see eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory#createComposite(java.lang.String)
+ */
 public Composite createComposite(String serviceId) {
 	Composite service = new Composite(serviceId);
 	

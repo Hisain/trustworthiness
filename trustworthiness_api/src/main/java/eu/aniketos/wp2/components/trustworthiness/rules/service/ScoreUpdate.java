@@ -4,10 +4,14 @@ import java.util.Map;
 
 /**
  * @author Hisain Elshaafi (TSSG)
- *
+ * triggers generation of ratings through invoking JBoss rules
  */
 public interface ScoreUpdate {
 
+	/**
+	 * @param metric
+	 * @throws Exception
+	 */
 	void updateScore(Map<String, String> metric) throws Exception;
 
 }

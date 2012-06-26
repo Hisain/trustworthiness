@@ -42,10 +42,6 @@
 		<property name="compositeService" ref="compositeService"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 	</bean> -->
-
-	<bean name="trustworthinessPredictionJms"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.TrustworthinessPredictionJmsImpl">
-	</bean>
 	
 	<bean name="trustworthinessPredictionService"
 		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.TrustworthinessPredictionServiceImpl">

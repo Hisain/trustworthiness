@@ -1,16 +1,12 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.Table;
 import javax.persistence.Column;
-import javax.persistence.OneToMany;
-import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.InheritanceType;
@@ -40,69 +36,111 @@ public class Service implements Serializable {
 	private double deviation=0;
 	//private boolean composite = false;
 
+	/**
+	 * @param serviceId
+	 */
 	public Service(String serviceId) {
 		this.id = serviceId;
 	}
 
+	/**
+	 * 
+	 */
 	public Service() {
 	}
 
+	/**
+	 * @return
+	 */
 	@Id
 	@Column(name="id")
 	public String getId() {
 		return id;
 	}
 
+	/**
+	 * @param id
+	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 
+	/**
+	 * @return
+	 */
 	@Column (name="trustscore")
 	@NotNull
 	public double getTrustScore() {
 		return trustScore;
 	}
 
+	/**
+	 * @param trustScore
+	 */
 	public void setTrustScore(double trustScore) {
 		this.trustScore = trustScore;
 	}
 
+	/**
+	 * @return
+	 */
 	@Column (name="confidence")
 	@NotNull
 	public double getConfidence() {
 		return confidence;
 	}
 
+	/**
+	 * @param confidence
+	 */
 	public void setConfidence(double confidence) {
 		this.confidence = confidence;
 	}
 
+	/**
+	 * @return
+	 */
 	@Column (name="movingwt")
 	@NotNull
 	public double getMovingWt() {
 		return movingWt;
 	}
 
+	/**
+	 * @param movingWt
+	 */
 	public void setMovingWt(double movingWt) {
 		this.movingWt = movingWt;
 	}
 
+	/**
+	 * @return
+	 */
 	@Column (name="calctime")
 	@NotNull
 	public double getCalcTime() {
 		return calcTime;
 	}
 
+	/**
+	 * @param calcTime
+	 */
 	public void setCalcTime(double calcTime) {
 		this.calcTime = calcTime;
 	}
 
+	/**
+	 * @return
+	 */
 	@Column (name="deviation")
 	@NotNull
 	public double getDeviation() {
 		return deviation;
 	}
 
+	/**
+	 * @param deviation
+	 */
 	public void setDeviation(double deviation) {
 		this.deviation = deviation;
 	}

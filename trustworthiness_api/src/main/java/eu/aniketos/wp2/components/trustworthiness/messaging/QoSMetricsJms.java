@@ -7,6 +7,9 @@ package eu.aniketos.wp2.components.trustworthiness.messaging;
  */
 public interface QoSMetricsJms {
 
+	/**
+	 * method for receiving qos metrics using JMS
+	 */
 	public void receiveMetrics();
 	
 }

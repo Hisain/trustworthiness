@@ -29,6 +29,11 @@ public class MessageImpl implements Message, Serializable {
 	private String messageKey;
 	private List<Object> context;
 
+	/**
+	 * @param type
+	 * @param messageKey
+	 * @param context
+	 */
 	public MessageImpl(Message.Type type, String messageKey,
 			List<Object> context) {
 		if (type == null || messageKey == null) {
@@ -40,14 +45,23 @@ public class MessageImpl implements Message, Serializable {
 		this.context = context;
 	}
 
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.rules.service.Message#getMessageKey()
+	 */
 	public String getMessageKey() {
 		return messageKey;
 	}
 
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.rules.service.Message#getType()
+	 */
 	public Message.Type getType() {
 		return type;
 	}
 
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.rules.service.Message#getContextOrdered()
+	 */
 	public List<Object> getContextOrdered() {
 		return context;
 	}

@@ -2,17 +2,14 @@ package eu.aniketos.wp2.components.trustworthiness.impl.rules.model;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 
-import org.apache.log4j.Logger;
 import org.drools.KnowledgeBase;
-import org.drools.KnowledgeBaseConfiguration;
+//import org.drools.KnowledgeBaseConfiguration;
 import org.drools.KnowledgeBaseFactory;
-import org.drools.SystemEventListener;
-import org.drools.SystemEventListenerFactory;
+//import org.drools.SystemEventListener;
+//import org.drools.SystemEventListenerFactory;
 import org.drools.builder.KnowledgeBuilder;
 import org.drools.builder.KnowledgeBuilderFactory;
 import org.drools.builder.ResourceType;
@@ -29,8 +26,6 @@ import org.drools.io.Resource;
  */
 public class KnowledgeBaseFactoryService implements
 		KnowledgeBaseFactoryManagement {
-
-	private static Logger logger = Logger.getLogger(KnowledgeBaseFactoryService.class);
 	
 	private KnowledgeBase knowledgeBase;
 
@@ -93,6 +88,9 @@ public class KnowledgeBaseFactoryService implements
 		return KnowledgeBase.class;
 	}
 
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.impl.rules.model.KnowledgeBaseFactoryManagement#destroy()
+	 */
 	public void destroy() throws Exception {
 		// TODO Auto-generated method stub
 

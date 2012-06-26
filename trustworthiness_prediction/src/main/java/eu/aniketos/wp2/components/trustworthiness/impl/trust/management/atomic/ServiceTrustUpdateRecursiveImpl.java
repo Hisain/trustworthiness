@@ -1,13 +1,9 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.trust.management.atomic;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.osgi.service.event.Event;
@@ -22,6 +18,8 @@ import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
 
 /**
+ * updates trustworthiness of (atomic) services using recursive approach
+ * 
  * TODO: store data required for moving avg updates
  * 
  * @author Hisain Elshaafi
@@ -53,6 +51,9 @@ public class ServiceTrustUpdateRecursiveImpl implements
 
 	private double alpha = 1;
 
+	/**
+	 * 
+	 */
 	public void initialize() {
 
 		logger.debug("ServiceTrustUpdatePolicyImpl");
@@ -145,6 +146,9 @@ public class ServiceTrustUpdateRecursiveImpl implements
 		return trust;
 	}
 
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdatePolicy#calculateTrust(java.lang.String)
+	 */
 	public Trustworthiness calculateTrust(String serviceId) throws Exception {
 		double score = 0;
 
@@ -348,11 +352,12 @@ public class ServiceTrustUpdateRecursiveImpl implements
 
 		// send alert if trustworthiness < alert threshold
 		if (score < config.getConfig().getDouble("alert_threshold")) {
-			Dictionary props = new Properties();
+			
+			Map<String, String> props = new HashMap<String, String>();
 			props.put("service.id", serviceId);
 			props.put("trustworthiness.score", Double.toString(score));
 			props.put("trustworthiness.confidence", Double.toString(confidence));
-
+			
 			Event osgiEvent = new Event("eu/aniketos/trustworthiness/alert",
 					props);
 			eventAdmin.sendEvent(osgiEvent);
@@ -366,35 +371,75 @@ public class ServiceTrustUpdateRecursiveImpl implements
 		return trust;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return data access service for atomic and composite Web services
+	 */
 	public ServiceEntityService getServiceEntityService() {
 		return serviceEntityService;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param serviceEntityService data access service for atomic and composite Web services
+	 */
 	public void setServiceEntityService(
 			ServiceEntityService serviceEntityService) {
 		this.serviceEntityService = serviceEntityService;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return data access service for rating scores
+	 */
 	public ScoreEntityService getScoreEntityService() {
 		return scoreEntityService;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param scoreEntityService data access service for rating scores
+	 */
 	public void setScoreEntityService(ScoreEntityService scoreEntityService) {
 		this.scoreEntityService = scoreEntityService;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return object to retrieve configuration
+	 */
 	public ConfigurationManagement getConfig() {
 		return config;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param config object to retrieve configuration
+	 */
 	public void setConfig(ConfigurationManagement config) {
 		this.config = config;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return OSGi event admin
+	 */
 	public EventAdmin getEventAdmin() {
 		return eventAdmin;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param eventAdmin OSGi event admin
+	 */
 	public void setEventAdmin(EventAdmin eventAdmin) {
 		this.eventAdmin = eventAdmin;
 	}

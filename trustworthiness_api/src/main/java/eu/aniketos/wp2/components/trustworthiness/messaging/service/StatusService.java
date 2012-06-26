@@ -5,6 +5,10 @@ package eu.aniketos.wp2.components.trustworthiness.messaging.service;
  *
  */
 public interface StatusService {
+	
+	/**
+	 * initialize method for displaying bundle status
+	 */
 	public void initialize();
 	
 }

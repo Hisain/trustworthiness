@@ -8,7 +8,21 @@ import org.apache.commons.configuration.ConfigurationBuilder;
  * 
  */
 public interface ConfigurationManagement {
-	 Configuration getConfig();
-	 public ConfigurationBuilder getConfigBuilder();
-	 public void setConfigBuilder(ConfigurationBuilder configBuilder);
+	 
+	/**
+	 * @return configuration object
+	 */
+	
+	Configuration getConfig();
+	 
+	/**
+	 * @return Apache Configuration configurationbuilder that can create
+	 * configuration objects
+	 */	
+	public ConfigurationBuilder getConfigBuilder();
+	 
+	/**
+	 * @param configBuilder Apache ConfigurationBuilder interface
+	 */
+	public void setConfigBuilder(ConfigurationBuilder configBuilder);
 }

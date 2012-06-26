@@ -1,8 +1,8 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.trust.management.composite;
 
 import java.math.BigDecimal;
-import java.util.Dictionary;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -19,6 +19,7 @@ import eu.aniketos.wp2.components.trustworthiness.trust.management.composite.Com
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 
 /**
+ * calculates trustworthiness of simple composite services from components 
  * @author Hisain Elshaafi (TSSG)
  * 
  */
@@ -35,6 +36,9 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 
 	private EventAdmin eventAdmin;
 
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.composite.CompositeTrustUpdate#aggregateTrustworthiness(java.lang.String)
+	 */
 	public Trustworthiness aggregateTrustworthiness(String serviceId)
 			throws Exception {
 
@@ -84,7 +88,7 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 
 		// send alert if trustworthiness < alert threshold
 		if (twScore < config.getConfig().getDouble("alert_threshold")) {
-			Dictionary props = new Properties();
+			Map<String, String> props = new HashMap<String, String>();
 			props.put("service.id", serviceId);
 			props.put("trustworthiness.score", Double.toString(twScore));
 			props.put("trustworthiness.confidence",
@@ -102,34 +106,58 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 
 	}
 
+	/**
+	 * @return
+	 */
 	public ServiceEntityService getServiceEntityService() {
 		return serviceEntityService;
 	}
 
+	/**
+	 * @param sEntityService
+	 */
 	public void setServiceEntityService(ServiceEntityService sEntityService) {
 		this.serviceEntityService = sEntityService;
 	}
 
+	/**
+	 * @return
+	 */
 	public ServiceTrustUpdatePolicy getTrustUpdate() {
 		return trustUpdate;
 	}
 
+	/**
+	 * @param trustUpdate
+	 */
 	public void setTrustUpdate(ServiceTrustUpdatePolicy trustUpdate) {
 		this.trustUpdate = trustUpdate;
 	}
 	
+	/**
+	 * @return
+	 */
 	public ConfigurationManagement getConfig() {
 		return config;
 	}
 
+	/**
+	 * @param config
+	 */
 	public void setConfig(ConfigurationManagement config) {
 		this.config = config;
 	}
 	
+	/**
+	 * @return
+	 */
 	public EventAdmin getEventAdmin() {
 		return eventAdmin;
 	}
 	
+	/**
+	 * @param eventAdmin
+	 */
 	public void setEventAdmin(EventAdmin eventAdmin) {
 		this.eventAdmin = eventAdmin;
 	}

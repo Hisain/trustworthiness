@@ -7,14 +7,29 @@ import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score;
 
 /**
  * @author Hisain Elshaafi (TSSG)
- *
+ * 
  */
 public interface TrustFactory {
 
-	public abstract Atomic createService(String serviceName);
-	
-	public abstract Composite createComposite(String serviceName);
+	/**
+	 * @param serviceId
+	 *            String service id
+	 * @return
+	 */
+	public abstract Atomic createService(String serviceId);
 
+	/**
+	 * @param serviceId
+	 *            String service id
+	 * @return
+	 */
+	public abstract Composite createComposite(String serviceId);
+
+	/**
+	 * @param service
+	 *            new service object
+	 * @return new Score object
+	 */
 	public abstract Score createScore(Service service);
 
 }

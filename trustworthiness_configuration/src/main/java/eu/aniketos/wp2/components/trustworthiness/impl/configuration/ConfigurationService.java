@@ -18,6 +18,9 @@ public class ConfigurationService implements ConfigurationManagement {
 	private ConfigurationBuilder configBuilder = null;
 
 	
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement#getConfig()
+	 */
 	public Configuration getConfig(){
 		Configuration config = null;
 		try {
@@ -27,9 +30,17 @@ public class ConfigurationService implements ConfigurationManagement {
 		}
 		return config;
 	}
+	
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement#getConfigBuilder()
+	 */
 	public ConfigurationBuilder getConfigBuilder(){
 		return configBuilder;
 	}
+	
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement#setConfigBuilder(org.apache.commons.configuration.ConfigurationBuilder)
+	 */
 	public void setConfigBuilder(ConfigurationBuilder configBuilder) {
 		this.configBuilder = configBuilder;
 	}
