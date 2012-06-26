@@ -14,14 +14,19 @@ import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntitySer
  * 
  */
 public class QoSMetricsServiceImpl implements QoSMetricsService {
+	
 	private static Logger logger = Logger.getLogger(QoSMetricsService.class);
 
 	private ConfigurationManagement config;
 
-	ScoreUpdate scoreUpdate;
+	private ScoreUpdate scoreUpdate;
 
 	private ServiceEntityService serviceEntityService;
 
+
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.messaging.QoSMetricsService#receiveMetrics(java.util.Map)
+	 */
 	public void receiveMetrics(Map<String, String> metric) throws Exception {
 
 		if (metric == null
@@ -47,27 +52,57 @@ public class QoSMetricsServiceImpl implements QoSMetricsService {
 		}
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param config set configuration field
+	 */
 	public void setConfig(ConfigurationManagement config) {
 		this.config = config;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return configuration field
+	 */
 	public ConfigurationManagement getConfig() {
 		return config;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param serviceEntityService data access service object for Web services
+	 */
 	public void setServiceEntityService(
 			ServiceEntityService serviceEntityService) {
 		this.serviceEntityService = serviceEntityService;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return data access service object for Web services
+	 */
 	public ServiceEntityService getServiceEntityService() {
 		return serviceEntityService;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return
+	 */
 	public ScoreUpdate getScoreUpdate() {
 		return scoreUpdate;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param scoreUpdate
+	 */
 	public void setScoreUpdate(ScoreUpdate scoreUpdate) {
 		this.scoreUpdate = scoreUpdate;
 	}

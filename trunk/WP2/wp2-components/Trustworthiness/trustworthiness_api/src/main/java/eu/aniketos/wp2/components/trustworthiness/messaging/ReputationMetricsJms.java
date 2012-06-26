@@ -7,6 +7,9 @@ package eu.aniketos.wp2.components.trustworthiness.messaging;
  */
 public interface ReputationMetricsJms {
 
+	/**
+	 * method for receiving reputation metrics using JMS
+	 */
 	public void receiveMetrics();
 		
 }

@@ -5,11 +5,8 @@ package eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo;
 
 import java.io.Serializable;
 
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -68,6 +65,13 @@ public class Score implements Serializable {
 	public Score() {
 	}
 
+	/**
+	 * @param id
+	 * @param service
+	 * @param score
+	 * @param recency
+	 * @param property
+	 */
 	public Score(String id, Service service, double score, long recency,
 			String property) {
 		this.id = id;
@@ -77,16 +81,25 @@ public class Score implements Serializable {
 		this.recency = recency;
 	}
 
+	/**
+	 * @return
+	 */
 	@Id
 	@Column(name="id")
 	public String getId() {
 		return id;
 	}
 
+	/**
+	 * @param id
+	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 
+	/**
+	 * @return
+	 */
 	@NotNull
 	@ManyToOne
 	// (cascade = { CascadeType.ALL })
@@ -95,61 +108,100 @@ public class Score implements Serializable {
 		return service;
 	}
 
+	/**
+	 * @param service
+	 */
 	public void setService(Service service) {
 		this.service = (Service)service;
 	}
 
+	/**
+	 * @return
+	 */
 	@NotNull
 	public long getRecency() {
 		return recency;
 	}
 
+	/**
+	 * @param recency
+	 */
 	public void setRecency(long recency) {
 		this.recency = recency;
 	}
 
+	/**
+	 * @return
+	 */
 	@NotNull
 	@Column(precision = 6, scale = 2)
 	public double getScore() {
 		return score;
 	}
 
+	/**
+	 * @param score
+	 */
 	public void setScore(double score) {
 		this.score = score;
 	}
 
+	/**
+	 * @return
+	 */
 	@NotNull
 	public String getProperty() {
 		return property;
 	}
 
+	/**
+	 * @param property
+	 */
 	public void setProperty(String property) {
 		this.property = property;
 	}
 
+	/**
+	 * @return
+	 */
 	@Transient
 	public double getRecencyWt() {
 		return recencyWt;
 	}
 
+	/**
+	 * @param scoreWt
+	 */
 	public void setRecencyWt(double scoreWt) {
 		this.recencyWt = scoreWt;
 	}
 
+	/**
+	 * @return
+	 */
 	@Transient
 	public double getPropertyWt() {
 		return propertyWt;
 	}
 
+	/**
+	 * @param propertyWt
+	 */
 	public void setPropertyWt(double propertyWt) {
 		this.propertyWt = propertyWt;
 	}
 
+	/**
+	 * @return
+	 */
 	@Transient
 	public double getScoreWt() {
 		return scoreWt;
 	}
 
+	/**
+	 * @param scoreWt
+	 */
 	public void setScoreWt(double scoreWt) {
 		this.scoreWt = scoreWt;
 	}

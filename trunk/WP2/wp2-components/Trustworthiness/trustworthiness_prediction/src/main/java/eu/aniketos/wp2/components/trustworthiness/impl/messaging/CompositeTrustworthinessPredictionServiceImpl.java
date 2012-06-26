@@ -5,13 +5,10 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.management.composite.CompositeTrustUpdateImpl;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Composite;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
 import eu.aniketos.wp2.components.trustworthiness.messaging.ICompositeTrustworthinessPrediction;
-import eu.aniketos.wp2.components.trustworthiness.messaging.ITrustworthinessPrediction;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;
-import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdatePolicy;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.composite.CompositeTrustUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
@@ -32,6 +29,9 @@ public class CompositeTrustworthinessPredictionServiceImpl implements
 
 	private TrustFactory tFactory;
 
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.messaging.ICompositeTrustworthinessPrediction#getCompositeTrustworthiness(java.lang.String, java.util.Set)
+	 */
 	public Trustworthiness getCompositeTrustworthiness(String serviceId,
 			Set<String> componentServices) throws Exception {
 		
@@ -79,26 +79,56 @@ public class CompositeTrustworthinessPredictionServiceImpl implements
 
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return data access service for atomic and composite Web services
+	 */
 	public ServiceEntityService getServiceEntityService() {
 		return serviceEntityService;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param sEntityService data access service for atomic and composite Web services
+	 */
 	public void setServiceEntityService(ServiceEntityService sEntityService) {
 		this.serviceEntityService = sEntityService;
 	}
 	
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return 
+	 */
 	public CompositeTrustUpdate getCsTrustUpdate() {
 		return csTrustUpdate;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param csTrustUpdate
+	 */
 	public void setCsTrustUpdate(CompositeTrustUpdate csTrustUpdate) {
 		this.csTrustUpdate = csTrustUpdate;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return service and rating score objects factory
+	 */
 	public TrustFactory gettFactory() {
 		return tFactory;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param tFactory service and rating score objects factory
+	 */
 	public void settFactory(TrustFactory tFactory) {
 		this.tFactory = tFactory;
 	}

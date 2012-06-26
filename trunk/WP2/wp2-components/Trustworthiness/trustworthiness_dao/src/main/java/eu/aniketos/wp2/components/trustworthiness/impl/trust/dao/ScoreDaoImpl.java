@@ -19,10 +19,16 @@ public class ScoreDaoImpl  extends JpaDaoSupport implements ScoreDao {
 
 	private static Logger logger = Logger.getLogger(ScoreDaoImpl.class);
 
+	/**
+	 * 
+	 */
 	public ScoreDaoImpl() {
 		super();
 	}
 	
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.dao.ScoreDao#addScore(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score)
+	 */
 	public void addScore(Score score) {
 
 		try {
@@ -38,6 +44,9 @@ public class ScoreDaoImpl  extends JpaDaoSupport implements ScoreDao {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.dao.ScoreDao#updateScore(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score)
+	 */
 	public void updateScore(Score score) {
 
 		try {
@@ -53,6 +62,9 @@ public class ScoreDaoImpl  extends JpaDaoSupport implements ScoreDao {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.dao.ScoreDao#getScoresByServiceId(java.lang.String)
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Score> getScoresByServiceId(final String serviceId) {
 
@@ -93,6 +105,9 @@ public class ScoreDaoImpl  extends JpaDaoSupport implements ScoreDao {
 		return serviceScores;
 	}
 
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.dao.ScoreDao#deleteScore(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score)
+	 */
 	public void deleteScore(Score score) {
 
 		String serviceId = score.getService().getId();

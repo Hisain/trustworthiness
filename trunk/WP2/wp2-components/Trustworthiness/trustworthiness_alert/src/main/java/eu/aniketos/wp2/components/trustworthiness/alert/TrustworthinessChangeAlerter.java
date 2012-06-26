@@ -19,6 +19,9 @@ public class TrustworthinessChangeAlerter implements EventHandler {
 	private IAlert alert;
 	
 
+	/* (non-Javadoc)
+	 * @see org.osgi.service.event.EventHandler#handleEvent(org.osgi.service.event.Event)
+	 */
 	public void handleEvent(Event event) {
 
 		String topicName = event.getTopic();
@@ -68,18 +71,30 @@ public class TrustworthinessChangeAlerter implements EventHandler {
 
 	}
 
+	/**
+	 * @return data access service object for Web service
+	 */
 	public ServiceEntityService getServiceEntityService() {
 		return serviceEntityService;
 	}
 
+	/**
+	 * @param serviceEntityService data access service object for Web services
+	 */
 	public void setServiceEntityService(ServiceEntityService serviceEntityService) {
 		this.serviceEntityService = serviceEntityService;
 	}
 
+	/**
+	 * @return notification module alert
+	 */
 	public IAlert getAlert() {
 		return alert;
 	}
 
+	/**
+	 * @param alert notification module alert
+	 */
 	public void setAlert(IAlert alert) {
 		this.alert = alert;
 	}

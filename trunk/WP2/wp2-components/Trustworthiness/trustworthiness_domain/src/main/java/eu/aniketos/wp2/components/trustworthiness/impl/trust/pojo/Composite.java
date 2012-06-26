@@ -3,12 +3,9 @@ package eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
@@ -23,15 +20,24 @@ public class Composite extends Service {
 	
 	private Set<Atomic>componentServices = new HashSet<Atomic>();
 	
+	/**
+	 * 
+	 */
 	public Composite() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * @param serviceId
+	 */
 	public Composite(String serviceId) {
 		this.setId(serviceId);	
 	}
 	
+	/**
+	 * @return
+	 */
 	@ManyToMany(fetch = FetchType.EAGER)//, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "LNK_SERVICE_COMPOSITE", joinColumns = @JoinColumn(name = "composite_id", referencedColumnName = "id"),
 	inverseJoinColumns = @JoinColumn(name = "atomic_id", referencedColumnName = "id"))
@@ -40,6 +46,9 @@ public class Composite extends Service {
 		return componentServices;
 	}
 
+	/**
+	 * @param componentServices
+	 */
 	public void setComponentServices(Set<Atomic> componentServices) {
 		this.componentServices = componentServices;
 	}

@@ -1,12 +1,8 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.trust.management.atomic;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.osgi.service.event.Event;
@@ -21,7 +17,7 @@ import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
 
 /**
- * 
+ * updates trustworthiness of (atomic) services using moving average approach
  * 
  * @author Hisain Elshaafi
  * 
@@ -60,6 +56,9 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 
 	private double alpha = 1;
 
+	/**
+	 * 
+	 */
 	public void initialize() {
 
 		logger.debug("ServiceTrustUpdatePolicyImpl");
@@ -128,20 +127,28 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 	}
 
 	/**
-	 * 
+	 * method updates trustworthiness based on new rating score
 	 */
 	public Trustworthiness calculateTrust(Score ratingScore) {
 
 		double twScore = 0;
 		double twConfidence = 0;
-
-		// needs testing!
+		
 		Atomic service = (Atomic) ratingScore.getService();
 
-		if (service != null) {
+		if (service == null) {
+			logger.error("service not found.");
+			return null;
 
-			logger.info("found service " + service.getId());
 		}
+		
+		String serviceId = service.getId();
+		
+		if (logger.isInfoEnabled()) {
+			logger.info("found service " + serviceId);
+		}
+
+		
 
 		savedTw = service.getTrustScore();
 		calcTime = service.getCalcTime();
@@ -152,10 +159,6 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		int hourMsecs = 3600000;
 		double now = System.currentTimeMillis();
 		double nowInHour = now / (double) hourMsecs;
-
-		/*
-		 * if (service == null) { logger.warn("source = null"); return; }
-		 */
 
 		double scoreAge = nowInHour - calcTime;
 
@@ -271,20 +274,23 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		logger.debug("updating service with moving average values..");
 		serviceEntityService.updateAtomic(service);
 
-		BigDecimal scoreBD = new BigDecimal(String.valueOf(twScore)).setScale(3, BigDecimal.ROUND_HALF_UP);
-		BigDecimal confidenceBD = new BigDecimal(String.valueOf(twConfidence)).setScale(3, BigDecimal.ROUND_HALF_UP);
-		
+		BigDecimal scoreBD = new BigDecimal(String.valueOf(twScore)).setScale(
+				3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal confidenceBD = new BigDecimal(String.valueOf(twConfidence))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
+
 		twScore = Double.parseDouble(scoreBD.toString());
 		twConfidence = Double.parseDouble(confidenceBD.toString());
-		Trustworthiness trust = new ServiceTrustworthiness(service.getId(),
+		Trustworthiness trust = new ServiceTrustworthiness(serviceId,
 				twScore, twConfidence);
 
 		// send alert if trustworthiness < alert threshold
 		if (twScore < config.getConfig().getDouble("alert_threshold")) {
-			Dictionary props = new Properties();
-			props.put("service.id", service.getId());
+			Map<String, String> props = new HashMap<String, String>();
+			props.put("service.id", serviceId);
 			props.put("trustworthiness.score", Double.toString(twScore));
-			props.put("trustworthiness.confidence", Double.toString(twConfidence));
+			props.put("trustworthiness.confidence",
+					Double.toString(twConfidence));
 
 			Event osgiEvent = new Event("eu/aniketos/trustworthiness/alert",
 					props);
@@ -294,6 +300,12 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		return trust;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.
+	 * ServiceTrustUpdatePolicy#calculateTrust(java.lang.String)
+	 */
 	public Trustworthiness calculateTrust(String serviceId) {
 		double twScore = 0;
 		double twConfidence = 0;
@@ -402,21 +414,24 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		logger.debug("updating service with moving average values..");
 		serviceEntityService.updateAtomic(service);
 
-		BigDecimal scoreBD = new BigDecimal(String.valueOf(twScore)).setScale(3, BigDecimal.ROUND_HALF_UP);
-		BigDecimal confidenceBD = new BigDecimal(String.valueOf(twConfidence)).setScale(3, BigDecimal.ROUND_HALF_UP);
-		
+		BigDecimal scoreBD = new BigDecimal(String.valueOf(twScore)).setScale(
+				3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal confidenceBD = new BigDecimal(String.valueOf(twConfidence))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
+
 		twScore = Double.parseDouble(scoreBD.toString());
 		twConfidence = Double.parseDouble(confidenceBD.toString());
-		
+
 		Trustworthiness tw = new ServiceTrustworthiness(service.getId(),
 				twScore, twConfidence);
 
 		// send alert if trustworthiness < alert threshold
 		if (twScore < config.getConfig().getDouble("alert_threshold")) {
-			Dictionary props = new Properties();
+			Map<String, String> props = new HashMap<String, String>();
 			props.put("service.id", serviceId);
 			props.put("trustworthiness.score", Double.toString(twScore));
-			props.put("trustworthiness.confidence", Double.toString(twConfidence));
+			props.put("trustworthiness.confidence",
+					Double.toString(twConfidence));
 
 			Event osgiEvent = new Event("eu/aniketos/trustworthiness/alert",
 					props);
@@ -429,35 +444,79 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		return tw;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return data access service for atomic and composite Web services
+	 */
 	public ServiceEntityService getServiceEntityService() {
 		return serviceEntityService;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param serviceEntityService
+	 *            data access service for atomic and composite Web services
+	 */
 	public void setServiceEntityService(
 			ServiceEntityService serviceEntityService) {
 		this.serviceEntityService = serviceEntityService;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return data access service for rating scores
+	 */
 	public ScoreEntityService getScoreEntityService() {
 		return scoreEntityService;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param scoreEntityService
+	 *            data access service for rating scores
+	 */
 	public void setScoreEntityService(ScoreEntityService scoreEntityService) {
 		this.scoreEntityService = scoreEntityService;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return object to retrieve configuration
+	 */
 	public ConfigurationManagement getConfig() {
 		return config;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param config
+	 *            object to retrieve configuration
+	 */
 	public void setConfig(ConfigurationManagement config) {
 		this.config = config;
 	}
-	
+
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return OSGi event admin
+	 */
 	public EventAdmin getEventAdmin() {
 		return eventAdmin;
 	}
-	
+
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param eventAdmin
+	 *            OSGi event admin
+	 */
 	public void setEventAdmin(EventAdmin eventAdmin) {
 		this.eventAdmin = eventAdmin;
 	}

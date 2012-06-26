@@ -18,6 +18,9 @@ public class QoSMetricsSender {
 
 	private QoSMetricsService qosMetrics;
 
+	/**
+	 * @param qosMetics
+	 */
 	public QoSMetricsSender(QoSMetricsService qosMetics) {
 		super();
 		this.qosMetrics = qosMetics;

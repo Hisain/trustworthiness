@@ -10,11 +10,17 @@ public class Atomic extends Service {
 
 	private static final long serialVersionUID = 6669239437846743354L;
 	
+	/**
+	 * 
+	 */
 	public Atomic() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * @param serviceId
+	 */
 	public Atomic(String serviceId) {
 		this.setId(serviceId);
 	}

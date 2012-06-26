@@ -26,6 +26,9 @@ public class TrustworthinessPredictionServiceImpl implements
 
 	CompositeTrustUpdate csTrustUpdate;
 
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.messaging.ITrustworthinessPrediction#getTrustworthiness(java.lang.String)
+	 */
 	public Trustworthiness getTrustworthiness(String serviceId) throws Exception {
 
 		if (serviceId == null) {
@@ -58,26 +61,44 @@ public class TrustworthinessPredictionServiceImpl implements
 
 	}
 
+	/**
+	 * @return
+	 */
 	public ServiceEntityService getServiceEntityService() {
 		return serviceEntityService;
 	}
 
+	/**
+	 * @param sEntityService
+	 */
 	public void setServiceEntityService(ServiceEntityService sEntityService) {
 		this.serviceEntityService = sEntityService;
 	}
 
+	/**
+	 * @return
+	 */
 	public ServiceTrustUpdatePolicy getTrustUpdate() {
 		return trustUpdate;
 	}
 
+	/**
+	 * @param trustUpdate
+	 */
 	public void setTrustUpdate(ServiceTrustUpdatePolicy trustUpdate) {
 		this.trustUpdate = trustUpdate;
 	}
 
+	/**
+	 * @return
+	 */
 	public CompositeTrustUpdate getCsTrustUpdate() {
 		return csTrustUpdate;
 	}
 
+	/**
+	 * @param csTrustUpdate
+	 */
 	public void setCsTrustUpdate(CompositeTrustUpdate csTrustUpdate) {
 		this.csTrustUpdate = csTrustUpdate;
 	}

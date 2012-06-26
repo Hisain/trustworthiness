@@ -7,7 +7,6 @@ import javax.persistence.EntityNotFoundException;
 
 import org.apache.log4j.Logger;
 import org.springframework.orm.jpa.support.JpaDaoSupport;
-import org.springframework.transaction.annotation.Transactional;
 
 import eu.aniketos.wp2.components.trustworthiness.trust.dao.ServiceDao;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Composite;
@@ -22,10 +21,20 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 
 	private static Logger logger = Logger.getLogger(ServiceDaoImpl.class);
 
+	/**
+	 * 
+	 */
 	public ServiceDaoImpl() {
 		super();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * eu.aniketos.wp2.components.trustworthiness.trust.dao.ServiceDao#addAtomic
+	 * (eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic)
+	 */
 	public void addAtomic(Atomic service) {
 
 		try {
@@ -39,6 +48,13 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * eu.aniketos.wp2.components.trustworthiness.trust.dao.ServiceDao#addComposite
+	 * (eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Composite)
+	 */
 	public void addComposite(Composite service) {
 
 		try {
@@ -52,6 +68,13 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * eu.aniketos.wp2.components.trustworthiness.trust.dao.ServiceDao#updateAtomic
+	 * (eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic)
+	 */
 	public void updateAtomic(Atomic service) {
 
 		try {
@@ -65,6 +88,13 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.dao.ServiceDao#
+	 * updateComposite
+	 * (eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Composite)
+	 */
 	public void updateComposite(Composite service) {
 
 		try {
@@ -78,6 +108,13 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * eu.aniketos.wp2.components.trustworthiness.trust.dao.ServiceDao#getAllAtomics
+	 * ()
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Atomic> getAllAtomics() {
 		List<Atomic> services = new ArrayList<Atomic>();
@@ -109,6 +146,13 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 		return services;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * eu.aniketos.wp2.components.trustworthiness.trust.dao.ServiceDao#getAtomic
+	 * (java.lang.String)
+	 */
 	public Atomic getAtomic(final String id) {
 		Atomic service = null;
 		try {
@@ -134,6 +178,13 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 		return service;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * eu.aniketos.wp2.components.trustworthiness.trust.dao.ServiceDao#getComposite
+	 * (java.lang.String)
+	 */
 	public Composite getComposite(final String id) {
 		Composite service = null;
 		try {
@@ -147,7 +198,7 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 
 		} catch (EntityNotFoundException enf) {
 			logger.warn("getComposite: " + enf.getMessage());
-			
+
 		} catch (Exception e) {
 			logger.error("getComposite: " + e.getMessage());
 		}
@@ -161,6 +212,13 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 		return service;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * eu.aniketos.wp2.components.trustworthiness.trust.dao.ServiceDao#deleteAtomic
+	 * (eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic)
+	 */
 	public void deleteAtomic(Atomic service) {
 		String serviceName = service.getId();
 
@@ -180,6 +238,13 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.dao.ServiceDao#
+	 * deleteComposite
+	 * (eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Composite)
+	 */
 	public void deleteComposite(Composite service) {
 		String serviceName = service.getId();
 
@@ -199,6 +264,12 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.dao.ServiceDao#
+	 * getAllAtomicNames()
+	 */
 	@SuppressWarnings("unchecked")
 	public List<String> getAllAtomicNames() {
 

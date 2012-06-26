@@ -2,29 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-	<bean name="notification"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.Notification">
-	</bean>
-
-	<!-- <bean name="qosMetricJms"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.QoSMetricsJmsImpl">
-		<property name="config" ref="configService"></property>
-		<property name="serviceEntityService" ref="serviceEntityService"></property>
-	</bean> -->
-	
+		
 	<bean name="qosMetric"
 		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.QoSMetricsServiceImpl">
 		<property name="config" ref="configService"></property>
 		<property name="scoreUpdate" ref="scoreUpdate"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 	</bean>
-
-	<!-- <bean name="reputationMetricJms"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.ReputationMetricsJmsImpl">
-		<property name="config" ref="configService"></property>
-		<property name="serviceEntityService" ref="serviceEntityService"></property>
-	</bean> -->
 
 	<bean name="reportFactory"
 		class="eu.aniketos.wp2.components.trustworthiness.impl.rules.service.ReportFactoryImpl">
@@ -58,14 +42,14 @@
 		<property name="eventAdmin" ref="eventAdminService"/>
 	</bean>
 
-	<bean name="qosMetricJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+	<!-- <bean name="qosMetricJob" class="org.springframework.scheduling.quartz.JobDetailBean">
 		<property name="jobClass" value="eu.aniketos.wp2.components.trustworthiness.impl.messaging.QoSMetricsScheduler" />
 		<property name="jobDataAsMap">
 			<map>
 				<entry key="timeout" value="60" />
 			</map>
 		</property>
-	</bean>
+	</bean> -->
 	
 	<bean id="dummy"
 		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.service.StatusServiceImpl" init-method="initialize"/>

@@ -25,6 +25,9 @@ public class ValidationReportImpl implements ValidationReport, Serializable {
 	private static final long serialVersionUID = 6397725368292346892L;
 	protected Map<Message.Type, Set<Message>> messagesMap = new HashMap<Message.Type, Set<Message>>();
 
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.rules.service.ValidationReport#getMessages()
+	 */
 	public Set<Message> getMessages() {
 		Set<Message> messagesAll = new HashSet<Message>();
 		for (Collection<Message> messages : messagesMap.values()) {
@@ -33,6 +36,9 @@ public class ValidationReportImpl implements ValidationReport, Serializable {
 		return messagesAll;
 	}
 
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.rules.service.ValidationReport#getMessagesByType(eu.aniketos.wp2.components.trustworthiness.rules.service.Message.Type)
+	 */
 	public Set<Message> getMessagesByType(Message.Type type) {
 		if (type == null)
 			return Collections.emptySet();
@@ -43,6 +49,9 @@ public class ValidationReportImpl implements ValidationReport, Serializable {
 			return messages;
 	}
 
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.rules.service.ValidationReport#contains(java.lang.String)
+	 */
 	public boolean contains(String messageKey) {
 		for (Message message : getMessages()) {
 			if (messageKey.equals(message.getMessageKey())) {
@@ -52,6 +61,9 @@ public class ValidationReportImpl implements ValidationReport, Serializable {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.rules.service.ValidationReport#addMessage(eu.aniketos.wp2.components.trustworthiness.rules.service.Message)
+	 */
 	public boolean addMessage(Message message) {
 		if (message == null)
 			return false;

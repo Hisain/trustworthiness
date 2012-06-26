@@ -21,6 +21,10 @@ public class TrustworthinessRequester {
 	ITrustworthinessPrediction twPrediction;
 	ICompositeTrustworthinessPrediction ctwPrediction;
 
+	/**
+	 * @param twPrediction
+	 * @param ctwPrediction
+	 */
 	public TrustworthinessRequester(ITrustworthinessPrediction twPrediction,
 			ICompositeTrustworthinessPrediction ctwPrediction) {
 		super();
@@ -28,6 +32,9 @@ public class TrustworthinessRequester {
 		this.ctwPrediction = ctwPrediction;
 	}
 
+	/**
+	 * 
+	 */
 	public void requestTrustworthiness() {
 		logger.info("sending nonexisting service id");
 		try {

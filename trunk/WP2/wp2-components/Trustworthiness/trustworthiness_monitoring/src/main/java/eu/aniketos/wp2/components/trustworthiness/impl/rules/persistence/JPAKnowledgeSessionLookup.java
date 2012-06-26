@@ -1,15 +1,14 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.rules.persistence;
 
-import javax.annotation.PostConstruct;
 
-import org.drools.impl.EnvironmentFactory;
-import org.drools.marshalling.MarshallerFactory;
-import org.drools.marshalling.ObjectMarshallingStrategy;
+//import org.drools.impl.EnvironmentFactory;
+//import org.drools.marshalling.MarshallerFactory;
+//import org.drools.marshalling.ObjectMarshallingStrategy;
 //import org.drools.persistence.jpa.JPAKnowledgeService;
-import org.drools.runtime.Environment;
-import org.drools.runtime.EnvironmentName;
+//import org.drools.runtime.Environment;
+//import org.drools.runtime.EnvironmentName;
 import org.drools.runtime.StatefulKnowledgeSession;
-import org.drools.logger.KnowledgeRuntimeLogger;
+//import org.drools.logger.KnowledgeRuntimeLogger;
 import org.drools.logger.KnowledgeRuntimeLoggerFactory;
 
 import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.KnowledgeBaseFactoryManagement;
@@ -46,11 +45,17 @@ public class JPAKnowledgeSessionLookup implements
             .newSerializeMarshallingStrategy() });*/
   }
 
-  public JPAKnowledgeSessionLookup(KnowledgeBaseFactoryManagement knowledgeBaseFactory) {
+  /**
+ * @param knowledgeBaseFactory
+ */
+public JPAKnowledgeSessionLookup(KnowledgeBaseFactoryManagement knowledgeBaseFactory) {
 	super();
 	this.knowledgeBaseFactory = knowledgeBaseFactory;
 }
 
+/* 
+ * 
+ */
 public StatefulKnowledgeSession newSession() {
    /* StatefulKnowledgeSession session = JPAKnowledgeService
         .newStatefulKnowledgeSession(knowledgeBaseFactory.getKnowledgeBase(), null,
@@ -78,12 +83,12 @@ public StatefulKnowledgeSession newSession() {
    * helper method for registering work item handlers 
    * (they are not persisted) 
    */
-  private void registerWorkItemHandlers(
-      StatefulKnowledgeSession session) {
-    //WorkItemManager manager = session.getWorkItemManager();
-   // manager.registerWorkItemHandler("Task", ataskHandler);
-   
-  }
+//  private void registerWorkItemHandlers(
+//      StatefulKnowledgeSession session) {
+//    WorkItemManager manager = session.getWorkItemManager();
+//    manager.registerWorkItemHandler("Task", ataskHandler);
+//   
+//  }
 
 
   /*public void setKnowledgeBase(KnowledgeBase knowledgeBase) {

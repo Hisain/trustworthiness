@@ -8,6 +8,9 @@ public class Notification implements EventHandler {
 
 	private static Logger logger = Logger.getLogger(Notification.class);
 
+	/* (non-Javadoc)
+	 * @see org.osgi.service.event.EventHandler#handleEvent(org.osgi.service.event.Event)
+	 */
 	public void handleEvent(Event event) {
 		String topicName = event.getTopic();
 
