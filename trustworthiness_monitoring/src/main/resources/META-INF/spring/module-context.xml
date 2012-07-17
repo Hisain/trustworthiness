@@ -6,7 +6,21 @@
 	<bean name="qosMetric"
 		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.QoSMetricsServiceImpl">
 		<property name="config" ref="configService"></property>
-		<property name="scoreUpdate" ref="scoreUpdate"></property>
+		<property name="ratingUpdate" ref="ratingUpdate"></property>
+		<property name="serviceEntityService" ref="serviceEntityService"></property>
+	</bean>
+	
+	<bean name="reputationMetric"
+		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.ReputationMetricsServiceImpl">
+		<property name="config" ref="configService"></property>
+		<property name="ratingUpdate" ref="ratingUpdate"></property>
+		<property name="serviceEntityService" ref="serviceEntityService"></property>
+	</bean>
+	
+	<bean name="securityMetric"
+		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.SecurityMetricsServiceImpl">
+		<property name="config" ref="configService"></property>
+		<property name="secPropertyUpdate" ref="secPropertyUpdate"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 	</bean>
 
@@ -31,12 +45,23 @@
 		<property name="sessionLookup" ref="sessionLookup"></property>
 	</bean>
 
-	<bean name="scoreUpdate"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.rules.service.ScoreUpdateImpl"
+	<bean name="ratingUpdate"
+		class="eu.aniketos.wp2.components.trustworthiness.impl.rules.service.QosRatingUpdateImpl"
 		init-method="initialize">
 		<property name="config" ref="configService"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 		<property name="scoreEntityService" ref="scoreEntityService"></property>
+		<property name="trustFactory" ref="trustFactory"></property>
+		<property name="ruleExecuter" ref="ruleExecutor"></property>
+		<property name="eventAdmin" ref="eventAdminService"/>
+	</bean>
+	
+	<bean name="secPropertyUpdate"
+		class="eu.aniketos.wp2.components.trustworthiness.impl.rules.service.SecurityRatingUpdateImpl"
+		init-method="initialize">
+		<property name="config" ref="configService"></property>
+		<property name="serviceEntityService" ref="serviceEntityService"></property>
+		<property name="securityEntityService" ref="securityEntityService"></property>
 		<property name="trustFactory" ref="trustFactory"></property>
 		<property name="ruleExecuter" ref="ruleExecutor"></property>
 		<property name="eventAdmin" ref="eventAdminService"/>

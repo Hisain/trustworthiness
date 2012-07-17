@@ -1,7 +1,7 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.trust.management.atomic;
 
 
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdatePolicy;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness;
@@ -23,10 +23,10 @@ public class ServiceTrustUpdateImpl implements ServiceTrustUpdate {
 	}
 
 	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdate#calculateScore(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score, eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdatePolicy)
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdate#calculateScore(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating, eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdatePolicy)
 	 */
-	public Trustworthiness calculateScore(Score score, ServiceTrustUpdatePolicy policy) throws Exception{
-		return policy.calculateTrust(score);
+	public Trustworthiness calculateScore(Rating rating, ServiceTrustUpdatePolicy policy) throws Exception{
+		return policy.calculateTrust(rating);
 	}
 	
 }

@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.annotation.Propagation;
 
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
-import eu.aniketos.wp2.components.trustworthiness.trust.service.ScoreEntityService;
-import eu.aniketos.wp2.components.trustworthiness.trust.dao.ScoreDao;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.SecProperty;
+import eu.aniketos.wp2.components.trustworthiness.trust.service.SecurityEntityService;
+import eu.aniketos.wp2.components.trustworthiness.trust.dao.SecPropertyDao;
 
 /**
  *  data access service for scores
@@ -16,23 +16,23 @@ import eu.aniketos.wp2.components.trustworthiness.trust.dao.ScoreDao;
  *
  */
 @Transactional(propagation = Propagation.REQUIRES_NEW,noRollbackFor={Exception.class})
-public class ScoreEntityServiceImpl implements ScoreEntityService {
+public class SecurityEntityServiceImpl implements SecurityEntityService {
 	
-	ScoreDao scoreDao;
+	SecPropertyDao secPropertyDao;
 	
 	/* (non-Javadoc)
 	 * @see eu.aniketos.wp2.components.trustworthiness.trust.service.ScoreEntityService#addScore(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating)
 	 */
-	public void addScore(Rating rating) {
-		scoreDao.addScore(rating);
+	public void addSecProperty(SecProperty secProperty) {
+		secPropertyDao.addSecProperty(secProperty);
 
 	}
 
 	/* (non-Javadoc)
 	 * @see eu.aniketos.wp2.components.trustworthiness.trust.service.ScoreEntityService#updateScore(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating)
 	 */
-	public void updateScore(Rating rating) {
-		scoreDao.updateScore(rating);
+	public void updateSecProperty(SecProperty secProperty) {
+		secPropertyDao.updateSecProperty(secProperty);
 
 	}
 
@@ -40,31 +40,39 @@ public class ScoreEntityServiceImpl implements ScoreEntityService {
 	 * @see eu.aniketos.wp2.components.trustworthiness.trust.service.ScoreEntityService#getScoresByServiceId(java.lang.String)
 	 */
 	@Transactional(readOnly=true)
-	public List<Rating> getScoresByServiceId(String source) {
-		return scoreDao.getScoresByServiceId(source);
+	public List<SecProperty> getSecPropertiesByServiceId(String source) {
+		return secPropertyDao.getSecPropertiesByServiceId(source);
+	}
+	
+	public SecProperty getSecProperty(String serviceId, String secProperty) {
+		return secPropertyDao.getSecProperty(serviceId, secProperty);
 	}
 
 	/* (non-Javadoc)
 	 * @see eu.aniketos.wp2.components.trustworthiness.trust.service.ScoreEntityService#deleteScore(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating)
 	 */
-	public void deleteScore(Rating rating) {
-		scoreDao.deleteScore(rating);
+	public void deleteSecProperty(SecProperty secProperty) {
+		secPropertyDao.deleteSecProperty(secProperty);
 
 	}
-
+	
 	/**
 	 * @return score DAO object
 	 */
-	public ScoreDao getScoreDao() {
-		return scoreDao;
+	public SecPropertyDao getSecPropertyDao() {
+		return secPropertyDao;
 	}
 
 	/**
 	 * @param scoreDao score DAO object
 	 */
-	public void setScoreDao(ScoreDao scoreDao) {
-		this.scoreDao = scoreDao;
+	public void setSecPropertyDao(SecPropertyDao secPropertyDao) {
+		this.secPropertyDao = secPropertyDao;
 	}
+
+	
+
+	
 
 
 	

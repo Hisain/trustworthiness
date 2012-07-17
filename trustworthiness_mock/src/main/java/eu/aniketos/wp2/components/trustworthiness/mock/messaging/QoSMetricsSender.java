@@ -6,7 +6,7 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
-import eu.aniketos.wp2.components.trustworthiness.messaging.QoSMetricsService;
+import eu.aniketos.wp2.components.trustworthiness.messaging.QosMetricsService;
 
 /**
  * @author Hisain Elshaafi (TSSG)
@@ -16,12 +16,12 @@ public class QoSMetricsSender {
 
 	private static Logger logger = Logger.getLogger(QoSMetricsSender.class);
 
-	private QoSMetricsService qosMetrics;
+	private QosMetricsService qosMetrics;
 
 	/**
 	 * @param qosMetics
 	 */
-	public QoSMetricsSender(QoSMetricsService qosMetics) {
+	public QoSMetricsSender(QosMetricsService qosMetics) {
 		super();
 		this.qosMetrics = qosMetics;
 	}
@@ -96,7 +96,7 @@ public class QoSMetricsSender {
 			logger.error(e.getMessage());
 		}
 		logger.info("sending metric as null");
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 2; i++) {
 			Map<String, String> metric = null;
 			try {
 				qosMetrics.receiveMetrics(metric);
@@ -112,7 +112,7 @@ public class QoSMetricsSender {
 			logger.error(e.getMessage());
 		}
 		logger.info("sending metric as empty");
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 2; i++) {
 			Map<String, String> metric = new HashMap<String, String>();
 			try {
 				qosMetrics.receiveMetrics(metric);

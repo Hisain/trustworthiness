@@ -15,11 +15,22 @@
 	<osgi:reference id="scoreEntityService"
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.ScoreEntityService" />
 		
+	<osgi:reference id="securityEntityService"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.SecurityEntityService" />
+		
 	<osgi:reference id="trustFactory"
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory" />
 		
 	<osgi:service ref="qosMetric"
-		interface="eu.aniketos.wp2.components.trustworthiness.messaging.QoSMetricsService"
+		interface="eu.aniketos.wp2.components.trustworthiness.messaging.QosMetricsService"
+		 />
+		 
+	<osgi:service ref="reputationMetric"
+		interface="eu.aniketos.wp2.components.trustworthiness.messaging.ReputationMetricsService"
+		 />
+		 
+	<osgi:service ref="securityMetric"
+		interface="eu.aniketos.wp2.components.trustworthiness.messaging.SecurityMetricsService"
 		 />
 
 	<osgi:reference id="eventAdminService" interface="org.osgi.service.event.EventAdmin"/>

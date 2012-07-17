@@ -7,7 +7,7 @@ import java.util.Map;
  * @author Hisain Elshaafi (TSSG)
  *
  */
-public interface QosMetricsService {
+public interface SecurityMetricsService {
 
 	/**
 	 * @param metric Map containing an evaluation of a trustworthiness property

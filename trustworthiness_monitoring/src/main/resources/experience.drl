@@ -19,7 +19,7 @@ declare AlertEventImpl
 	@role( event )
 end
 
-function double calcMetric(String metricValueString, String contractValueString, String type, String limit){
+function double calcQosMetric(String metricValueString, String contractValueString, String type, String limit){
 	//System.out.println("calculating score");
 	
 	double contractValue = 0;
@@ -64,6 +64,60 @@ function double calcMetric(String metricValueString, String contractValueString,
 			
 	score = (score > 1)? 1:score;
 	score = (score < 0)? 0:score;
+	
+	return score;
+}
+
+function double calcSecMetric(String metricValueString, String contractValueString, String type, String limit){
+	//System.out.println("calculating score");
+	
+	double contractValue = 0;
+	double metricValue = 0;
+	
+	if (type.equals("binary")) {
+	
+		contractValue = Double.parseDouble(contractValueString);
+		metricValue = Double.parseDouble(metricValueString);
+	
+	}
+
+	double score = 0;
+	//TODO: set reward/penalty in configuration
+	//double reward = 0.5;
+	//double penalty = -0.5;
+
+	if (limit.equals("min")) { 
+	
+		if (metricValue == 0 && contractValue==1) {
+			score = 0;
+		} else if (contractValue==0) {
+			//0 means no security requirement -> score should be null
+			//score = null;
+		} else if (metricValue == 1) {
+			score = 1;
+		} 
+		
+	} 
+	else if (limit.equals("max")) {
+	
+		if (contractValue == 0 && metricValue==1) {
+			score = 0;
+		}	else if (contractValue==1) {
+			//1 1  means no security requirement -> score should be null
+			//score = null;
+		}  else if (metricValue == 0) {
+			score = 1;
+		} 
+	} 
+	
+	/*if (score >= 0){
+		score = score + reward;
+	} else {
+		score = score + penalty;
+	}		
+	score = (score > 1)? 1:score;
+	score = (score < 0)? 0:score;*/
+	
 	
 	return score;
 }
@@ -120,7 +174,7 @@ function double calcAlert(String alertValueString, String contractValueString, S
 	
 }
 
-rule security
+rule confidentiality
 	no-loop
 	#
 	when
@@ -130,14 +184,33 @@ rule security
 		
 	then 
 		#
-		//System.out.println("executed rule \"security\"");
+		//System.out.println("executed rule \"confidentiality\"");
 		modify ($scoreMap) {
-		put ("score", calcMetric($metricValue,$contractValue, $type, $limit)), 
+		put ("score", calcSecMetric($metricValue,$contractValue, $type, $limit)), 
 		put ("recency",System.currentTimeMillis() / 3600000),
-		put ("property", "security"))
+		put ("property", "confidentiality"))
 		};
 		
 				
+end
+
+rule integrity
+	no-loop
+	#
+	when
+		#	
+		$sme : MetricEventImpl($service : service, $property : property, $subproperty : subproperty, $contractValue : contractValue, $type : type, $limit : limit, $metricValue : metricValue) 
+		$scoreMap : Map( this["_type_"] == "Score" )
+		
+	then 
+		#
+		//System.out.println("executed rule \"integrity\"");
+		modify ($scoreMap) {
+		put ("score", calcSecMetric($metricValue,$contractValue, $type, $limit)), 
+		put ("recency",System.currentTimeMillis() / 3600000),
+		put ("property", "integrity"))
+		};
+		
 end
 
 rule availability
@@ -152,7 +225,7 @@ end
 		#
 		//System.out.println("executed rule \"availability\"");
 		modify ($scoreMap) {
-		put ("score", calcMetric($metricValue,$contractValue, $type, $limit)), 
+		put ("score", calcQosMetric($metricValue,$contractValue, $type, $limit)), 
 		put ("recency",System.currentTimeMillis() / 3600000),
 		put ("property", "availability"))
 		}; 
@@ -172,7 +245,7 @@ rule reliability
 		#
 		//System.out.println("executed rule \"reliability\"");
 		modify ($scoreMap) {
-		put ("score", calcMetric($metricValue,$contractValue, $type, $limit)), 
+		put ("score", calcQosMetric($metricValue,$contractValue, $type, $limit)), 
 		put ("recency",System.currentTimeMillis()/ 3600000),
 		put ("property", "reliability"))
 		};
@@ -192,7 +265,7 @@ rule performance
 		#
 		//System.out.println("executed rule \"performance\"");
 		modify ($scoreMap) {
-		put ("score", calcMetric($metricValue,$contractValue, $type, $limit)), 
+		put ("score", calcQosMetric($metricValue,$contractValue, $type, $limit)), 
 		put ("recency",System.currentTimeMillis() / 3600000),
 		put ("property", "performance"))
 		};
@@ -210,7 +283,7 @@ rule sla
 		#
 		//System.out.println("executed rule \"sla\"");
 		modify ($scoreMap) {
-		put ("score", calcMetric($metricValue,$contractValue, $type, $limit)), 
+		put ("score", calcQosMetric($metricValue,$contractValue, $type, $limit)), 
 		put ("recency",System.currentTimeMillis() / 3600000),
 		put ("property", "sla"))
 		};

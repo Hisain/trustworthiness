@@ -5,8 +5,9 @@ import java.util.UUID;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Composite;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.SecProperty;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Service;
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
 
 /**
  * @author Hisain Elshaafi (TSSG)
@@ -20,7 +21,7 @@ public class TrustFactoryImpl implements TrustFactory {
 public Atomic createService(String serviceId) {
     Atomic service = new Atomic(serviceId);    
    
-   // Score score = new ScoreImpl(); 
+   // Rating score = new ScoreImpl(); 
     //service.setScore(score);
     return service;
    }
@@ -28,13 +29,13 @@ public Atomic createService(String serviceId) {
   /* (non-Javadoc)
  * @see eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory#createScore(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Service)
  */
-public Score createScore(Service service) {
-    Score score = new Score();
-    score.setService(service);
+public Rating createRating(Service service) {
+    Rating rating = new Rating();
+    rating.setService(service);
     //id should be shared with member table
-    score.setId(UUID.randomUUID().toString());
+    rating.setId(UUID.randomUUID().toString());
    
-    return score; 
+    return rating; 
   }
 
 /* (non-Javadoc)
@@ -44,6 +45,13 @@ public Composite createComposite(String serviceId) {
 	Composite service = new Composite(serviceId);
 	
 	return service;
+}
+
+public SecProperty createSecPropertyRating(Service service) {
+	SecProperty sec = new SecProperty();
+	sec.setService(service);
+	sec.setId(UUID.randomUUID().toString());
+	return sec;
 }
   
 

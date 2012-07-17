@@ -13,7 +13,7 @@ import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Servic
 import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ScoreEntityService;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
 
 /**
@@ -129,7 +129,7 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 	/**
 	 * method updates trustworthiness based on new rating score
 	 */
-	public Trustworthiness calculateTrust(Score ratingScore) {
+	public Trustworthiness calculateTrust(Rating ratingScore) {
 
 		double twScore = 0;
 		double twConfidence = 0;

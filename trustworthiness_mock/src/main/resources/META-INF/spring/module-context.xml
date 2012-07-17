@@ -3,6 +3,15 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+	
+	<bean id="securitySender"
+		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.SecurityMetricsSender"
+		init-method="initialize">
+		<constructor-arg>
+			<ref bean="securityMetric" />
+		</constructor-arg>
+	</bean>
+	
 	<bean id="qosSender"
 		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.QoSMetricsSender"
 		init-method="initialize">
@@ -10,6 +19,7 @@
 			<ref bean="qosMetric" />
 		</constructor-arg>
 	</bean>
+	
 	
 	<bean id="twRequester"
 		class="eu.aniketos.wp2.components.trustworthiness.mock.trust.management.atomic.TrustworthinessRequester"
