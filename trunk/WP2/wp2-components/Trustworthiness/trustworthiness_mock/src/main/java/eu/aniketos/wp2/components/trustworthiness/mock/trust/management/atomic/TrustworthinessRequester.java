@@ -93,9 +93,12 @@ public class TrustworthinessRequester {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
-
-		logger.info("Trustworthiness score = " + tw.getScore());
-		logger.info("Trustworthiness confidence = " + tw.getConfidence());
+		if (tw != null) {
+			logger.info("Trustworthiness score = " + tw.getScore());
+			logger.info("Trustworthiness confidence = " + tw.getConfidence());
+		} else {
+			logger.info("null was returned for trustworthiness request");
+		}
 
 		try {
 			Thread.sleep(5000);

@@ -5,7 +5,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement;
-import eu.aniketos.wp2.components.trustworthiness.messaging.QosMetricsService;
+import eu.aniketos.wp2.components.trustworthiness.messaging.SecurityMetricsService;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 
@@ -13,13 +13,13 @@ import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntitySer
  * @author Hisain Elshaafi (TSSG)
  * 
  */
-public class QoSMetricsServiceImpl implements QosMetricsService {
+public class SecurityMetricsServiceImpl implements SecurityMetricsService {
 	
-	private static Logger logger = Logger.getLogger(QosMetricsService.class);
+	private static Logger logger = Logger.getLogger(SecurityMetricsService.class);
 
 	private ConfigurationManagement config;
 
-	private RatingUpdate ratingUpdate;
+	private RatingUpdate secPropertyUpdate;
 
 	private ServiceEntityService serviceEntityService;
 
@@ -48,7 +48,7 @@ public class QoSMetricsServiceImpl implements QosMetricsService {
 
 		} else {
 
-			ratingUpdate.updateScore(metric);
+			secPropertyUpdate.updateScore(metric);
 		}
 	}
 
@@ -94,17 +94,17 @@ public class QoSMetricsServiceImpl implements QosMetricsService {
 	 * 
 	 * @return
 	 */
-	public RatingUpdate getRatingUpdate() {
-		return ratingUpdate;
+	public RatingUpdate getSecPropertyUpdate() {
+		return secPropertyUpdate;
 	}
 
 	/**
 	 * required for Spring dependency injection
 	 * 
-	 * @param ratingUpdate
+	 * @param secPropertyUpdate
 	 */
-	public void setRatingUpdate(RatingUpdate ratingUpdate) {
-		this.ratingUpdate = ratingUpdate;
+	public void setSecPropertyUpdate(RatingUpdate secPropertyUpdate) {
+		this.secPropertyUpdate = secPropertyUpdate;
 	}
 
 }

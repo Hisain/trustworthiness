@@ -11,6 +11,9 @@
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.ServiceDao" />
 	<osgi:reference id="scoreDao"
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.ScoreDao" />
+		
+	<osgi:reference id="secPropertyDao"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.SecPropertyDao" />
 
 	<osgi:reference id="transactionManager"
 		interface="org.springframework.transaction.PlatformTransactionManager" />
@@ -18,7 +21,11 @@
 	
 	<osgi:service ref="serviceEntityService"
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService" />
+		
 	<osgi:service ref="scoreEntityService"
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.ScoreEntityService" />
+		
+	<osgi:service ref="securityEntityService"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.SecurityEntityService" />
 	
 </beans>

@@ -14,7 +14,7 @@ import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Servic
 import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ScoreEntityService;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
 
 /**
@@ -125,7 +125,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 	 * @throws Exception
 	 * 
 	 */
-	public Trustworthiness calculateTrust(Score ratingScore) throws Exception {
+	public Trustworthiness calculateTrust(Rating ratingScore) throws Exception {
 
 		Trustworthiness trust = null;
 
@@ -154,7 +154,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 
 		double confidence = 0;
 
-		List<Score> serviceScores = null;
+		List<Rating> serviceScores = null;
 
 		/* current time in hrs */
 		int hourMsecs = 3600000;
@@ -197,7 +197,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 
 		double totalScoreWt = 0;
 
-		for (Score serviceScore : serviceScores) {
+		for (Rating serviceScore : serviceScores) {
 
 			double recency = serviceScore.getRecency();
 			double scoreAge = nowInHour - recency;
@@ -257,7 +257,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 		/*
 		 * calculation of score
 		 */
-		for (Score serviceScore : serviceScores) {
+		for (Rating serviceScore : serviceScores) {
 
 			double scoreWt = 0;
 
@@ -303,7 +303,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 		double deviation = 0;
 		double totalWt = 0;
 
-		for (Score serviceScore : serviceScores) {
+		for (Rating serviceScore : serviceScores) {
 			/*
 			 * calculate deviation
 			 */

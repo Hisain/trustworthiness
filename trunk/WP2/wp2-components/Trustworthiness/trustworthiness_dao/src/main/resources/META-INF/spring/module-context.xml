@@ -28,6 +28,11 @@
 		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.dao.ScoreDaoImpl">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
+	
+	<bean id="secPropertyDao"
+		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.dao.SecPropertyDaoImpl">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
 
 	<bean id="serviceDao"
 		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.dao.ServiceDaoImpl">

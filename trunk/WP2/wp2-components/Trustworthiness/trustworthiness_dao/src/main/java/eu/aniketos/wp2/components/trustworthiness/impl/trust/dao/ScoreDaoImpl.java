@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.orm.jpa.support.JpaDaoSupport;
 
 import eu.aniketos.wp2.components.trustworthiness.trust.dao.ScoreDao;
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
 
 /**
  * Data Access Object for source scores
@@ -27,12 +27,12 @@ public class ScoreDaoImpl  extends JpaDaoSupport implements ScoreDao {
 	}
 	
 	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.trust.dao.ScoreDao#addScore(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score)
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.dao.ScoreDao#addScore(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating)
 	 */
-	public void addScore(Score score) {
+	public void addScore(Rating rating) {
 
 		try {
-			getJpaTemplate().persist(score);
+			getJpaTemplate().persist(rating);
 			getJpaTemplate().flush();
 
 			if (logger.isDebugEnabled()) {
@@ -45,12 +45,12 @@ public class ScoreDaoImpl  extends JpaDaoSupport implements ScoreDao {
 	}
 
 	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.trust.dao.ScoreDao#updateScore(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score)
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.dao.ScoreDao#updateScore(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating)
 	 */
-	public void updateScore(Score score) {
+	public void updateScore(Rating rating) {
 
 		try {
-			getJpaTemplate().merge(score);
+			getJpaTemplate().merge(rating);
 			getJpaTemplate().flush();
 
 			if (logger.isDebugEnabled()) {
@@ -66,16 +66,16 @@ public class ScoreDaoImpl  extends JpaDaoSupport implements ScoreDao {
 	 * @see eu.aniketos.wp2.components.trustworthiness.trust.dao.ScoreDao#getScoresByServiceId(java.lang.String)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Score> getScoresByServiceId(final String serviceId) {
+	public List<Rating> getScoresByServiceId(final String serviceId) {
 
-		List<Score> serviceScores = new ArrayList<Score>();
+		List<Rating> serviceScores = new ArrayList<Rating>();
 		
 		List<Object> results = null;
 		try {
 			//TODO: needs checking
-			results = (ArrayList<Object>) getJpaTemplate().find("from Score s where s.service = ?",serviceId);
+			results = (ArrayList<Object>) getJpaTemplate().find("from Rating s where s.service = ?",serviceId);
 			getJpaTemplate().flush();
-			//em.createQuery("s from Score s, Agent a where s.agent = a and a.name='"+agentName+"'")
+			//em.createQuery("s from Rating s, Agent a where s.agent = a and a.name='"+agentName+"'")
 		} catch (Exception e) {
 			logger.error("loadScores: " + e.getMessage());
 		}
@@ -87,8 +87,8 @@ public class ScoreDaoImpl  extends JpaDaoSupport implements ScoreDao {
 
 			for (Object result : results) {
 
-				Score score = (Score) result;
-				serviceScores.add(score);
+				Rating rating = (Rating) result;
+				serviceScores.add(rating);
 			}
 		} 
 		else {
@@ -106,22 +106,22 @@ public class ScoreDaoImpl  extends JpaDaoSupport implements ScoreDao {
 	}
 
 	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.trust.dao.ScoreDao#deleteScore(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score)
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.dao.ScoreDao#deleteScore(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating)
 	 */
-	public void deleteScore(Score score) {
+	public void deleteScore(Rating rating) {
 
-		String serviceId = score.getService().getId();
+		String serviceId = rating.getService().getId();
 
 		logger.info("deleting score from " + serviceId);
 		
 		try {
 			
-			score = getJpaTemplate().merge(score);
-			getJpaTemplate().remove(score);
+			rating = getJpaTemplate().merge(rating);
+			getJpaTemplate().remove(rating);
 			getJpaTemplate().flush();
 
 			if (logger.isDebugEnabled()) {
-				logger.debug("deleted record for score " + score.getId());
+				logger.debug("deleted record for score " + rating.getId());
 			}
 
 		} catch (Exception e) {
@@ -129,6 +129,8 @@ public class ScoreDaoImpl  extends JpaDaoSupport implements ScoreDao {
 		}
 
 	}
+
+	
 
 
 }

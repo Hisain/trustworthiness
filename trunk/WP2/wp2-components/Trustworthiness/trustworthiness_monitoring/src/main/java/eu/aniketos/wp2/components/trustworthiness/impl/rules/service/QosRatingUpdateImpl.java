@@ -20,20 +20,20 @@ import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationMan
 import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.AlertEventImpl;
 import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEventImpl;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RuleExecuter;
-import eu.aniketos.wp2.components.trustworthiness.rules.service.ScoreUpdate;
+import eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ScoreEntityService;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
 
 /**
  * @author Hisain Elshaafi (TSSG)
  * 
  */
-public class ScoreUpdateImpl extends Observable implements ScoreUpdate {
+public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
 
-	private static Logger logger = Logger.getLogger(ScoreUpdateImpl.class);
+	private static Logger logger = Logger.getLogger(QosRatingUpdateImpl.class);
 
 	private ConfigurationManagement config;
 
@@ -55,14 +55,14 @@ public class ScoreUpdateImpl extends Observable implements ScoreUpdate {
 		// monitorHelperService.setupObservers(this);
 
 		/*
-		 * Map<String,Score> props = new HashMap<String,Score>();
-		 * props.put("test", new Score()); logger.info(eventAdmin);
+		 * Map<String,Rating> props = new HashMap<String,Rating>();
+		 * props.put("test", new Rating()); logger.info(eventAdmin);
 		 * eventAdmin.sendEvent(new Event("trust-event/qos", props));
 		 */
 	}
 
 	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.rules.service.ScoreUpdate#updateScore(java.util.Map)
+	 * @see eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate#updateScore(java.util.Map)
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void updateScore(Map<String, String> event) throws Exception {
@@ -113,25 +113,31 @@ public class ScoreUpdateImpl extends Observable implements ScoreUpdate {
 					"metric did not contain required event elements. message will be ignored.");
 		}
 
-		String value = config.getConfig().getString(propertySub + "[@value]");
+		String contractValue = config.getConfig().getString(propertySub + "[@value]");
 		String type = config.getConfig().getString(propertySub + "[@type]");
 		String limit = config.getConfig().getString(propertySub + "[@limit]");
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("property " + property + ", value=" + value
+			logger.debug("property=" + propertySub + ", contractValue=" + contractValue
 					+ ", type=" + type + ", limit=" + limit);
 		}
 
+		// if property is missing quit
+		if (contractValue==null || type==null || limit==null){
+			logger.warn("property " + property + " for the metric is missing in configuration.");
+			return;
+		}
+		
 		if (event.get("type").equalsIgnoreCase("metric")) {
 
 			facts.add(new MetricEventImpl(service, property, subproperty,
-					value, type, limit, metricValue));
+					contractValue, type, limit, metricValue));
 		} else if (event.get("type").equalsIgnoreCase("alert")) {
-			facts.add(new AlertEventImpl(service, property, subproperty, value,
+			facts.add(new AlertEventImpl(service, property, subproperty, contractValue,
 					type, limit, String.valueOf(1)));
 		}
 
-		Score score = trustFactory.createScore(service);
+		Rating rating = trustFactory.createRating(service);
 
 		Map scoreMap = new HashMap();
 		scoreMap.put("_type_", "Score");
@@ -162,15 +168,15 @@ public class ScoreUpdateImpl extends Observable implements ScoreUpdate {
 
 			scoreValue = Double.parseDouble(scoreBD.toString());
 			
-			score.setScore(scoreValue);
-			score.setRecency((Long) scoreMap.get("recency"));
-			score.setProperty((String) scoreMap.get("property"));
+			rating.setScore(scoreValue);
+			rating.setRecency((Long) scoreMap.get("recency"));
+			rating.setProperty((String) scoreMap.get("property"));
 
-			scoreEntityService.addScore(score);
+			scoreEntityService.addScore(rating);
 
 			Dictionary props = new Properties();
 			props.put("service.id",serviceId);
-			props.put("score.id", score.getId());
+			props.put("score.id", rating.getId());
 			
 			Event osgiEvent = new Event("eu/aniketos/trustworthiness/qos", props);
 			eventAdmin.sendEvent(osgiEvent);

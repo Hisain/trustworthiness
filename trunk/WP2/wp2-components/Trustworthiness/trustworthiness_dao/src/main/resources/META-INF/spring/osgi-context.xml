@@ -18,6 +18,9 @@
 
 	<osgi:service ref="scoreDao"
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.ScoreDao" />
+		
+	<osgi:service ref="secPropertyDao"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.SecPropertyDao" />
 
 
 </beans>

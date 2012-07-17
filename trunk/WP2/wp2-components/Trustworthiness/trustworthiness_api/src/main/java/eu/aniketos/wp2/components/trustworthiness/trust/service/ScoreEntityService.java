@@ -2,7 +2,7 @@ package eu.aniketos.wp2.components.trustworthiness.trust.service;
 
 import java.util.List;
 
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
 
 /**
  * data access service for scores
@@ -13,28 +13,29 @@ import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Score;
 public interface ScoreEntityService {
 
 	/**
-	 * @param score
-	 *            Score object to add
+	 * @param rating
+	 *            Rating object to add
 	 */
-	public abstract void addScore(Score score);
+	public abstract void addScore(Rating rating);
 
 	/**
-	 * @param score
-	 *            Score object to update
+	 * @param rating
+	 *            Rating object to update
 	 */
-	public abstract void updateScore(Score score);
+	public abstract void updateScore(Rating rating);
 
 	/**
 	 * @param serviceId
 	 *            String service id
 	 * @return list of existing scores for service
 	 */
-	public abstract List<Score> getScoresByServiceId(final String serviceId);
+	public abstract List<Rating> getScoresByServiceId(final String serviceId);
 
 	/**
-	 * @param score
-	 *            Score object to delete
+	 * @param rating
+	 *            Rating object to delete
 	 */
-	public abstract void deleteScore(Score score);
+	public abstract void deleteScore(Rating rating);
 
+	
 }

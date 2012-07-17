@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 //import org.hibernate.validator.Length;
 import org.hibernate.validator.NotNull;
@@ -27,13 +26,14 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  */
 @Entity
 @org.hibernate.annotations.Proxy(lazy=false)  
-@Table(name = "SCORE")
-public class Score implements Serializable {
+@Table(name = "SEC_PROPERTY")
+public class SecProperty implements Serializable {
 
+	
 	/**
-	 *
+	 * 
 	 */
-	private static final long serialVersionUID = 6837528366375185230L;
+	private static final long serialVersionUID = 935859863872557458L;
 
 	private String id;
 
@@ -47,22 +47,10 @@ public class Score implements Serializable {
 	//@Length(max = 50)
 	private long recency;
 
-	/*
-	 * recencyWt and propertyWt is weight of score regardless of other scores
-	 */
-	private double recencyWt;
-
-	private double propertyWt;
-
-	/*
-	 * scoreWt is weight of score calculated in relation to all existing scores
-	 */
-	private double scoreWt;
-
 	/**
 	 *
 	 */
-	public Score() {
+	public SecProperty() {
 	}
 
 	/**
@@ -72,13 +60,12 @@ public class Score implements Serializable {
 	 * @param recency
 	 * @param property
 	 */
-	public Score(String id, Service service, double score, long recency,
+	public SecProperty(String id, Service service, double score, long recency,
 			String property) {
 		this.id = id;
 		this.service = (Service)service;
 		this.score = score;
 		this.property = property;
-		this.recency = recency;
 	}
 
 	/**
@@ -115,21 +102,7 @@ public class Score implements Serializable {
 		this.service = (Service)service;
 	}
 
-	/**
-	 * @return
-	 */
-	@NotNull
-	public long getRecency() {
-		return recency;
-	}
-
-	/**
-	 * @param recency
-	 */
-	public void setRecency(long recency) {
-		this.recency = recency;
-	}
-
+	
 	/**
 	 * @return
 	 */
@@ -164,46 +137,16 @@ public class Score implements Serializable {
 	/**
 	 * @return
 	 */
-	@Transient
-	public double getRecencyWt() {
-		return recencyWt;
+	@NotNull
+	public long getRecency() {
+		return recency;
 	}
 
 	/**
-	 * @param scoreWt
+	 * @param recency
 	 */
-	public void setRecencyWt(double scoreWt) {
-		this.recencyWt = scoreWt;
-	}
-
-	/**
-	 * @return
-	 */
-	@Transient
-	public double getPropertyWt() {
-		return propertyWt;
-	}
-
-	/**
-	 * @param propertyWt
-	 */
-	public void setPropertyWt(double propertyWt) {
-		this.propertyWt = propertyWt;
-	}
-
-	/**
-	 * @return
-	 */
-	@Transient
-	public double getScoreWt() {
-		return scoreWt;
-	}
-
-	/**
-	 * @param scoreWt
-	 */
-	public void setScoreWt(double scoreWt) {
-		this.scoreWt = scoreWt;
+	public void setRecency(long recency) {
+		this.recency = recency;
 	}
 
 	@Override
@@ -211,34 +154,33 @@ public class Score implements Serializable {
 
 		if (this == o)
 			return true;
-		if (o == null || !(o instanceof Score)) {
+		if (o == null || !(o instanceof SecProperty)) {
 
 			return false;
 		}
 
-		Score other = (Score) o;
+		SecProperty other = (SecProperty) o;
 
 		/*
 		 * equivalence by id
 		 */
-		Score castOther = (Score) other;
+		SecProperty castOther = (SecProperty) other;
 		return new EqualsBuilder().append(id, castOther.getId()).append(service,
-				castOther.getService()).append(score, castOther.getScore())
-				.append(recency, castOther.getRecency()).append(property,
+				castOther.getService())
+				.append(property,
 						castOther.getProperty()).isEquals();
 	}
 
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(441293447, 2056268651).append(id).append(
-				service).append(score).append(recency).append(property)
+				service).append(score).append(property)
 				.toHashCode();
 	}
 
 	public String toString() {
 		return new ToStringBuilder(this).append("id", id)
-				.append("service", service).append("score", score).append(
-						"recency", recency).append("property", property)
+				.append("service", service).append("score", score).append("property", property)
 				.toString();
 	}
 }

@@ -5,7 +5,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement;
-import eu.aniketos.wp2.components.trustworthiness.messaging.QosMetricsService;
+import eu.aniketos.wp2.components.trustworthiness.messaging.ReputationMetricsService;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 
@@ -13,9 +13,9 @@ import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntitySer
  * @author Hisain Elshaafi (TSSG)
  * 
  */
-public class QoSMetricsServiceImpl implements QosMetricsService {
+public class ReputationMetricsServiceImpl implements ReputationMetricsService {
 	
-	private static Logger logger = Logger.getLogger(QosMetricsService.class);
+	private static Logger logger = Logger.getLogger(ReputationMetricsService.class);
 
 	private ConfigurationManagement config;
 

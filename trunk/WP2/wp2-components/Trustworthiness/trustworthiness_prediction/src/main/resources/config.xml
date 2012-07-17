@@ -2,9 +2,7 @@
 
 <configuration>
   <system/>
-  <properties fileName="config.properties"/>
   <properties fileName="policy.properties"/>
-  <properties fileName="metrics.properties"/>
   <properties fileName="context.properties"/>
   <xml fileName="contract.xml"/>
 </configuration>
