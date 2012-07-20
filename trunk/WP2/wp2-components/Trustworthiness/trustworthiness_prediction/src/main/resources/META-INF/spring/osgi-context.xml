@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                      http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+                      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                      ">
+
+
+
+	<osgi:reference id="serviceEntityService"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService" />
+		
+	<osgi:reference id="ratingEntityService"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.RatingEntityService" />
+		
+	<osgi:reference id="configService"
+		interface="eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement" />
+
+	<osgi:service ref="status"
+		interface="eu.aniketos.wp2.components.trustworthiness.messaging.service.StatusService" />
+
+	<osgi:service ref="trustFactory"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory" />
+
+	<osgi:service ref="trustworthinessPredictionService"
+		interface="eu.aniketos.wp2.components.trustworthiness.messaging.ITrustworthinessPrediction" />
+
+	<osgi:service ref="compositeTrustworthinessPredictionService"
+		interface="eu.aniketos.wp2.components.trustworthiness.messaging.ICompositeTrustworthinessPrediction" />
+
+	<osgi:reference id="transactionManager"
+		interface="org.springframework.transaction.PlatformTransactionManager" />
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<osgi:service ref="eventHandler" interface="org.osgi.service.event.EventHandler">
+		<osgi:service-properties>
+			<entry key="event.topics" value="eu/aniketos/trustworthiness/*"/>
+		</osgi:service-properties>
+	</osgi:service>
+	
+	<osgi:reference id="eventAdminService" interface="org.osgi.service.event.EventAdmin"/>
+</beans>
