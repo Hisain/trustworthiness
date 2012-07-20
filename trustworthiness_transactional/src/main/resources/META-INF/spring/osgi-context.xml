@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                      http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+                      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                      ">
+
+	<osgi:reference id="serviceDao"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.ServiceDao" />
+		
+	<osgi:reference id="ratingDao"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.RatingDao" />
+		
+	<osgi:reference id="secPropertyDao"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.SecPropertyDao" />
+
+	<osgi:reference id="transactionManager"
+		interface="org.springframework.transaction.PlatformTransactionManager" />
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<osgi:service ref="serviceEntityService"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService" />
+		
+	<osgi:service ref="ratingEntityService"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.RatingEntityService" />
+		
+	<osgi:service ref="securityEntityService"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.SecurityEntityService" />
+	
+</beans>

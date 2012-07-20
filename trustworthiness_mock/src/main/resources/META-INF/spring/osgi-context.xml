@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                      http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd">
+
+	<osgi:reference id="trustworthinessPredictionService"
+		interface="eu.aniketos.wp2.components.trustworthiness.messaging.ITrustworthinessPrediction" />
+
+	<osgi:reference id="qosMetric"
+		interface="eu.aniketos.wp2.components.trustworthiness.messaging.QosMetricsService" />
+
+	<osgi:reference id="securityMetric"
+		interface="eu.aniketos.wp2.components.trustworthiness.messaging.SecurityMetricsService" />
+
+	<osgi:reference id="serviceManagement"
+		interface="eu.aniketos.wp2.components.trustworthiness.messaging.ServiceManagement" />
+
+	<osgi:reference id="compositeTrustworthinessPredictionService"
+		interface="eu.aniketos.wp2.components.trustworthiness.messaging.ICompositeTrustworthinessPrediction" />
+
+	<osgi:service ref="alertEventHandler" interface="org.osgi.service.event.EventHandler">
+		<osgi:service-properties>
+			<entry key="event.topics" value="eu/aniketos/trustworthiness/alert" />
+		</osgi:service-properties>
+	</osgi:service>
+
+	<osgi:reference id="eventAdminService" interface="org.osgi.service.event.EventAdmin" />
+
+</beans>
