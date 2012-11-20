@@ -7,6 +7,7 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 
 import eu.aniketos.wp2.components.trustworthiness.messaging.QosMetricsService;
+import eu.aniketos.wp2.components.trustworthiness.rules.model.event.TrustEvent;
 
 /**
  * @author Hisain Elshaafi (TSSG)
@@ -35,6 +36,27 @@ public class QoSMetricsTest {
 
 		// metric with null or empty service id
 		logger.info("metric with null or empty service id");
+		
+		for (int i = 0; i < 1; i++) {
+			TrustEvent event = new MetricEventImpl();
+			event.setServiceId(null);
+			event.setProperty("availability");
+			event.setSubproperty("uptime");
+			event.setValue(Double.toString(0.9 + r.nextDouble() / 10));
+			try {
+				qosMetrics.processQoSMetric(event);
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+			}
+		}
+
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+
+			logger.error(e.getMessage());
+		}
+		
 		for (int i = 0; i < 1; i++) {
 			Map<String, String> metric = new HashMap<String, String>();
 			metric.put("serviceId", null);
@@ -49,6 +71,7 @@ public class QoSMetricsTest {
 			}
 		}
 
+				
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
@@ -64,6 +87,25 @@ public class QoSMetricsTest {
 			metric.put("value", Double.toString(0.9 + r.nextDouble() / 10));
 			try {
 				qosMetrics.receiveMetrics(metric);
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+			}
+		}
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+
+			logger.error(e.getMessage());
+		}
+		for (int i = 0; i < 1; i++) {
+			TrustEvent event = new MetricEventImpl();
+			event.setServiceId("testId05");
+			event.setProperty("availability");
+			event.setSubproperty("uptime");
+			event.setValue(Double.toString(0.9 + r.nextDouble() / 10));
+			try {
+				qosMetrics.processQoSMetric(event);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
