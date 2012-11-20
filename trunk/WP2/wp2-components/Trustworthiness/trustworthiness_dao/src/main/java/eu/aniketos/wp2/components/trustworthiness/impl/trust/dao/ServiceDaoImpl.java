@@ -170,10 +170,10 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 		}
 		if (service != null) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("getAtomic: found service: " + service.getId());
+				logger.debug("getAtomic: found service: " + id);
 			}
 		} else {
-			logger.debug("getAtomic: no service found");
+			logger.debug("getAtomic: service " + id + " not found");
 		}
 		return service;
 	}
@@ -204,10 +204,10 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 		}
 		if (service != null) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("getComposite: found service: " + service.getId());
+				logger.debug("getComposite: found service: " + id);
 			}
 		} else {
-			logger.debug("getComposite: no service found");
+			logger.debug("getComposite: service " + id + " not found");
 		}
 		return service;
 	}
