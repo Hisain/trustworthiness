@@ -55,7 +55,7 @@ public class SecProperty implements Serializable {
 
 	/**
 	 * @param id
-	 * @param service
+	 * @param serviceId
 	 * @param score
 	 * @param recency
 	 * @param property
@@ -63,7 +63,7 @@ public class SecProperty implements Serializable {
 	public SecProperty(String id, Service service, double score, long recency,
 			String property) {
 		this.id = id;
-		this.service = (Service)service;
+		this.service = service;
 		this.score = score;
 		this.property = property;
 	}
@@ -90,16 +90,16 @@ public class SecProperty implements Serializable {
 	@NotNull
 	@ManyToOne
 	// (cascade = { CascadeType.ALL })
-	@JoinColumn(name="service")
+	@JoinColumn(name="service_id")
 	public Service getService() {
 		return service;
 	}
 
 	/**
-	 * @param service
+	 * @param serviceId
 	 */
 	public void setService(Service service) {
-		this.service = (Service)service;
+		this.service = service;
 	}
 
 	
@@ -180,7 +180,7 @@ public class SecProperty implements Serializable {
 
 	public String toString() {
 		return new ToStringBuilder(this).append("id", id)
-				.append("service", service).append("score", score).append("property", property)
+				.append("serviceId", service).append("score", score).append("property", property)
 				.toString();
 	}
 }
