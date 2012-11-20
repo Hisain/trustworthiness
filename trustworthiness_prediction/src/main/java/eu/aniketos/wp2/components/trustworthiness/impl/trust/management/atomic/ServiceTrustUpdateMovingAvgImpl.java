@@ -134,15 +134,16 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		double twScore = 0;
 		double twConfidence = 0;
 		
-		Atomic service = (Atomic) ratingScore.getService();
+		String serviceId = ratingScore.getService().getId();
 
-		if (service == null) {
+		Atomic service = serviceEntityService.getAtomic(serviceId);
+		
+		if (serviceId == null) {
 			logger.error("service not found.");
 			return null;
 
 		}
 		
-		String serviceId = service.getId();
 		
 		if (logger.isInfoEnabled()) {
 			logger.info("found service " + serviceId);
