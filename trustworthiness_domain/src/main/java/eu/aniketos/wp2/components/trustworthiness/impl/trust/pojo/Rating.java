@@ -75,7 +75,7 @@ public class Rating implements Serializable {
 	public Rating(String id, Service service, double score, long recency,
 			String property) {
 		this.id = id;
-		this.service = (Service)service;
+		this.service = service;
 		this.score = score;
 		this.property = property;
 		this.recency = recency;
@@ -99,11 +99,13 @@ public class Rating implements Serializable {
 
 	/**
 	 * @return
+	 * 
+	 * TODO: test after change from service to service
 	 */
 	@NotNull
 	@ManyToOne
 	// (cascade = { CascadeType.ALL })
-	@JoinColumn(name="service")
+	@JoinColumn(name="service_id")
 	public Service getService() {
 		return service;
 	}
@@ -112,7 +114,7 @@ public class Rating implements Serializable {
 	 * @param service
 	 */
 	public void setService(Service service) {
-		this.service = (Service)service;
+		this.service = service;
 	}
 
 	/**
