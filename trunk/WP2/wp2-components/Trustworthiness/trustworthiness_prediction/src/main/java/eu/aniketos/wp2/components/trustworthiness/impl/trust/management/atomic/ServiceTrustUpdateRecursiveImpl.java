@@ -16,6 +16,7 @@ import eu.aniketos.wp2.components.trustworthiness.trust.service.RatingEntityServ
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Service;
 
 /**
  * updates trustworthiness of (atomic) services using recursive approach
@@ -125,11 +126,14 @@ public class ServiceTrustUpdateRecursiveImpl implements
 	 * @throws Exception
 	 * 
 	 */
-	public Trustworthiness calculateTrust(Rating ratingScore) throws Exception {
+	public Trustworthiness calculateTrust(Rating rating) throws Exception {
 
 		Trustworthiness trust = null;
 
-		Atomic service = (Atomic) ratingScore.getService();
+		Service service = rating.getService();
+
+		
+		
 		if (service != null) {
 
 			logger.info("found service " + service.getId());
