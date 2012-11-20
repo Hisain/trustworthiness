@@ -3,23 +3,20 @@ package eu.aniketos.wp2.components.trustworthiness.impl.rules
 
 import java.util.Map
 
-import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEventImpl
+import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.RuleMetricEventImpl
 import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.AlertEventImpl
 
-#list any import classes here.
 
 
-
-#declare any global variables here
-
-declare MetricEventImpl
+#declare any global variables 
+declare RuleMetricEventImpl
 	@role( event )
 end
 declare AlertEventImpl
 	@role( event )
 end
 
-function double calcQosMetric(String metricValueString, String contractValueString, String type, String limit){
+function double calcQosMetric(String valueString, String contractValueString, String type, String limit){
 	//System.out.println("calculating score");
 	
 	double contractValue = 0;
@@ -28,7 +25,7 @@ function double calcQosMetric(String metricValueString, String contractValueStri
 	if (type.equals("percentage") || type.equals("real")) {
 	
 		contractValue = Double.parseDouble(contractValueString);
-		metricValue = Double.parseDouble(metricValueString);
+		metricValue = Double.parseDouble(valueString);
 	
 	}
 
@@ -164,7 +161,7 @@ function double calcAlert(String alertValueString, String contractValueString, S
 	/*if (score >= 0){
 		score = score + reward;
 	} else {
-		score = score + penalty;
+		score = RuleRuleMetricEventImpl;
 	}*/
 			
 	score = (score > 1)? 1:score;
@@ -174,21 +171,39 @@ function double calcAlert(String alertValueString, String contractValueString, S
 	
 }
 
+rule reputation
+	no-loop
+	#
+	when
+		#	
+		$sme : RuleMetricEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty, $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
+		$scoreMap : Map( this["_type_"] == "Score" )
+		
+	then 
+		#
+		modify ($scoreMap) {
+		put ("score", calcQosMetric($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
+		};
+		
+				
+end
+
 rule confidentiality
 	no-loop
 	#
 	when
 		#	
-		$sme : MetricEventImpl($service : service, $property : property, $subproperty : subproperty, $contractValue : contractValue, $type : type, $limit : limit, $metricValue : metricValue) 
+		$sme : RuleMetricEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty, $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
 		$scoreMap : Map( this["_type_"] == "Score" )
 		
 	then 
 		#
-		//System.out.println("executed rule \"confidentiality\"");
 		modify ($scoreMap) {
-		put ("score", calcSecMetric($metricValue,$contractValue, $type, $limit)), 
-		put ("recency",System.currentTimeMillis() / 3600000),
-		put ("property", "confidentiality"))
+		put ("score", calcSecMetric($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
 		};
 		
 				
@@ -199,16 +214,15 @@ rule integrity
 	#
 	when
 		#	
-		$sme : MetricEventImpl($service : service, $property : property, $subproperty : subproperty, $contractValue : contractValue, $type : type, $limit : limit, $metricValue : metricValue) 
+		$sme : RuleMetricEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty, $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
 		$scoreMap : Map( this["_type_"] == "Score" )
 		
 	then 
 		#
-		//System.out.println("executed rule \"integrity\"");
 		modify ($scoreMap) {
-		put ("score", calcSecMetric($metricValue,$contractValue, $type, $limit)), 
-		put ("recency",System.currentTimeMillis() / 3600000),
-		put ("property", "integrity"))
+		put ("score", calcSecMetric($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
 		};
 		
 end
@@ -218,16 +232,15 @@ end
 	#
 	when
 		#	
-		$sme : MetricEventImpl($service : service, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $metricValue : metricValue) 
+		$sme : RuleMetricEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
 		$scoreMap : Map( this["_type_"] == "Score" )
 		
 	then 
 		#
-		//System.out.println("executed rule \"availability\"");
 		modify ($scoreMap) {
-		put ("score", calcQosMetric($metricValue,$contractValue, $type, $limit)), 
-		put ("recency",System.currentTimeMillis() / 3600000),
-		put ("property", "availability"))
+		put ("score", calcQosMetric($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
 		}; 
 		
 		
@@ -238,16 +251,15 @@ rule reliability
 	#
 	when
 		#	
-		$sme : MetricEventImpl($service : service, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $metricValue : metricValue) 
+		$sme : RuleMetricEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
 		$scoreMap : Map( this["_type_"] == "Score" )
 		
 	then 
 		#
-		//System.out.println("executed rule \"reliability\"");
 		modify ($scoreMap) {
-		put ("score", calcQosMetric($metricValue,$contractValue, $type, $limit)), 
-		put ("recency",System.currentTimeMillis()/ 3600000),
-		put ("property", "reliability"))
+		put ("score", calcQosMetric($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
 		};
 		
 end
@@ -258,67 +270,68 @@ rule performance
 	#
 	when
 		#	
-		$sme : MetricEventImpl($service : service, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $metricValue : metricValue) 
+		$sme : RuleMetricEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
 		$scoreMap : Map( this["_type_"] == "Score" )
 		
 	then 
 		#
-		//System.out.println("executed rule \"performance\"");
 		modify ($scoreMap) {
-		put ("score", calcQosMetric($metricValue,$contractValue, $type, $limit)), 
-		put ("recency",System.currentTimeMillis() / 3600000),
-		put ("property", "performance"))
+		put ("score", calcQosMetric($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
 		};
 		
 end
+
 rule sla
 	no-loop
 	#
 	when
 		#	
-		$sme : MetricEventImpl($service : service, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $metricValue : metricValue) 
+		$sme : RuleMetricEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
 		$scoreMap : Map( this["_type_"] == "Score" )
 		
 	then 
 		#
-		//System.out.println("executed rule \"sla\"");
 		modify ($scoreMap) {
-		put ("score", calcQosMetric($metricValue,$contractValue, $type, $limit)), 
-		put ("recency",System.currentTimeMillis() / 3600000),
-		put ("property", "sla"))
+		put ("score", calcQosMetric($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
 		};
 		
 end	
+
+/*
 rule "port-scanning"
 	no-loop
 	when
 	#	
-		$sme : AlertEventImpl($service : service, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $alertValue : alertValue) 
+		$sme : AlertEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
 		$scoreMap : Map( this["_type_"] == "Score" )
 		
 	then 
 		#
-		//System.out.println("executed rule \"port-scanning\"");
 		modify ($scoreMap) {
-		put ("score", calcAlert($alertValue,$contractValue, $type, $limit)), 
-		put ("recency",System.currentTimeMillis() / 3600000),
-		put ("property", "port-scanning"))
+		put ("score", calcAlert($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
 		};
 	end
 	
+
 rule mitm
 	no-loop
 	when
 	#	
-		$sme : AlertEventImpl($service : service, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $alertValue : alertValue) 
+		$sme : AlertEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
 		$scoreMap : Map( this["_type_"] == "Score" )
 		
 	then 
 		#
-		//System.out.println("executed rule \"mitm\"");
 		modify ($scoreMap) {
-		put ("score", calcAlert($alertValue,$contractValue, $type, $limit)), 
-		put ("recency",System.currentTimeMillis() / 3600000),
-		put ("property", "mitm"))
+		put ("score", calcAlert($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
 		};
 	end
+	*/

@@ -6,6 +6,8 @@ import org.apache.log4j.Logger;
 
 import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.wp2.components.trustworthiness.messaging.QosMetricsService;
+import eu.aniketos.wp2.components.trustworthiness.rules.model.event.TrustEvent;
+import eu.aniketos.wp2.components.trustworthiness.rules.model.event.RuleMetricEvent;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 
@@ -50,6 +52,22 @@ public class QoSMetricsServiceImpl implements QosMetricsService {
 
 			ratingUpdate.updateScore(metric);
 		}
+	}
+	
+	public void processQoSMetric(TrustEvent event) throws Exception {
+		
+		if (event == null
+				|| event.getServiceId() == null
+				|| event.getProperty() == null
+				|| event.getValue() == null) {
+			logger.warn("received metric contains null or empty data");
+			throw new Exception("received metric contains null or empty data");
+
+		} else {
+
+			ratingUpdate.updateScore(event);
+		}
+		
 	}
 
 	/**

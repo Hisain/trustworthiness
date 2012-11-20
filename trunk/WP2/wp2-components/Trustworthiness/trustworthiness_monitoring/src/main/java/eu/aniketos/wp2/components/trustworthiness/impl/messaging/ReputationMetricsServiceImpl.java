@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.wp2.components.trustworthiness.messaging.ReputationMetricsService;
+import eu.aniketos.wp2.components.trustworthiness.rules.model.event.TrustEvent;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 
@@ -50,6 +51,25 @@ public class ReputationMetricsServiceImpl implements ReputationMetricsService {
 
 			ratingUpdate.updateScore(metric);
 		}
+	}
+	
+	public void processReputationRating(TrustEvent event) throws Exception {
+		
+		if (event == null
+				|| event.getServiceId() == null
+				|| event.getProperty() == null
+				|| event.getValue() == null
+				|| event.getServiceId().length() == 0
+				|| event.getProperty().length() == 0
+				|| event.getValue().length() == 0) {
+			logger.warn("received metric contains null or empty data");
+			throw new Exception("received metric contains null or empty data");
+
+		} else {
+
+			ratingUpdate.updateScore(event);
+		}
+		
 	}
 
 	/**

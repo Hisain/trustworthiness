@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Properties;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
@@ -18,7 +20,8 @@ import org.osgi.service.event.EventAdmin;
 import org.apache.log4j.Logger;
 import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.AlertEventImpl;
-import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEventImpl;
+import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.RuleMetricEventImpl;
+import eu.aniketos.wp2.components.trustworthiness.rules.model.event.TrustEvent;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RuleExecuter;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;
@@ -61,10 +64,13 @@ public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
 		 */
 	}
 
-	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate#updateScore(java.util.Map)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate
+	 * #updateScore(java.util.Map)
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void updateScore(Map<String, String> event) throws Exception {
 
 		String serviceId = event.get("serviceId");
@@ -81,15 +87,13 @@ public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
 						.get("subproperty") == null)
 				|| !event.containsKey("type") || event.get("property") == null
 				|| event.get("type") == null) {
-			
+
 			logger.warn("metric did not contain required event elements.");
 			logger.warn("message will be ignored.");
 			throw new Exception(
 					"metric did not contain required event elements. message will be ignored.");
 
 		}
-
-		List<Object> facts = new ArrayList<Object>();
 
 		/*
 		 * TODO: organise with type of metric, content, names, etc
@@ -106,38 +110,175 @@ public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
 			}
 		}
 
-		String metricValue = event.get("value");
-		
-		if (metricValue==null){
+		String eventValue = event.get("value");
+
+		if (eventValue == null) {
 			throw new Exception(
 					"metric did not contain required event elements. message will be ignored.");
 		}
 
-		String contractValue = config.getConfig().getString(propertySub + "[@value]");
+		String eventTimestamp = event.get("timestamp");
+		String timestamp = null;
+		if (eventTimestamp != null) {
+			timestamp = Long
+					.toString(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+							.parse(eventTimestamp).getTime() / 3600000);
+
+			if (logger.isDebugEnabled()) {
+				logger.debug(eventTimestamp + " is converted to " + timestamp);
+			}
+
+		} else {
+			timestamp = Long.toString(System.currentTimeMillis() / 3600000);
+
+		}
+
+		String contractValue = config.getConfig().getString(
+				propertySub + "[@value]");
 		String type = config.getConfig().getString(propertySub + "[@type]");
 		String limit = config.getConfig().getString(propertySub + "[@limit]");
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("property=" + propertySub + ", contractValue=" + contractValue
-					+ ", type=" + type + ", limit=" + limit);
+			logger.debug("property=" + propertySub + ", contractValue="
+					+ contractValue + ", type=" + type + ", limit=" + limit + ", timestamp= "
+					+ timestamp);
 		}
 
 		// if property is missing quit
-		if (contractValue==null || type==null || limit==null){
-			logger.warn("property " + property + " for the metric is missing in configuration.");
+		if (contractValue == null || type == null || limit == null) {
+			logger.warn("property " + property
+					+ " for the metric is missing in configuration.");
 			return;
 		}
-		
+
+		TrustEvent ruleEvent = null;
+
 		if (event.get("type").equalsIgnoreCase("metric")) {
 
-			facts.add(new MetricEventImpl(service, property, subproperty,
-					contractValue, type, limit, metricValue));
+			ruleEvent = new RuleMetricEventImpl(serviceId, property,
+					subproperty, contractValue, type, limit, eventValue,
+					timestamp);
+
 		} else if (event.get("type").equalsIgnoreCase("alert")) {
-			facts.add(new AlertEventImpl(service, property, subproperty, contractValue,
-					type, limit, String.valueOf(1)));
+			ruleEvent = new AlertEventImpl(serviceId, property, subproperty,
+					contractValue, type, limit, eventValue, timestamp);
+
 		}
 
+		fireRule(ruleEvent, service);
+
+	}
+
+	public void updateScore(TrustEvent event) throws Exception {
+
+		String serviceId = event.getServiceId();
+		Atomic service = null;
+		if ((service = serviceEntityService.getAtomic(serviceId)) == null) {
+			logger.info("creating new service entry");
+			service = trustFactory.createService(serviceId);
+
+			serviceEntityService.addAtomic(service);
+		}
+
+		/*
+		 * TODO: organise with type of metric, content, names, etc
+		 */
+
+		String property = event.getProperty();
+		String propertySub = property;
+		String subproperty = null;
+		if ((subproperty = event.getSubproperty()) != null) {
+			propertySub = property + "." + subproperty;
+			if (logger.isDebugEnabled()) {
+				logger.debug(property);
+			}
+		}
+
+		// TODO: should do some checking of validity of fields
+
+		String metricValue = event.getValue();
+
+		String eventTimestamp = event.getTimestamp();
+		String timestamp = null;
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("start processing timestamp ");
+		}
+		
+		if (eventTimestamp != null) {
+			
+			SimpleDateFormat dateFormat = new SimpleDateFormat(
+					"yyyy-MM-dd'T'HH:mm:ssZ");
+
+			if (logger.isDebugEnabled()) {
+				logger.debug("processing timestamp ");
+			}
+			long timestampLong = 0;
+			
+			try {
+				timestampLong = dateFormat.parse(eventTimestamp).getTime();
+			} catch (ParseException e) {
+				logger.error("date format parse exception: "
+						+ e.getStackTrace());
+				throw new ParseException("date format parse exception: "
+						+ e.getStackTrace(), e.getErrorOffset());
+			}
+			
+			timestamp = Long.toString(timestampLong / 3600000);
+
+			if (logger.isDebugEnabled()) {
+				logger.debug(eventTimestamp + " is converted to " + timestamp);
+			}
+
+		} else {
+			timestamp = Long.toString(System.currentTimeMillis() / 3600000);
+		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("ended processing timestamp ");
+		}
+
+		String contractValue = config.getConfig().getString(
+				propertySub + "[@value]");
+		String type = config.getConfig().getString(propertySub + "[@type]");
+		String limit = config.getConfig().getString(propertySub + "[@limit]");
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("property=" + propertySub + ", metricValue="
+					+ metricValue + ", contractValue=" + contractValue
+					+ ", type=" + type + ", limit=" + limit + ", timestamp= "
+					+ timestamp);
+		}
+
+		// if property is missing quit
+		if (contractValue == null || type == null || limit == null) {
+			logger.warn("property " + property
+					+ " for the metric is missing in configuration.");
+			return;
+		}
+
+		RuleMetricEventImpl ruleEvent = new RuleMetricEventImpl(serviceId,
+				property, subproperty, contractValue, type, limit, metricValue,
+				timestamp);
+
+		fireRule(ruleEvent, service);
+
+	}
+
+	/**
+	 * @param ruleEvent
+	 * @param service
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void fireRule(TrustEvent ruleEvent, Atomic service) {
+
+		List<Object> facts = new ArrayList<Object>();
+
+		facts.add(ruleEvent);
+
 		Rating rating = trustFactory.createRating(service);
+
+		String serviceId = service.getId();
 
 		Map scoreMap = new HashMap();
 		scoreMap.put("_type_", "Score");
@@ -146,10 +287,10 @@ public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
 
 		logger.debug("now firing rules for score update");
 
-		Collection<?> results = ruleExecuter.execute(facts,
-				property.toLowerCase(), "Score", "score");
+		Collection<?> results = ruleExecuter.execute(facts, ruleEvent
+				.getProperty().toLowerCase(), "Score", "score");
 		Iterator<?> scoreIterator = results.iterator();
-		
+
 		if (scoreIterator.hasNext()) {
 			scoreMap = (Map) scoreIterator.next();
 
@@ -164,27 +305,29 @@ public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
 
 		if (scoreMap.containsKey("score")) {
 			Double scoreValue = (Double) scoreMap.get("score");
-			BigDecimal scoreBD = new BigDecimal(String.valueOf(scoreValue)).setScale(6, BigDecimal.ROUND_HALF_UP);
+			BigDecimal scoreBD = new BigDecimal(String.valueOf(scoreValue))
+					.setScale(6, BigDecimal.ROUND_HALF_UP);
 
 			scoreValue = Double.parseDouble(scoreBD.toString());
-			
+
 			rating.setScore(scoreValue);
-			rating.setRecency((Long) scoreMap.get("recency"));
+			rating.setRecency(Long.parseLong((String)scoreMap.get("recency")));
 			rating.setProperty((String) scoreMap.get("property"));
 
 			ratingEntityService.addRating(rating);
 
 			Dictionary props = new Properties();
-			props.put("service.id",serviceId);
+			props.put("service.id", serviceId);
 			props.put("score.id", rating.getId());
-			
-			Event osgiEvent = new Event("eu/aniketos/trustworthiness/qos", props);
+
+			Event osgiEvent = new Event("eu/aniketos/trustworthiness/qos",
+					props);
 			eventAdmin.sendEvent(osgiEvent);
-			
+
 			logger.debug("sent event to topic eu/aniketos/trustworthiness/qos ");
 
 		} else {
-			logger.warn("no score calculated from alert for " + service.getId());
+			logger.warn("no score calculated from alert for " + serviceId);
 		}
 	}
 
@@ -296,11 +439,12 @@ public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
 	public EventAdmin getEventAdmin() {
 		return eventAdmin;
 	}
-	
+
 	/**
 	 * required for Spring dependency injection
 	 * 
-	 * @param eventAdmin OSGi event admin
+	 * @param eventAdmin
+	 *            OSGi event admin
 	 */
 	public void setEventAdmin(EventAdmin eventAdmin) {
 		this.eventAdmin = eventAdmin;

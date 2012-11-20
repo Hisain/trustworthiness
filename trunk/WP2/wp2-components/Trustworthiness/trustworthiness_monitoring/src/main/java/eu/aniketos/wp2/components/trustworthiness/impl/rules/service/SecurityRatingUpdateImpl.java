@@ -1,6 +1,8 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.rules.service;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Dictionary;
@@ -18,7 +20,8 @@ import org.osgi.service.event.EventAdmin;
 import org.apache.log4j.Logger;
 import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.AlertEventImpl;
-import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEventImpl;
+import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.RuleMetricEventImpl;
+import eu.aniketos.wp2.components.trustworthiness.rules.model.event.TrustEvent;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RuleExecuter;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;
@@ -64,7 +67,6 @@ public class SecurityRatingUpdateImpl extends Observable implements RatingUpdate
 	/* (non-Javadoc)
 	 * @see eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate#updateScore(java.util.Map)
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void updateScore(Map<String, String> event) throws Exception {
 
 		String serviceId = event.get("serviceId");
@@ -88,8 +90,6 @@ public class SecurityRatingUpdateImpl extends Observable implements RatingUpdate
 					"metric did not contain required event elements. message will be ignored.");
 
 		}
-
-		List<Object> facts = new ArrayList<Object>();
 
 		/*
 		 * TODO: organise with type of metric, content, names, etc
@@ -116,10 +116,127 @@ public class SecurityRatingUpdateImpl extends Observable implements RatingUpdate
 		String contractValue = config.getConfig().getString(propertySub + "[@value]");
 		String type = config.getConfig().getString(propertySub + "[@type]");
 		String limit = config.getConfig().getString(propertySub + "[@limit]");
+		
+		String eventTimestamp = event.get("timestamp");
+		String timestamp = null;
+		if (eventTimestamp != null) {
+			timestamp = Long
+					.toString(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+							.parse(eventTimestamp).getTime() / 3600000);
+
+			if (logger.isDebugEnabled()) {
+				logger.debug(eventTimestamp + " is converted to " + timestamp);
+			}
+
+		} else {
+			timestamp = Long.toString(System.currentTimeMillis() / 3600000);
+
+		}
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("property=" + propertySub + ", contractValue=" + contractValue
-					+ ", type=" + type + ", limit=" + limit);
+					+ ", type=" + type + ", limit=" + limit + ", timestamp= "
+					+ timestamp);
+		}
+
+		// if property is missing quit
+		if (contractValue==null || type==null || limit==null){
+			logger.warn("property " + property + " for the metric is missing in configuration.");
+			return;
+		}
+
+		TrustEvent ruleEvent = null;
+		
+		if (event.get("type").equalsIgnoreCase("metric")) {
+
+			ruleEvent = new RuleMetricEventImpl(serviceId, property, subproperty,
+					contractValue, type, limit, metricValue, timestamp);
+					
+		} else if (event.get("type").equalsIgnoreCase("alert")) {
+			
+			ruleEvent = new AlertEventImpl(serviceId, property, subproperty, contractValue,
+					type, limit, String.valueOf(1),
+					timestamp);
+			
+		}
+		
+		fireRule(ruleEvent, service);
+		
+	}
+	
+	
+	public void updateScore(TrustEvent event) throws Exception {
+
+		String serviceId = event.getServiceId();
+		Atomic service = null;
+		if ((service = serviceEntityService.getAtomic(serviceId)) == null) {
+			logger.info("creating new service entry");
+			service = trustFactory.createService(serviceId);
+
+			serviceEntityService.addAtomic(service);
+		}
+
+
+		/*
+		 * TODO: organise with type of metric, content, names, etc
+		 */
+
+		String property = event.getProperty();
+		String propertySub = property;
+		String subproperty = null;
+		if ((subproperty = event.getSubproperty())!=null) {
+			propertySub = property + "." + subproperty;
+			if (logger.isDebugEnabled()) {
+				logger.debug(property);
+			}
+		}
+		
+		String eventTimestamp = event.getTimestamp();
+		String timestamp = null;
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("start processing timestamp ");
+		}
+		
+		if (eventTimestamp != null) {
+			
+			SimpleDateFormat dateFormat = new SimpleDateFormat(
+					"yyyy-MM-dd'T'HH:mm:ssZ");
+
+			if (logger.isDebugEnabled()) {
+				logger.debug("processing timestamp ");
+			}
+			long timestampLong = 0;
+			
+			try {
+				timestampLong = dateFormat.parse(eventTimestamp).getTime();
+			} catch (ParseException e) {
+				logger.error("date format parse exception: "
+						+ e.getStackTrace());
+				throw new ParseException("date format parse exception: "
+						+ e.getStackTrace(), e.getErrorOffset());
+			}
+			
+			timestamp = Long.toString(timestampLong / 3600000);
+
+			if (logger.isDebugEnabled()) {
+				logger.debug(eventTimestamp + " is converted to " + timestamp);
+			}
+
+		} else {
+			timestamp = Long.toString(System.currentTimeMillis() / 3600000);
+		}
+		
+		//TODO: should do some checking of validity of fields
+
+		String contractValue = config.getConfig().getString(propertySub + "[@value]");
+		String type = config.getConfig().getString(propertySub + "[@type]");
+		String limit = config.getConfig().getString(propertySub + "[@limit]");
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("property=" + propertySub + ", contractValue=" + contractValue
+					+ ", type=" + type + ", limit=" + limit + ", timestamp= "
+					+ timestamp);
 		}
 
 		// if property is missing quit
@@ -128,22 +245,38 @@ public class SecurityRatingUpdateImpl extends Observable implements RatingUpdate
 			return;
 		}
 		
-		if (event.get("type").equalsIgnoreCase("metric")) {
-
-			facts.add(new MetricEventImpl(service, property, subproperty,
-					contractValue, type, limit, metricValue));
-		} else if (event.get("type").equalsIgnoreCase("alert")) {
-			facts.add(new AlertEventImpl(service, property, subproperty, contractValue,
-					type, limit, String.valueOf(1)));
-		}
-
-		//retrieve existing security property if already exists
-		SecProperty sec = securityEntityService.getSecProperty(serviceId, property);
+		String metricValue = event.getValue();
 		
+		RuleMetricEventImpl ruleEvent = new RuleMetricEventImpl(serviceId, property, subproperty,
+				contractValue, type, limit, metricValue,
+				timestamp);
+		
+		fireRule(ruleEvent, service);
+		
+
+		
+	}
+	
+	/**
+	 * @param ruleEvent
+	 * @param service
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void fireRule(TrustEvent ruleEvent, Atomic service){
+
+		List<Object> facts = new ArrayList<Object>();
+		
+		facts.add(ruleEvent);
+
+		String serviceId = service.getId();
+		
+		//retrieve existing security property if already exists
+		SecProperty sec = securityEntityService.getSecProperty(serviceId, ruleEvent.getProperty());
+						
 		if (sec==null){
 			sec = trustFactory.createSecPropertyRating(service);
 		}
-
+				
 		Map scoreMap = new HashMap();
 		scoreMap.put("_type_", "Score");
 		scoreMap.put("service", serviceId);
@@ -152,7 +285,7 @@ public class SecurityRatingUpdateImpl extends Observable implements RatingUpdate
 		logger.debug("now firing rules for score update");
 
 		Collection<?> results = ruleExecuter.execute(facts,
-				property.toLowerCase(), "Score", "score");
+				ruleEvent.getProperty().toLowerCase(), "Score", "score");
 		Iterator<?> scoreIterator = results.iterator();
 		
 		if (scoreIterator.hasNext()) {
@@ -174,7 +307,7 @@ public class SecurityRatingUpdateImpl extends Observable implements RatingUpdate
 			scoreValue = Double.parseDouble(scoreBD.toString());
 			
 			sec.setScore(scoreValue);
-			sec.setRecency((Long) scoreMap.get("recency"));
+			sec.setRecency(Long.parseLong((String)scoreMap.get("recency")));
 			sec.setProperty((String) scoreMap.get("property"));
 
 			
@@ -191,7 +324,7 @@ public class SecurityRatingUpdateImpl extends Observable implements RatingUpdate
 			logger.debug("sent event to topic eu/aniketos/trustworthiness/security ");
 
 		} else {
-			logger.warn("no score calculated from alert for " + service.getId());
+			logger.warn("no score calculated from alert for " + serviceId);
 		}
 	}
 
