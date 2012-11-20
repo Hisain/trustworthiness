@@ -1,7 +1,6 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event;
 
-import eu.aniketos.wp2.components.trustworthiness.rules.model.event.SREvent;
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Service;
+import eu.aniketos.wp2.components.trustworthiness.rules.model.event.RuleAlertEvent;
 
 /**
  * alert events class
@@ -9,27 +8,29 @@ import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Service;
  * @author Hisain Elshaafi (TSSG)
  * 
  */
-public class AlertEventImpl implements SREvent {
+public class AlertEventImpl implements RuleAlertEvent {
 
-	private Service service;
-	 
+	private String serviceId;
+
 	private String property;
-	
+
 	private String subproperty;
 
 	// new alertValue reading causing the event
-	private String alertValue;
+	private String value;
 
 	// proposed value in contractValue
 	private String contractValue;
-	
+
 	private String type;
-	
+
 	private String limit;
 
+	private String timestamp;
+
 	/**
-	 * @param service
-	 *            atomic or composite service object
+	 * @param serviceId
+	 *            atomic or composite serviceId object
 	 * @param property
 	 *            metric's trustworthiness property
 	 * @param subproperty
@@ -40,47 +41,49 @@ public class AlertEventImpl implements SREvent {
 	 *            type of alert i.e. percentage, real number, etc.
 	 * @param limit
 	 *            the type of limit requirement i.e. max, min, etc
-	 * @param alertValue
+	 * @param value
 	 *            actual alert value
 	 */
-	public AlertEventImpl(Service service, String property, String subproperty,
-			String contractValue, String type, String limit, String alertValue) {
+	public AlertEventImpl(String serviceId, String property,
+			String subproperty, String contractValue, String type,
+			String limit, String value, String timestamp) {
 
-		this.service = service;
+		this.serviceId = serviceId;
 		this.property = property;
 		this.subproperty = subproperty;
-		this.alertValue = alertValue;
+		this.value = value;
 		this.contractValue = contractValue;
 		this.type = type;
 		this.limit = limit;
+		this.timestamp = timestamp;
 	}
 
 	/**
 	 * @return
 	 */
-	public Service getService() {
-		return service;
+	public String getServiceId() {
+		return serviceId;
 	}
 
 	/**
-	 * @param service
+	 * @param serviceId
 	 */
-	public void setService(Service service) {
-		this.service = service;
+	public void setServiceId(String serviceId) {
+		this.serviceId = serviceId;
 	}
 
 	/**
 	 * @return
 	 */
-	public String getAlertValue() {
-		return alertValue;
+	public String getValue() {
+		return value;
 	}
 
 	/**
 	 * @param alertValue
 	 */
-	public void setAlertValue(String alertValue) {
-		this.alertValue = alertValue;
+	public void setValue(String alertValue) {
+		this.value = alertValue;
 	}
 
 	/**
@@ -151,6 +154,20 @@ public class AlertEventImpl implements SREvent {
 	 */
 	public void setSubproperty(String subproperty) {
 		this.subproperty = subproperty;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getTimestamp() {
+		return timestamp;
+	}
+
+	/**
+	 * @param timestamp
+	 */
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
 	}
 
 }

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <properties>
+	<reputation type="percentage" limit="min" value="0.90">
+	</reputation>
 	<performance>
 		<delay type="real" limit="max" value="1.0" />
 	</performance>
