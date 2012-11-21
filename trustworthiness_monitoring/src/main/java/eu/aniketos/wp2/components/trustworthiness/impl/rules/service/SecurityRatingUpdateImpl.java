@@ -1,8 +1,6 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.rules.service;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Dictionary;
@@ -14,6 +12,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Properties;
 
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 
@@ -120,17 +120,28 @@ public class SecurityRatingUpdateImpl extends Observable implements RatingUpdate
 		String eventTimestamp = event.get("timestamp");
 		String timestamp = null;
 		if (eventTimestamp != null) {
-			timestamp = Long
-					.toString(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
-							.parse(eventTimestamp).getTime() / 3600000);
+			
+			DateTimeFormatter fmt = ISODateTimeFormat.dateTimeNoMillis();
+
+			try {
+				timestamp = Long
+						.toString(fmt.parseMillis(eventTimestamp) / 3600000);
+
+			} catch (IllegalArgumentException iae) {
+
+				logger.error("date format parse exception: "
+						+ iae.getStackTrace());
+			}
 
 			if (logger.isDebugEnabled()) {
 				logger.debug(eventTimestamp + " is converted to " + timestamp);
 			}
 
-		} else {
+		} 
+		
+		// no timestamp or not valid text
+		if (timestamp == null) {
 			timestamp = Long.toString(System.currentTimeMillis() / 3600000);
-
 		}
 
 		if (logger.isDebugEnabled()) {
@@ -194,36 +205,29 @@ public class SecurityRatingUpdateImpl extends Observable implements RatingUpdate
 		String eventTimestamp = event.getTimestamp();
 		String timestamp = null;
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("start processing timestamp ");
-		}
 		
 		if (eventTimestamp != null) {
 			
-			SimpleDateFormat dateFormat = new SimpleDateFormat(
-					"yyyy-MM-dd'T'HH:mm:ssZ");
+			DateTimeFormatter fmt = ISODateTimeFormat.dateTimeNoMillis();
 
-			if (logger.isDebugEnabled()) {
-				logger.debug("processing timestamp ");
-			}
-			long timestampLong = 0;
-			
 			try {
-				timestampLong = dateFormat.parse(eventTimestamp).getTime();
-			} catch (ParseException e) {
+				timestamp = Long
+						.toString(fmt.parseMillis(eventTimestamp) / 3600000);
+
+			} catch (IllegalArgumentException iae) {
+
 				logger.error("date format parse exception: "
-						+ e.getStackTrace());
-				throw new ParseException("date format parse exception: "
-						+ e.getStackTrace(), e.getErrorOffset());
+						+ iae.getStackTrace());
 			}
-			
-			timestamp = Long.toString(timestampLong / 3600000);
 
 			if (logger.isDebugEnabled()) {
 				logger.debug(eventTimestamp + " is converted to " + timestamp);
 			}
 
-		} else {
+		}
+		
+		// no timestamp or not valid text
+		if (timestamp == null) {
 			timestamp = Long.toString(System.currentTimeMillis() / 3600000);
 		}
 		

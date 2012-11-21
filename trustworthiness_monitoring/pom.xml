@@ -15,7 +15,7 @@
 
 	<properties>
 		<bundle.require.bundle>
-			trustworthiness-api;bundle-version="1.0.0",trustworthiness-domain;bundle-version="1.0.0",com.springsource.org.aopalliance;bundle-version="1.0.0",org.springframework.aop;bundle-version="${spring.version}",org.springframework.beans;bundle-version="${spring.version}",org.springframework.context;bundle-version="${spring.version}",org.springframework.context.support;bundle-version="${spring.version}",org.springframework.core;bundle-version="${spring.version}",org.springframework.jms;bundle-version="${spring.version}",org.springframework.transaction;bundle-version="${spring.version}",org.springframework.jdbc;bundle-version="${spring.version}",org.springframework.osgi.core;bundle-version="${spring.osgi.version}",org.springframework.osgi.extender;bundle-version="${spring.osgi.version}",org.springframework.osgi.io;bundle-version="${spring.osgi.version}",commons-configuration-1.7;bundle-version="1.7.0",com.springsource.org.apache.commons.lang;bundle-version="2.5.0",com.springsource.javax.persistence;bundle-version="${javax.persistence.version}",com.springsource.org.apache.log4j;bundle-version="1.2.15",com.springsource.org.quartz;bundle-version="1.6.2",org.drools.core;bundle-version="5.2.0.Final",org.drools.compiler;bundle-version="5.2.0.Final"
+			trustworthiness-api;bundle-version="1.0.0",trustworthiness-domain;bundle-version="1.0.0",com.springsource.org.aopalliance;bundle-version="1.0.0",org.springframework.aop;bundle-version="${spring.version}",org.springframework.beans;bundle-version="${spring.version}",org.springframework.context;bundle-version="${spring.version}",org.springframework.context.support;bundle-version="${spring.version}",org.springframework.core;bundle-version="${spring.version}",org.springframework.jms;bundle-version="${spring.version}",org.springframework.transaction;bundle-version="${spring.version}",org.springframework.jdbc;bundle-version="${spring.version}",org.springframework.osgi.core;bundle-version="${spring.osgi.version}",org.springframework.osgi.extender;bundle-version="${spring.osgi.version}",org.springframework.osgi.io;bundle-version="${spring.osgi.version}",commons-configuration-1.7;bundle-version="1.7.0",com.springsource.org.apache.commons.lang;bundle-version="2.5.0",com.springsource.javax.persistence;bundle-version="${javax.persistence.version}",com.springsource.org.apache.log4j;bundle-version="1.2.15",com.springsource.org.quartz;bundle-version="1.6.2",org.drools.core;bundle-version="5.2.0.Final",org.drools.compiler;bundle-version="5.2.0.Final",com.springsource.org.joda.time;bundle-version="1.6.0"
 		</bundle.require.bundle>
 		<bundle.import.package>
 			org.osgi.framework;version="1.3.0",*
@@ -93,18 +93,11 @@
 			<artifactId>spring-osgi-annotation</artifactId>
 			<version>${spring.osgi.version}</version>
 		</dependency>
-		
-		<!-- <dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>com.springsource.org.hibernate.annotations.common</artifactId>
-			<version>3.3.0.ga</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>com.springsource.org.hibernate</artifactId>
-			<version>3.3.2.GA</version>
-		</dependency>		 -->
+
+		<!-- <dependency> <groupId>org.hibernate</groupId> <artifactId>com.springsource.org.hibernate.annotations.common</artifactId> 
+			<version>3.3.0.ga</version> </dependency> <dependency> <groupId>org.hibernate</groupId> 
+			<artifactId>com.springsource.org.hibernate</artifactId> <version>3.3.2.GA</version> 
+			</dependency> -->
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
@@ -119,7 +112,7 @@
 			<groupId>org.aopalliance</groupId>
 			<artifactId>com.springsource.org.aopalliance</artifactId>
 			<version>1.0.0</version>
-		</dependency> 
+		</dependency>
 		<dependency>
 			<groupId>org.apache.log4j</groupId>
 			<artifactId>com.springsource.org.apache.log4j</artifactId>
@@ -156,6 +149,11 @@
 			<version>4.3.0</version>
 		</dependency>
 		<dependency>
+			<groupId>org.joda</groupId>
+			<artifactId>com.springsource.org.joda.time</artifactId>
+			<version>1.6.0</version>
+		</dependency>
+		<dependency>
 			<groupId>eu.aniketos.wp2.components.trustworthiness</groupId>
 			<artifactId>trustworthiness-api</artifactId>
 			<version>1.0.0</version>
@@ -165,7 +163,7 @@
 			<artifactId>trustworthiness-domain</artifactId>
 			<version>1.0.0</version>
 		</dependency>
-	
+
 	</dependencies>
 
 	<build>
@@ -189,5 +187,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 </project>
