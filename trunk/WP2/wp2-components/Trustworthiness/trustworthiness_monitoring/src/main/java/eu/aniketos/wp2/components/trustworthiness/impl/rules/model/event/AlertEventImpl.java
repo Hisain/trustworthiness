@@ -28,6 +28,8 @@ public class AlertEventImpl implements RuleAlertEvent {
 
 	private String timestamp;
 
+	private String eventDescription;
+	
 	/**
 	 * @param serviceId
 	 *            atomic or composite serviceId object
@@ -168,6 +170,23 @@ public class AlertEventImpl implements RuleAlertEvent {
 	 */
 	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
+	}
+	
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.rules.model.event.TrustEvent#getEventDescription()
+	 */
+	public String getEventDescription() {
+		// 
+		return eventDescription;
+	}
+
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.rules.model.event.TrustEvent#setEventDescription(java.lang.String)
+	 */
+	public void setEventDescription(String eventDescription) {
+		// 
+		this.eventDescription = eventDescription;
+		
 	}
 
 }

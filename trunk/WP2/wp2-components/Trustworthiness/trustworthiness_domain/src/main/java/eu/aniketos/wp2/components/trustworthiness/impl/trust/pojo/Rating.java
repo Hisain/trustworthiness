@@ -47,6 +47,10 @@ public class Rating implements Serializable {
 	//@Length(max = 50)
 	private long recency;
 
+	// description of triggering event
+	private String eventDescription;
+	
+
 	/*
 	 * recencyWt and propertyWt is weight of score regardless of other scores
 	 */
@@ -73,12 +77,13 @@ public class Rating implements Serializable {
 	 * @param property
 	 */
 	public Rating(String id, Service service, double score, long recency,
-			String property) {
+			String property, String eventDescription) {
 		this.id = id;
 		this.service = service;
 		this.score = score;
 		this.property = property;
 		this.recency = recency;
+		this.eventDescription = eventDescription;
 	}
 
 	/**
@@ -161,6 +166,21 @@ public class Rating implements Serializable {
 	 */
 	public void setProperty(String property) {
 		this.property = property;
+	}
+
+	/**
+	 * @return
+	 */
+	@Column(name="event_description")
+	public String getEventDescription() {
+		return eventDescription;
+	}
+
+	/**
+	 * @param eventDescription
+	 */
+	public void setEventDescription(String eventDescription) {
+		this.eventDescription = eventDescription;
 	}
 
 	/**

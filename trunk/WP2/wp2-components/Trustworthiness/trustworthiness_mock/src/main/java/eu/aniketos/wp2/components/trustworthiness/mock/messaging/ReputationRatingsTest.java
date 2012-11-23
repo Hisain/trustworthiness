@@ -64,6 +64,9 @@ public class ReputationRatingsTest {
 			if (logger.isDebugEnabled()) {
 				logger.debug(" timestamp=" + timestamp);
 			}
+			
+			String eventDescription = "nice service, happy to do business with..";
+			event.setEventDescription(eventDescription);
 
 			try {
 				repMetrics.processReputationRating(event);
