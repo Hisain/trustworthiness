@@ -17,6 +17,7 @@ import org.joda.time.format.ISODateTimeFormat;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 
+import org.apache.commons.configuration.ConversionException;
 import org.apache.log4j.Logger;
 import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.AlertEventImpl;
@@ -50,18 +51,21 @@ public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
 
 	private EventAdmin eventAdmin;
 
+	int maxDescriptionSize = 0;
+
 	/**
 	 * 
 	 */
 	public void initialize() {
-		// replaced with osgi events *whiteboard*
-		// monitorHelperService.setupObservers(this);
-
-		/*
-		 * Map<String,Rating> props = new HashMap<String,Rating>();
-		 * props.put("test", new Rating()); logger.info(eventAdmin);
-		 * eventAdmin.sendEvent(new Event("trust-event/qos", props));
-		 */
+		if (config.getConfig().containsKey("max_event_description_size")) {
+			try {
+				maxDescriptionSize = config.getConfig().getInt(
+						"max_event_description_size");
+			} catch (ConversionException ce) {
+				logger.error("max_event_description_size conversion exception: "
+						+ ce.getMessage());
+			}
+		}
 	}
 
 	/*
@@ -120,11 +124,7 @@ public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
 		String eventTimestamp = event.get("timestamp");
 		String timestamp = null;
 		if (eventTimestamp != null) {
-			/*
-			 * timestamp = Long .toString(new
-			 * SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
-			 * .parse(eventTimestamp).getTime() / 3600000);
-			 */
+
 			DateTimeFormatter fmt = ISODateTimeFormat.dateTimeNoMillis();
 
 			try {
@@ -141,8 +141,8 @@ public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
 				logger.debug(eventTimestamp + " is converted to " + timestamp);
 			}
 
-		} 
-		
+		}
+
 		// no timestamp or not valid text
 		if (timestamp == null) {
 			timestamp = Long.toString(System.currentTimeMillis() / 3600000);
@@ -179,6 +179,18 @@ public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
 					contractValue, type, limit, eventValue, timestamp);
 
 		}
+
+		String eventDescription = null;
+		if (event.containsKey("eventDescription")) {
+			eventDescription = event.get("EventDescription");
+		}
+		if (eventDescription == null) {
+			eventDescription = "";
+		} else if (eventDescription.length() > maxDescriptionSize) {
+			eventDescription = eventDescription
+					.substring(0, maxDescriptionSize);
+		}
+		ruleEvent.setEventDescription(eventDescription);
 
 		fireRule(ruleEvent, service);
 
@@ -217,21 +229,6 @@ public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
 		String timestamp = null;
 
 		if (eventTimestamp != null) {
-
-			/*
-			 * SimpleDateFormat dateFormat = new SimpleDateFormat(
-			 * "yyyy-MM-dd'T'HH:mm:ssZ");
-			 */
-
-			/*
-			 * long timestampLong = 0; try { timestampLong =
-			 * dateFormat.parse(eventTimestamp).getTime(); } catch
-			 * (ParseException e) { logger.error("date format parse exception: "
-			 * + e.getStackTrace()); throw new
-			 * ParseException("date format parse exception: " +
-			 * e.getStackTrace(), e.getErrorOffset()); } timestamp =
-			 * Long.toString(timestampLong / 3600000);
-			 */
 
 			DateTimeFormatter fmt = ISODateTimeFormat.dateTimeNoMillis();
 
@@ -279,6 +276,15 @@ public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
 				property, subproperty, contractValue, type, limit, metricValue,
 				timestamp);
 
+		String eventDescription = event.getEventDescription();
+		if (eventDescription == null) {
+			eventDescription = "";
+		} else if (eventDescription.length() > maxDescriptionSize) {
+			eventDescription = eventDescription
+					.substring(0, maxDescriptionSize);
+		}
+		ruleEvent.setEventDescription(eventDescription);
+
 		fireRule(ruleEvent, service);
 
 	}
@@ -295,6 +301,7 @@ public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
 		facts.add(ruleEvent);
 
 		Rating rating = trustFactory.createRating(service);
+		rating.setEventDescription(ruleEvent.getEventDescription());
 
 		String serviceId = service.getId();
 

@@ -19,17 +19,15 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
 /**
  * @author Hisain Elshaafi (TSSG)
- *
+ * 
  */
 @Entity
-@org.hibernate.annotations.Proxy(lazy=false)  
+@org.hibernate.annotations.Proxy(lazy = false)
 @Table(name = "SEC_PROPERTY")
 public class SecProperty implements Serializable {
 
-	
 	/**
 	 * 
 	 */
@@ -41,11 +39,13 @@ public class SecProperty implements Serializable {
 
 	private double score;
 
-	//@Length(max = 25)
+	// @Length(max = 25)
 	private String property;
 
-	//@Length(max = 50)
+	// @Length(max = 50)
 	private long recency;
+
+	private String updateDescription;
 
 	/**
 	 *
@@ -72,7 +72,7 @@ public class SecProperty implements Serializable {
 	 * @return
 	 */
 	@Id
-	@Column(name="id")
+	@Column(name = "id")
 	public String getId() {
 		return id;
 	}
@@ -90,7 +90,7 @@ public class SecProperty implements Serializable {
 	@NotNull
 	@ManyToOne
 	// (cascade = { CascadeType.ALL })
-	@JoinColumn(name="service_id")
+	@JoinColumn(name = "service_id")
 	public Service getService() {
 		return service;
 	}
@@ -102,7 +102,6 @@ public class SecProperty implements Serializable {
 		this.service = service;
 	}
 
-	
 	/**
 	 * @return
 	 */
@@ -149,6 +148,22 @@ public class SecProperty implements Serializable {
 		this.recency = recency;
 	}
 
+	/**
+	 * @return updateDescription description of latest security property update
+	 */
+	@Column(name="update_description")
+	public String getUpdateDescription() {
+		return updateDescription;
+	}
+
+	/**
+	 * @param updateDescription
+	 *            description of latest security property update
+	 */
+	public void setUpdateDescription(String updateDescription) {
+		this.updateDescription = updateDescription;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 
@@ -165,22 +180,20 @@ public class SecProperty implements Serializable {
 		 * equivalence by id
 		 */
 		SecProperty castOther = (SecProperty) other;
-		return new EqualsBuilder().append(id, castOther.getId()).append(service,
-				castOther.getService())
-				.append(property,
-						castOther.getProperty()).isEquals();
+		return new EqualsBuilder().append(id, castOther.getId())
+				.append(service, castOther.getService())
+				.append(property, castOther.getProperty()).isEquals();
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(441293447, 2056268651).append(id).append(
-				service).append(score).append(property)
-				.toHashCode();
+		return new HashCodeBuilder(441293447, 2056268651).append(id)
+				.append(service).append(score).append(property).toHashCode();
 	}
 
 	public String toString() {
 		return new ToStringBuilder(this).append("id", id)
-				.append("serviceId", service).append("score", score).append("property", property)
-				.toString();
+				.append("serviceId", service).append("score", score)
+				.append("property", property).toString();
 	}
 }

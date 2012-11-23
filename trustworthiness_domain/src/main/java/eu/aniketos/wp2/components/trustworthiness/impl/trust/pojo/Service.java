@@ -68,7 +68,7 @@ public class Service implements Serializable {
 	/**
 	 * @return
 	 */
-	@Column (name="trustscore")
+	@Column (name="trust_score")
 	@NotNull
 	public double getTrustScore() {
 		return trustScore;
@@ -100,7 +100,7 @@ public class Service implements Serializable {
 	/**
 	 * @return
 	 */
-	@Column (name="movingwt")
+	@Column (name="moving_wt")
 	@NotNull
 	public double getMovingWt() {
 		return movingWt;
@@ -116,7 +116,7 @@ public class Service implements Serializable {
 	/**
 	 * @return
 	 */
-	@Column (name="calctime")
+	@Column (name="calc_time")
 	@NotNull
 	public double getCalcTime() {
 		return calcTime;
