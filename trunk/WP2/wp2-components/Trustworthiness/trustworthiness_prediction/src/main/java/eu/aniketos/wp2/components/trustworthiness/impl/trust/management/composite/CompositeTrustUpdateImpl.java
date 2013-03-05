@@ -62,10 +62,10 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 		// TODO update atomic trust before aggregation
 		for (Atomic service : componentServices) {
 			logger.debug("component service " + service.getId());
-			tw = trustUpdate.calculateTrust(service.getId());
+			tw = trustUpdate.updateTrust(service.getId());
 
-			double score = tw.getScore();
-			double confidence = tw.getConfidence();
+			double score = tw.getTrustworthinessScore();
+			double confidence = tw.getQosConfidence();
 
 			if (logger.isDebugEnabled()) {
 				logger.debug(service + " trustworthiness " + score + ","
@@ -83,8 +83,8 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 		twScore = Double.parseDouble(scoreBD.toString());
 		twConfidence = Double.parseDouble(confidenceBD.toString());
 
-		tw.setScore(twScore);
-		tw.setConfidence(twConfidence);
+		tw.setTrustworthinessScore(twScore);
+		tw.setQosConfidence(twConfidence);
 
 		// send alert if trustworthiness < alert threshold
 		if (twScore < config.getConfig().getDouble("alert_threshold")) {

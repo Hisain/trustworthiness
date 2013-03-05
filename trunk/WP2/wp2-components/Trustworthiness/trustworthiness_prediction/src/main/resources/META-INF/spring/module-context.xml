@@ -17,6 +17,7 @@
 		<property name="config" ref="configService"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 		<property name="ratingEntityService" ref="ratingEntityService"></property>
+		<property name="securityEntityService" ref="securityEntityService"></property>
 		<property name="eventAdmin" ref="eventAdminService"/>
 	</bean>
 	
@@ -26,6 +27,7 @@
 		<property name="config" ref="configService"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 		<property name="ratingEntityService" ref="ratingEntityService"></property>
+		<property name="securityEntityService" ref="securityEntityService"></property>
 		<property name="eventAdmin" ref="eventAdminService"/>
 	</bean>
 

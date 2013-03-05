@@ -29,8 +29,10 @@ public class Service implements Serializable {
 	
 	private static final long serialVersionUID = 7661205089410810957L;
 	private String id = null;
-	private double trustScore=0;
-	private double confidence=0;
+	private double trustworthinessScore=0;
+	private double qosScore=0;
+	private double qosConfidence=0;
+	private double securityScore=0;
 	private double movingWt=0;
 	private double calcTime=0;
 	private double deviation=0;
@@ -68,33 +70,64 @@ public class Service implements Serializable {
 	/**
 	 * @return
 	 */
-	@Column (name="trust_score")
+	@Column (name="trustworthiness_score")
 	@NotNull
-	public double getTrustScore() {
-		return trustScore;
+	public double getTrustworthinessScore() {
+		return trustworthinessScore;
 	}
 
 	/**
-	 * @param trustScore
+	 * @param trustworthinessScore
 	 */
-	public void setTrustScore(double trustScore) {
-		this.trustScore = trustScore;
+	public void setTrustworthinessScore(double trustworthinessScore) {
+		this.trustworthinessScore = trustworthinessScore;
+	}
+	
+
+	/**
+	 * @return
+	 */
+	@Column (name="qos_score")
+	@NotNull
+	public double getQosScore() {
+		return qosScore;
+	}
+
+
+	/**
+	 * @param qosScore
+	 */
+	public void setQosScore(double qosScore) {
+		this.qosScore = qosScore;
+	}
+	
+	/**
+	 * @return
+	 */
+	@Column (name="qos_confidence")
+	@NotNull
+	public double getQosConfidence() {
+		return qosConfidence;
+	}
+
+	/**
+	 * @param qosConfidence
+	 */
+	public void setQosConfidence(double confidence) {
+		this.qosConfidence = confidence;
 	}
 
 	/**
 	 * @return
 	 */
-	@Column (name="confidence")
+	@Column (name="security_score")
 	@NotNull
-	public double getConfidence() {
-		return confidence;
+	public double getSecurityScore() {
+		return securityScore;
 	}
 
-	/**
-	 * @param confidence
-	 */
-	public void setConfidence(double confidence) {
-		this.confidence = confidence;
+	public void setSecurityScore(double securityScore) {
+		this.securityScore = securityScore;
 	}
 
 	/**

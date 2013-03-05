@@ -2,6 +2,7 @@ package eu.aniketos.wp2.components.trustworthiness.impl.trust.management.atomic;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -12,9 +13,11 @@ import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationMan
 import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdatePolicy;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.RatingEntityService;
+import eu.aniketos.wp2.components.trustworthiness.trust.service.SecurityEntityService;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.SecProperty;
 
 /**
  * updates trustworthiness of (atomic) services using moving average approach
@@ -32,12 +35,18 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 
 	private RatingEntityService ratingEntityService;
 
+	private SecurityEntityService securityEntityService;
+
 	private ConfigurationManagement config;
 
 	private EventAdmin eventAdmin;
 
 	/* set default score (0.0) if not configured */
 	private double defaultScore = 0.0;
+
+	private double confidentialityWeight = 0.0;
+
+	private double integrityWeight = 0.0;
 
 	/* default tw level decay constant */
 	private static double decayConstant = 0.25;
@@ -97,6 +106,40 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 				defaultScore = 0.0f;
 			}
 		}
+
+		/**
+		 * set confidentiality weight
+		 */
+		if (!config.getConfig().containsKey("confidentiality_weight")) {
+			logger.warn("confidentiality weight is not specified, will be set to 1.0");
+		} else {
+			confidentialityWeight = config.getConfig().getFloat(
+					"confidentiality_weight");
+
+			if ((confidentialityWeight < 0) || (confidentialityWeight > 10)) {
+				logger.error("incorrect confidentiality weight specified. "
+						+ "must be 0 <= confidentiality_weight <= 10. "
+						+ "will be set to 1.0");
+				confidentialityWeight = 1.0f;
+			}
+		}
+
+		/**
+		 * set integrity weight
+		 */
+		if (!config.getConfig().containsKey("integrity_weight")) {
+			logger.warn("integrity weight is not specified, will be set to 1.0");
+		} else {
+			integrityWeight = config.getConfig().getFloat("integrity_weight");
+
+			if ((integrityWeight < 0) || (integrityWeight > 10)) {
+				logger.error("incorrect integrity weight specified. "
+						+ "must be 0 <= integrity_weight <= 10. "
+						+ "will be set to 1.0");
+				integrityWeight = 1.0f;
+			}
+		}
+
 		/*
 		 * if (!config.getConfig().containsKey("confidence_threshold")) {
 		 * logger.warn("confidence threshold is not set, will be set to 1"); }
@@ -131,34 +174,115 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 	 */
 	public Trustworthiness calculateTrust(Rating ratingScore) {
 
-		double twScore = 0;
-		double twConfidence = 0;
-		
 		String serviceId = ratingScore.getService().getId();
 
-		Atomic service = serviceEntityService.getAtomic(serviceId);
-		
 		if (serviceId == null) {
 			logger.error("service not found.");
 			return null;
 
 		}
-		
-		
+
 		if (logger.isInfoEnabled()) {
 			logger.info("found service " + serviceId);
 		}
 
-		
 
-		savedTw = service.getTrustScore();
+		double securityScore = calcSecurityScore(serviceId);
+
+		Map<String, Double> qos = calcQoS(ratingScore);
+		
+		double qosScore = qos.get("qosScore");
+		double qosConfidence = qos.get("qosConfidence");
+		double deviation = qos.get("deviation");
+		double nowInHour = qos.get("nowInHour");
+		double totalScoreWt = qos.get("totalScoreWt");
+
+		// determine overall trustworthiness score
+		// TODO: separate reputation from qos
+		double trustworthinessScore = qosScore * securityScore;
+
+		BigDecimal scoreBD = new BigDecimal(String.valueOf(qosScore)).setScale(
+				3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal confidenceBD = new BigDecimal(String.valueOf(qosConfidence))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal deviationBD = new BigDecimal(String.valueOf(deviation))
+				.setScale(5, BigDecimal.ROUND_HALF_UP);
+		BigDecimal nowInHourBD = new BigDecimal(String.valueOf(nowInHour))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal totalScoreWtBD = new BigDecimal(String.valueOf(totalScoreWt))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal securityBD = new BigDecimal(String.valueOf(securityScore))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal trustworthinessBD = new BigDecimal(
+				String.valueOf(trustworthinessScore)).setScale(3,
+				BigDecimal.ROUND_HALF_UP);
+
+		qosScore = Double.parseDouble(scoreBD.toString());
+		qosConfidence = Double.parseDouble(confidenceBD.toString());
+		deviation = Double.parseDouble(deviationBD.toString());
+		nowInHour = Double.parseDouble(nowInHourBD.toString());
+		totalScoreWt = Double.parseDouble(totalScoreWtBD.toString());
+		securityScore = Double.parseDouble(securityBD.toString());
+		trustworthinessScore = Double.parseDouble(trustworthinessBD.toString());
+
+		Trustworthiness tw = new ServiceTrustworthiness(serviceId,
+				trustworthinessScore, qosScore, qosConfidence, securityScore);
+
+		Atomic service = serviceEntityService.getAtomic(serviceId);
+		
+		service.setQosScore(qosScore);
+		service.setQosConfidence(qosConfidence);
+		service.setDeviation(deviation);
+		service.setCalcTime(nowInHour);
+		service.setMovingWt(totalScoreWt);
+		service.setSecurityScore(securityScore);
+		service.setTrustworthinessScore(trustworthinessScore);
+
+		logger.debug("updating service with moving average values..");
+		serviceEntityService.updateAtomic(service);
+
+		// send alert if trustworthiness < alert threshold
+		if (trustworthinessScore < config.getConfig().getDouble("alert_threshold")) {
+			Map<String, String> props = new HashMap<String, String>();
+			props.put("service.id", serviceId);
+			props.put("trustworthiness.score",
+					Double.toString(trustworthinessScore));
+			props.put("trustworthiness.confidence",
+					Double.toString(qosConfidence));
+
+			Event osgiEvent = new Event("eu/aniketos/trustworthiness/alert",
+					props);
+			eventAdmin.sendEvent(osgiEvent);
+		}
+
+		return tw;
+	}
+
+	private Map<String, Double> calcQoS(Rating ratingScore) {
+
+		Map<String, Double> qos = new HashMap<String, Double>();
+
+		String serviceId = ratingScore.getService().getId();
+
+		Atomic service = serviceEntityService.getAtomic(serviceId);
+
+		double qosScore = 0;
+
+		double qosConfidence = 0;
+
+		savedTw = service.getTrustworthinessScore();
+		
 		calcTime = service.getCalcTime();
+		
 		savedDeviation = service.getDeviation();
+		
 		savedTwWt = service.getMovingWt();
 
 		/* current time in hrs */
 		int hourMsecs = 3600000;
+		
 		double now = System.currentTimeMillis();
+		
 		double nowInHour = now / (double) hourMsecs;
 
 		double scoreAge = nowInHour - calcTime;
@@ -217,10 +341,10 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 			logger.debug("scoreWt " + scoreWt);
 		}
 
-		twScore = (savedTwWt * savedTwWt + scoreWt * ratingScore.getScore())
+		qosScore = (savedTw * savedTwWt + scoreWt * ratingScore.getScore())
 				/ twWt;
 
-		service.setTrustScore(twScore);
+		service.setTrustworthinessScore(qosScore);
 
 		/*
 		 * calculation of confidence
@@ -242,7 +366,8 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		 * calculate deviation
 		 */
 		deviation = ((twWt - scoreWt) * savedTw)
-				+ (scoreWt * Math.abs(twScore - ratingScore.getScore())) / twWt;
+				+ (scoreWt * Math.abs(qosScore - ratingScore.getScore()))
+				/ twWt;
 
 		service.setDeviation(deviation);
 
@@ -251,7 +376,7 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 			logger.debug("dConfidence " + dConfidence);
 			logger.debug("nConfidence " + nConfidence);
 
-			twConfidence = dConfidence * nConfidence;
+			qosConfidence = dConfidence * nConfidence;
 
 		} else {
 			if (logger.isInfoEnabled()) {
@@ -260,45 +385,20 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 			/*
 			 * no previous history, get default score.
 			 */
-			twScore = defaultScore;
-			twConfidence = 0;
+			qosScore = defaultScore;
+			qosConfidence = 0;
 
 		}
-
-		service.setConfidence(twConfidence);
 
 		calcTime = nowInHour;
-		service.setCalcTime(calcTime);
 
-		service.setMovingWt(twWt);
+		qos.put("qosScore", qosScore);
+		qos.put("qosConfidence", qosConfidence);
+		qos.put("totalScoreWt", twWt);
+		qos.put("deviation", deviation);
+		qos.put("nowInHour", nowInHour);
 
-		logger.debug("updating service with moving average values..");
-		serviceEntityService.updateAtomic(service);
-
-		BigDecimal scoreBD = new BigDecimal(String.valueOf(twScore)).setScale(
-				3, BigDecimal.ROUND_HALF_UP);
-		BigDecimal confidenceBD = new BigDecimal(String.valueOf(twConfidence))
-				.setScale(3, BigDecimal.ROUND_HALF_UP);
-
-		twScore = Double.parseDouble(scoreBD.toString());
-		twConfidence = Double.parseDouble(confidenceBD.toString());
-		Trustworthiness trust = new ServiceTrustworthiness(serviceId,
-				twScore, twConfidence);
-
-		// send alert if trustworthiness < alert threshold
-		if (twScore < config.getConfig().getDouble("alert_threshold")) {
-			Map<String, String> props = new HashMap<String, String>();
-			props.put("service.id", serviceId);
-			props.put("trustworthiness.score", Double.toString(twScore));
-			props.put("trustworthiness.confidence",
-					Double.toString(twConfidence));
-
-			Event osgiEvent = new Event("eu/aniketos/trustworthiness/alert",
-					props);
-			eventAdmin.sendEvent(osgiEvent);
-		}
-
-		return trust;
+		return qos;
 	}
 
 	/*
@@ -307,9 +407,115 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.
 	 * ServiceTrustUpdatePolicy#calculateTrust(java.lang.String)
 	 */
-	public Trustworthiness calculateTrust(String serviceId) {
-		double twScore = 0;
-		double twConfidence = 0;
+	public Trustworthiness updateTrust(String serviceId) {
+		
+		Map<String, Double> qos = updateQoS(serviceId);
+
+		double securityScore = calcSecurityScore(serviceId);
+
+		double qosScore = qos.get("qosScore");
+		double qosConfidence = qos.get("qosConfidence");
+		double deviation = qos.get("deviation");
+		double nowInHour = qos.get("nowInHour");
+		double totalScoreWt = qos.get("totalScoreWt");
+		
+		// determine overall trustworthiness score
+		// TODO: separate reputation from qos
+		double trustworthinessScore = qosScore * securityScore;
+
+		
+
+		BigDecimal scoreBD = new BigDecimal(String.valueOf(qosScore)).setScale(
+				3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal confidenceBD = new BigDecimal(String.valueOf(qosConfidence))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal deviationBD = new BigDecimal(String.valueOf(deviation))
+				.setScale(5, BigDecimal.ROUND_HALF_UP);
+		BigDecimal nowInHourBD = new BigDecimal(String.valueOf(nowInHour))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal totalScoreWtBD = new BigDecimal(String.valueOf(totalScoreWt))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal securityBD = new BigDecimal(String.valueOf(securityScore))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal trustworthinessBD = new BigDecimal(
+				String.valueOf(trustworthinessScore)).setScale(3,
+				BigDecimal.ROUND_HALF_UP);
+
+		qosScore = Double.parseDouble(scoreBD.toString());
+		qosConfidence = Double.parseDouble(confidenceBD.toString());
+		deviation = Double.parseDouble(deviationBD.toString());
+		nowInHour = Double.parseDouble(nowInHourBD.toString());
+		totalScoreWt = Double.parseDouble(totalScoreWtBD.toString());
+		securityScore = Double.parseDouble(securityBD.toString());
+		trustworthinessScore = Double.parseDouble(trustworthinessBD.toString());
+
+		Trustworthiness tw = new ServiceTrustworthiness(serviceId,
+				trustworthinessScore, qosScore, qosConfidence, securityScore);
+
+		Atomic service = serviceEntityService.getAtomic(serviceId);
+		
+		service.setQosScore(qosScore);
+		service.setQosConfidence(qosConfidence);
+		service.setDeviation(deviation);
+		service.setCalcTime(nowInHour);
+		service.setMovingWt(totalScoreWt);
+		service.setSecurityScore(securityScore);
+		service.setTrustworthinessScore(trustworthinessScore);
+		
+
+		logger.debug("updating service with moving average values..");
+		serviceEntityService.updateAtomic(service);
+
+		// send alert if trustworthiness < alert threshold
+		if (trustworthinessScore < config.getConfig().getDouble("alert_threshold")) {
+			Map<String, String> props = new HashMap<String, String>();
+			props.put("service.id", serviceId);
+			props.put("trustworthiness.score",
+					Double.toString(trustworthinessScore));
+			props.put("trustworthiness.confidence",
+					Double.toString(qosConfidence));
+
+			Event osgiEvent = new Event("eu/aniketos/trustworthiness/alert",
+					props);
+			eventAdmin.sendEvent(osgiEvent);
+			logger.debug("trustworthiness below threshold, sent an alert.");
+		} else {
+			logger.debug("trustworthiness above threshold.");
+		}
+
+		return tw;
+	}
+
+	private double calcSecurityScore(String serviceId) {
+		// TODO support security update similar to moving avg in qos
+		double securityScore = 0;
+		double totSecurity = 0;
+
+		// determine security score
+		List<SecProperty> serviceSecProps = null;
+		serviceSecProps = securityEntityService
+				.getSecPropertiesByServiceId(serviceId);
+
+		double propertyWeight = 0;
+
+		for (SecProperty secProp : serviceSecProps) {
+			if (secProp.getProperty().equals("confidentiality")) {
+				propertyWeight = confidentialityWeight;
+			} else if (secProp.getProperty().equals("integrity")) {
+				propertyWeight = integrityWeight;
+			}
+			totSecurity += secProp.getScore() * propertyWeight;
+		}
+		securityScore = 1 - Math.exp(-totSecurity);
+		return securityScore;
+	}
+	
+	private Map<String, Double> updateQoS(String serviceId) {
+		
+		Map<String, Double> qos = new HashMap<String, Double>();
+		
+		double qosScore = 0;
+		double qosConfidence = 0;
 
 		Atomic service = serviceEntityService.getAtomic(serviceId);
 
@@ -318,7 +524,7 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 			logger.info("found service " + service.getId());
 		}
 
-		savedTw = service.getTrustScore();
+		savedTw = service.getTrustworthinessScore();
 		calcTime = service.getCalcTime();
 		savedDeviation = service.getDeviation();
 		savedTwWt = service.getMovingWt();
@@ -359,9 +565,9 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 			logger.debug("scoreWt " + scoreWt);
 		}
 
-		twScore = (savedTwWt * savedTwWt) / twWt;
+		qosScore = (savedTwWt * savedTwWt) / twWt;
 
-		service.setTrustScore(twScore);
+		service.setTrustworthinessScore(qosScore);
 
 		/*
 		 * calculation of confidence
@@ -391,7 +597,7 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 			logger.debug("dConfidence " + dConfidence);
 			logger.debug("nConfidence " + nConfidence);
 
-			twConfidence = dConfidence * nConfidence;
+			qosConfidence = dConfidence * nConfidence;
 
 		} else {
 			if (logger.isInfoEnabled()) {
@@ -400,49 +606,22 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 			/*
 			 * no previous history, get default score.
 			 */
-			twScore = defaultScore;
-			twConfidence = 0;
+			qosScore = defaultScore;
+			qosConfidence = 0;
 
 		}
-
-		service.setConfidence(twConfidence);
 
 		calcTime = nowInHour;
-		service.setCalcTime(calcTime);
-
-		service.setMovingWt(twWt);
-
-		logger.debug("updating service with moving average values..");
-		serviceEntityService.updateAtomic(service);
-
-		BigDecimal scoreBD = new BigDecimal(String.valueOf(twScore)).setScale(
-				3, BigDecimal.ROUND_HALF_UP);
-		BigDecimal confidenceBD = new BigDecimal(String.valueOf(twConfidence))
-				.setScale(3, BigDecimal.ROUND_HALF_UP);
-
-		twScore = Double.parseDouble(scoreBD.toString());
-		twConfidence = Double.parseDouble(confidenceBD.toString());
-
-		Trustworthiness tw = new ServiceTrustworthiness(service.getId(),
-				twScore, twConfidence);
-
-		// send alert if trustworthiness < alert threshold
-		if (twScore < config.getConfig().getDouble("alert_threshold")) {
-			Map<String, String> props = new HashMap<String, String>();
-			props.put("service.id", serviceId);
-			props.put("trustworthiness.score", Double.toString(twScore));
-			props.put("trustworthiness.confidence",
-					Double.toString(twConfidence));
-
-			Event osgiEvent = new Event("eu/aniketos/trustworthiness/alert",
-					props);
-			eventAdmin.sendEvent(osgiEvent);
-			logger.debug("trustworthiness below threshold, sent an alert.");
-		} else {
-			logger.debug("trustworthiness above threshold.");
-		}
-
-		return tw;
+		
+		
+		qos.put("qosScore", qosScore);
+		qos.put("qosConfidence", qosConfidence);
+		qos.put("totalScoreWt", twWt);
+		qos.put("deviation", deviation);
+		qos.put("nowInHour", nowInHour);
+		
+		return qos;
+		
 	}
 
 	/**
@@ -482,6 +661,15 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 	 */
 	public void setRatingEntityService(RatingEntityService ratingEntityService) {
 		this.ratingEntityService = ratingEntityService;
+	}
+
+	public SecurityEntityService getSecurityEntityService() {
+		return securityEntityService;
+	}
+
+	public void setSecurityEntityService(
+			SecurityEntityService securityEntityService) {
+		this.securityEntityService = securityEntityService;
 	}
 
 	/**

@@ -36,6 +36,7 @@ public class TrustworthinessRequestTest {
 	 * 
 	 */
 	public void requestTrustworthiness() {
+		
 		logger.info("sending nonexisting service id");
 		try {
 			Thread.sleep(5000);
@@ -43,8 +44,9 @@ public class TrustworthinessRequestTest {
 
 			logger.error(e.getMessage());
 		}
+		
 		try {
-			twPrediction.getTrustworthiness("id00");
+			twPrediction.getTrustworthiness("testId00");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -56,8 +58,9 @@ public class TrustworthinessRequestTest {
 
 			logger.error(e.getMessage());
 		}
+
 		try {
-			twPrediction.getTrustworthiness("id07");
+			twPrediction.getTrustworthiness("testId07");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -68,8 +71,9 @@ public class TrustworthinessRequestTest {
 
 			logger.error(e.getMessage());
 		}
+		
 		try {
-			twPrediction.getTrustworthiness("id08");
+			twPrediction.getTrustworthiness("testId08");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -82,20 +86,20 @@ public class TrustworthinessRequestTest {
 		}
 
 		Set<String> componentServices = new HashSet<String>();
-		componentServices.add("id05");
-		componentServices.add("id07");
-		componentServices.add("id08");
+		componentServices.add("testId05");
+		componentServices.add("testId07");
+		componentServices.add("testId08");
 
 		Trustworthiness tw = null;
 		try {
-			tw = ctwPrediction.getCompositeTrustworthiness("xid02",
+			tw = ctwPrediction.getCompositeTrustworthiness("testXId02",
 					componentServices);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 		if (tw != null) {
-			logger.info("Trustworthiness score = " + tw.getScore());
-			logger.info("Trustworthiness confidence = " + tw.getConfidence());
+			logger.info("Trustworthiness score = " + tw.getTrustworthinessScore());
+			logger.info("Trustworthiness confidence = " + tw.getQosConfidence());
 		} else {
 			logger.info("null was returned for trustworthiness request");
 		}
@@ -110,7 +114,7 @@ public class TrustworthinessRequestTest {
 		logger.info("send empty composite service");
 		componentServices = new HashSet<String>();
 		try {
-			tw = ctwPrediction.getCompositeTrustworthiness("xid03",
+			tw = ctwPrediction.getCompositeTrustworthiness("testXId03",
 					componentServices);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -119,8 +123,8 @@ public class TrustworthinessRequestTest {
 		if (tw == null) {
 			logger.info("Trustworthiness = null");
 		} else {
-			logger.info("Trustworthiness score = " + tw.getScore());
-			logger.info("Trustworthiness confidence = " + tw.getConfidence());
+			logger.info("Trustworthiness score = " + tw.getTrustworthinessScore());
+			logger.info("Trustworthiness confidence = " + tw.getQosConfidence());
 		}
 
 		try {
@@ -133,7 +137,7 @@ public class TrustworthinessRequestTest {
 		logger.info("send null composite service");
 		componentServices = null;
 		try {
-			tw = ctwPrediction.getCompositeTrustworthiness("xid03",
+			tw = ctwPrediction.getCompositeTrustworthiness("testXId03",
 					componentServices);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -142,8 +146,8 @@ public class TrustworthinessRequestTest {
 		if (tw == null) {
 			logger.info("Trustworthiness = null");
 		} else {
-			logger.info("Trustworthiness score = " + tw.getScore());
-			logger.info("Trustworthiness confidence = " + tw.getConfidence());
+			logger.info("Trustworthiness score = " + tw.getTrustworthinessScore());
+			logger.info("Trustworthiness confidence = " + tw.getQosConfidence());
 		}
 
 		try {
@@ -168,8 +172,8 @@ public class TrustworthinessRequestTest {
 		if (tw == null) {
 			logger.info("Trustworthiness = null");
 		} else {
-			logger.info("Trustworthiness score = " + tw.getScore());
-			logger.info("Trustworthiness confidence = " + tw.getConfidence());
+			logger.info("Trustworthiness score = " + tw.getTrustworthinessScore());
+			logger.info("Trustworthiness confidence = " + tw.getQosConfidence());
 		}
 	}
 }

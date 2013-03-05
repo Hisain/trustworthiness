@@ -19,21 +19,41 @@ public interface Trustworthiness {
 	/**
 	 * @return trustworthiness score
 	 */
-	public abstract double getScore();
+	public abstract double getTrustworthinessScore();
 
 	/**
 	 * @param score trustworthiness score
 	 */
-	public abstract void setScore(double score);
+	public abstract void setTrustworthinessScore(double securityScore);
+	
+	/**
+	 * @return trustworthiness score
+	 */
+	public abstract double getSecurityScore();
+
+	/**
+	 * @param score trustworthiness score
+	 */
+	public abstract void setSecurityScore(double securityScore);
+	
+	/**
+	 * @return trustworthiness score
+	 */
+	public abstract double getQosScore();
+
+	/**
+	 * @param score trustworthiness score
+	 */
+	public abstract void setQosScore(double score);
 
 	/**
 	 * @return trustworthiness confidence
 	 */
-	public abstract double getConfidence();
+	public abstract double getQosConfidence();
 
 	/**
 	 * @param confidence trustworthiness confidence
 	 */
-	public abstract void setConfidence(double confidence);
+	public abstract void setQosConfidence(double confidence);
 
 }
