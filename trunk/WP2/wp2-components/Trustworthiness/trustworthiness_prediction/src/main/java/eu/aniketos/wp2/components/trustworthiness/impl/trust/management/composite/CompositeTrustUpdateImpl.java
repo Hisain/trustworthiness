@@ -45,7 +45,6 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 		Composite compositeService = serviceEntityService
 				.getComposite(serviceId);
 
-		Trustworthiness tw = new ServiceTrustworthiness();
 
 		double twScore = 1;
 
@@ -55,6 +54,7 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 		 * TODO: update component trustworthiness before aggregation
 		 */
 		Set<Atomic> componentServices = compositeService.getComponentServices();
+		
 		if (componentServices == null || componentServices.size() == 0) {
 			logger.error("no component service found for " + serviceId);
 		}
@@ -62,10 +62,10 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 		// TODO update atomic trust before aggregation
 		for (Atomic service : componentServices) {
 			logger.debug("component service " + service.getId());
-			tw = trustUpdate.updateTrust(service.getId());
+			Trustworthiness componentTw =  trustUpdate.updateTrust(service.getId());
 
-			double score = tw.getTrustworthinessScore();
-			double confidence = tw.getQosConfidence();
+			double score = componentTw.getTrustworthinessScore();
+			double confidence = componentTw.getQosConfidence();
 
 			if (logger.isDebugEnabled()) {
 				logger.debug(service + " trustworthiness " + score + ","
@@ -83,9 +83,15 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 		twScore = Double.parseDouble(scoreBD.toString());
 		twConfidence = Double.parseDouble(confidenceBD.toString());
 
-		tw.setTrustworthinessScore(twScore);
-		tw.setQosConfidence(twConfidence);
+		Trustworthiness csTw = new ServiceTrustworthiness();
+		csTw.setTrustworthinessScore(twScore);
+		csTw.setQosConfidence(twConfidence);
 
+		//save trustworthiness info
+		compositeService.setTrustworthinessScore(twScore);
+		compositeService.setQosConfidence(twConfidence);
+		serviceEntityService.updateComposite(compositeService);
+		
 		// send alert if trustworthiness < alert threshold
 		if (twScore < config.getConfig().getDouble("alert_threshold")) {
 			Map<String, String> props = new HashMap<String, String>();
@@ -102,7 +108,7 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 			logger.debug("trustworthiness above threshold.");
 		}
 
-		return tw;
+		return csTw;
 
 	}
 

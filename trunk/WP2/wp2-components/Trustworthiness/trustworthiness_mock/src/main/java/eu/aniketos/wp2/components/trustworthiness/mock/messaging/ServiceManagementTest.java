@@ -74,7 +74,7 @@ public class ServiceManagementTest {
 		
 		for (int i = 0; i < 1; i++) {
 			Map<String, String> serviceData = new HashMap<String, String>();
-			serviceData.put("serviceId", "testId1");
+			serviceData.put("serviceId", "testId01");
 			serviceData.put("serviceName", "testName1");
 			serviceData.put("serviceDescription", "");
 			try {
@@ -124,7 +124,7 @@ public class ServiceManagementTest {
 		}
 		
 		for (int i = 0; i < 1; i++) {
-			String serviceId ="testId2";
+			String serviceId ="testId02";
 			try {
 				serviceManagement.addService(serviceId);
 			} catch (Exception e) {
@@ -140,7 +140,7 @@ public class ServiceManagementTest {
 		}
 		
 		for (int i = 0; i < 1; i++) {
-			String serviceId = "testId1";
+			String serviceId = "testId01";
 			try {
 				serviceManagement.removeService(serviceId);
 			} catch (Exception e) {
