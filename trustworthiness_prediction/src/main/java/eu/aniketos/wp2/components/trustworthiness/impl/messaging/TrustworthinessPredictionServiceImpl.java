@@ -42,7 +42,7 @@ public class TrustworthinessPredictionServiceImpl implements
 		Trustworthiness tw = null;
 
 		if (service != null) {
-			tw = trustUpdate.calculateTrust(serviceId);
+			tw = trustUpdate.updateTrust(serviceId);
 
 		} else {
 
@@ -51,8 +51,8 @@ public class TrustworthinessPredictionServiceImpl implements
 			if (cs != null) {
 				tw = csTrustUpdate.aggregateTrustworthiness(serviceId);
 			} else {
-				logger.warn("Could not find service in the repository.");
-				throw new Exception("Could not find service in the repository");
+				logger.warn("Could not find service in " + serviceId + " the repository.");
+				throw new Exception("Could not find service in " + serviceId + " the repository");
 			}
 
 		}

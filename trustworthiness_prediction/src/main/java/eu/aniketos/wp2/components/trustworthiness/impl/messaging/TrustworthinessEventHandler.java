@@ -31,6 +31,8 @@ public class TrustworthinessEventHandler implements EventHandler {
 	 * @see org.osgi.service.event.EventHandler#handleEvent(org.osgi.service.event.Event)
 	 */
 	public void handleEvent(Event event) {
+		
+		logger.debug("event " + event);
 		String topicName = event.getTopic();
 
 		if (logger.isDebugEnabled()) {
@@ -51,7 +53,7 @@ public class TrustworthinessEventHandler implements EventHandler {
 					+ serviceId + " scoreId " + scoreId);
 
 			try {
-				trustUpdate.calculateTrust(serviceId);
+				trustUpdate.updateTrust(serviceId);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}

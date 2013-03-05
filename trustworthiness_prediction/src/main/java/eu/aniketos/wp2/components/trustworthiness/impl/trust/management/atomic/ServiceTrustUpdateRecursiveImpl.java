@@ -13,9 +13,11 @@ import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationMan
 import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdatePolicy;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.RatingEntityService;
+import eu.aniketos.wp2.components.trustworthiness.trust.service.SecurityEntityService;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.SecProperty;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Service;
 
 /**
@@ -36,12 +38,18 @@ public class ServiceTrustUpdateRecursiveImpl implements
 
 	private RatingEntityService ratingEntityService;
 
+	private SecurityEntityService securityEntityService;
+
 	private ConfigurationManagement config;
 
 	private EventAdmin eventAdmin;
 
 	/* set default score (0.0) if not configured */
 	private double defaultScore = 0.0;
+
+	private double confidentialityWeight = 0.0;
+
+	private double integrityWeight = 0.0;
 
 	/* default tw level decay constant */
 	private static double decayConstant = 0.25;
@@ -93,6 +101,40 @@ public class ServiceTrustUpdateRecursiveImpl implements
 				defaultScore = 0.0f;
 			}
 		}
+
+		/**
+		 * set confidentiality weight
+		 */
+		if (!config.getConfig().containsKey("confidentiality_weight")) {
+			logger.warn("confidentiality weight is not specified, will be set to 1.0");
+		} else {
+			confidentialityWeight = config.getConfig().getFloat(
+					"confidentiality_weight");
+
+			if ((confidentialityWeight < 0) || (confidentialityWeight > 10)) {
+				logger.error("incorrect confidentiality weight specified. "
+						+ "must be 0 <= confidentiality_weight <= 10. "
+						+ "will be set to 1.0");
+				confidentialityWeight = 1.0f;
+			}
+		}
+
+		/**
+		 * set integrity weight
+		 */
+		if (!config.getConfig().containsKey("integrity_weight")) {
+			logger.warn("integrity weight is not specified, will be set to 1.0");
+		} else {
+			integrityWeight = config.getConfig().getFloat("integrity_weight");
+
+			if ((integrityWeight < 0) || (integrityWeight > 10)) {
+				logger.error("incorrect integrity weight specified. "
+						+ "must be 0 <= integrity_weight <= 10. "
+						+ "will be set to 1.0");
+				integrityWeight = 1.0f;
+			}
+		}
+
 		/*
 		 * if (!config.getConfig().containsKey("confidence_threshold")) {
 		 * logger.warn("confidence threshold is not set, will be set to 1"); }
@@ -132,13 +174,11 @@ public class ServiceTrustUpdateRecursiveImpl implements
 
 		Service service = rating.getService();
 
-		
-		
 		if (service != null) {
 
 			logger.info("found service " + service.getId());
 
-			trust = calculateTrust(service.getId());
+			trust = updateTrust(service.getId());
 
 		} else {
 			if (logger.isInfoEnabled()) {
@@ -150,24 +190,13 @@ public class ServiceTrustUpdateRecursiveImpl implements
 		return trust;
 	}
 
-	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdatePolicy#calculateTrust(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.
+	 * ServiceTrustUpdatePolicy#calculateTrust(java.lang.String)
 	 */
-	public Trustworthiness calculateTrust(String serviceId) throws Exception {
-		double score = 0;
-
-		double confidence = 0;
-
-		List<Rating> serviceScores = null;
-
-		/* current time in hrs */
-		int hourMsecs = 3600000;
-		double now = System.currentTimeMillis();
-		double nowInHour = now / (double) hourMsecs;
-
-		/*
-		 * if (service == null) { logger.warn("source = null"); return; }
-		 */
+	public Trustworthiness updateTrust(String serviceId) throws Exception {
 
 		logger.debug("try retrieve previous score");
 
@@ -183,10 +212,18 @@ public class ServiceTrustUpdateRecursiveImpl implements
 
 		logger.info("found service " + service.getId());
 
-		serviceScores = ratingEntityService
-				.getRatingsByServiceId(service.getId());
+		List<Rating> serviceScores = null;
 
-		if (serviceScores == null || serviceScores.size() == 0) {
+		serviceScores = ratingEntityService.getRatingsByServiceId(service
+				.getId());
+
+		List<SecProperty> serviceSecProps = null;
+
+		serviceSecProps = securityEntityService
+				.getSecPropertiesByServiceId(serviceId);
+
+		if ((serviceScores == null || serviceScores.size() == 0)
+				&& (serviceSecProps == null || serviceSecProps.size() == 0)) {
 
 			if (logger.isInfoEnabled()) {
 				logger.info("no recorded ratings for service " + serviceId);
@@ -195,11 +232,105 @@ public class ServiceTrustUpdateRecursiveImpl implements
 
 		}
 
+		Map<String, Double> qos = calcQoS(serviceScores);
+
+		double securityScore = calcSecurityScore(serviceSecProps);
+
+		double qosScore = qos.get("qosScore");
+		double qosConfidence = qos.get("qosConfidence");
+		double deviation = qos.get("deviation");
+		double nowInHour = qos.get("nowInHour");
+		double totalScoreWt = qos.get("totalScoreWt");
+
+		// determine overall trustworthiness score
+		// TODO: separate reputation from qos
+		double trustworthinessScore = qosScore * securityScore;
+
+		if (logger.isInfoEnabled()) {
+			logger.info("trustworthiness for " + service + "="
+					+ trustworthinessScore);
+		}
+
+		BigDecimal scoreBD = new BigDecimal(String.valueOf(qosScore)).setScale(
+				3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal confidenceBD = new BigDecimal(String.valueOf(qosConfidence))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal deviationBD = new BigDecimal(String.valueOf(deviation))
+				.setScale(5, BigDecimal.ROUND_HALF_UP);
+		BigDecimal nowInHourBD = new BigDecimal(String.valueOf(nowInHour))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal totalScoreWtBD = new BigDecimal(String.valueOf(totalScoreWt))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal securityBD = new BigDecimal(String.valueOf(securityScore))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal trustworthinessBD = new BigDecimal(
+				String.valueOf(trustworthinessScore)).setScale(3,
+				BigDecimal.ROUND_HALF_UP);
+
+		qosScore = Double.parseDouble(scoreBD.toString());
+		qosConfidence = Double.parseDouble(confidenceBD.toString());
+		deviation = Double.parseDouble(deviationBD.toString());
+		nowInHour = Double.parseDouble(nowInHourBD.toString());
+		totalScoreWt = Double.parseDouble(totalScoreWtBD.toString());
+		securityScore = Double.parseDouble(securityBD.toString());
+		trustworthinessScore = Double.parseDouble(trustworthinessBD.toString());
+
+		Trustworthiness trust = new ServiceTrustworthiness(service.getId(),
+				trustworthinessScore, qosScore, qosConfidence, securityScore);
+
+		service.setQosScore(qosScore);
+		service.setQosConfidence(qosConfidence);
+		service.setDeviation(deviation);
+		service.setCalcTime(nowInHour);
+		service.setMovingWt(totalScoreWt);
+		service.setSecurityScore(securityScore);
+		service.setTrustworthinessScore(trustworthinessScore);
+
+		logger.debug("updating service with results..");
+		serviceEntityService.updateAtomic(service);
+
+		// send alert if trustworthiness < alert threshold
+		if (trustworthinessScore < config.getConfig().getDouble(
+				"alert_threshold")) {
+
+			Map<String, String> props = new HashMap<String, String>();
+			props.put("service.id", serviceId);
+			props.put("trustworthiness.score",
+					Double.toString(trustworthinessScore));
+			props.put("trustworthiness.confidence",
+					Double.toString(qosConfidence));
+
+			Event osgiEvent = new Event("eu/aniketos/trustworthiness/alert",
+					props);
+			eventAdmin.sendEvent(osgiEvent);
+
+			logger.debug("trustworthiness below threshold, sent an alert.");
+		} else {
+			logger.debug("trustworthiness above threshold.");
+
+		}
+
+		return trust;
+	}
+
+	private Map<String, Double> calcQoS(List<Rating> serviceScores) {
+
+		Map<String, Double> qos = new HashMap<String, Double>();
+
+		double qosScore = 0;
+
+		double qosConfidence = 0;
+
 		/*
 		 * TODO: check expiry and delete if expired
 		 */
 
 		double totalScoreWt = 0;
+
+		/* current time in hrs */
+		int hourMsecs = 3600000;
+		double now = System.currentTimeMillis();
+		double nowInHour = now / (double) hourMsecs;
 
 		for (Rating serviceScore : serviceScores) {
 
@@ -282,7 +413,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 
 			serviceScore.setScoreWt(scoreWt);
 
-			score += scoreWt * serviceScore.getScore();
+			qosScore += scoreWt * serviceScore.getScore();
 		}
 
 		/*
@@ -312,7 +443,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 			 * calculate deviation
 			 */
 			double scoreWt = serviceScore.getScoreWt();
-			deviation += scoreWt * Math.abs(score - serviceScore.getScore());
+			deviation += scoreWt * Math.abs(qosScore - serviceScore.getScore());
 			totalWt += scoreWt;
 		}
 
@@ -329,50 +460,32 @@ public class ServiceTrustUpdateRecursiveImpl implements
 			logger.error("total weight was 0 or less.");
 		}
 
-		confidence = dConfidence * nConfidence;
+		qosConfidence = dConfidence * nConfidence;
 
-		if (logger.isInfoEnabled()) {
-			logger.info("trustworthiness for " + service + " " + score);
+		qos.put("qosScore", qosScore);
+		qos.put("qosConfidence", qosConfidence);
+		qos.put("totalScoreWt", totalScoreWt);
+		qos.put("deviation", deviation);
+		qos.put("nowInHour", nowInHour);
+
+		return qos;
+	}
+
+	private double calcSecurityScore(List<SecProperty> serviceSecProps) {
+		double securityScore = 0;
+		double totSecurity = 0;
+		double propertyWeight = 0;
+
+		for (SecProperty secProp : serviceSecProps) {
+			if (secProp.getProperty().equals("confidentiality")) {
+				propertyWeight = confidentialityWeight;
+			} else if (secProp.getProperty().equals("integrity")) {
+				propertyWeight = integrityWeight;
+			}
+			totSecurity += secProp.getScore() * propertyWeight;
 		}
-
-		BigDecimal scoreBD = new BigDecimal(String.valueOf(score)).setScale(3,
-				BigDecimal.ROUND_HALF_UP);
-		BigDecimal confidenceBD = new BigDecimal(String.valueOf(confidence))
-				.setScale(3, BigDecimal.ROUND_HALF_UP);
-
-		score = Double.parseDouble(scoreBD.toString());
-		confidence = Double.parseDouble(confidenceBD.toString());
-
-		Trustworthiness trust = new ServiceTrustworthiness(service.getId(),
-				score, confidence);
-
-		service.setTrustScore(score);
-		service.setDeviation(d);
-		service.setConfidence(confidence);
-		service.setCalcTime(nowInHour);
-		service.setMovingWt(totalScoreWt);
-
-		serviceEntityService.updateAtomic(service);
-
-		// send alert if trustworthiness < alert threshold
-		if (score < config.getConfig().getDouble("alert_threshold")) {
-			
-			Map<String, String> props = new HashMap<String, String>();
-			props.put("service.id", serviceId);
-			props.put("trustworthiness.score", Double.toString(score));
-			props.put("trustworthiness.confidence", Double.toString(confidence));
-			
-			Event osgiEvent = new Event("eu/aniketos/trustworthiness/alert",
-					props);
-			eventAdmin.sendEvent(osgiEvent);
-			
-			logger.debug("trustworthiness below threshold, sent an alert.");
-		} else {
-			logger.debug("trustworthiness above threshold.");
-
-		}
-
-		return trust;
+		securityScore = 1 - Math.exp(-totSecurity);
+		return securityScore;
 	}
 
 	/**
@@ -387,7 +500,8 @@ public class ServiceTrustUpdateRecursiveImpl implements
 	/**
 	 * required for Spring dependency injection
 	 * 
-	 * @param serviceEntityService data access service for atomic and composite Web services
+	 * @param serviceEntityService
+	 *            data access service for atomic and composite Web services
 	 */
 	public void setServiceEntityService(
 			ServiceEntityService serviceEntityService) {
@@ -406,10 +520,26 @@ public class ServiceTrustUpdateRecursiveImpl implements
 	/**
 	 * required for Spring dependency injection
 	 * 
-	 * @param ratingEntityService data access service for rating scores
+	 * @param ratingEntityService
+	 *            data access service for rating scores
 	 */
 	public void setRatingEntityService(RatingEntityService ratingEntityService) {
 		this.ratingEntityService = ratingEntityService;
+	}
+
+	/**
+	 * @return
+	 */
+	public SecurityEntityService getSecurityEntityService() {
+		return securityEntityService;
+	}
+
+	/**
+	 * @param securityEntityService
+	 */
+	public void setSecurityEntityService(
+			SecurityEntityService securityEntityService) {
+		this.securityEntityService = securityEntityService;
 	}
 
 	/**
@@ -424,7 +554,8 @@ public class ServiceTrustUpdateRecursiveImpl implements
 	/**
 	 * required for Spring dependency injection
 	 * 
-	 * @param config object to retrieve configuration
+	 * @param config
+	 *            object to retrieve configuration
 	 */
 	public void setConfig(ConfigurationManagement config) {
 		this.config = config;
@@ -442,7 +573,8 @@ public class ServiceTrustUpdateRecursiveImpl implements
 	/**
 	 * required for Spring dependency injection
 	 * 
-	 * @param eventAdmin OSGi event admin
+	 * @param eventAdmin
+	 *            OSGi event admin
 	 */
 	public void setEventAdmin(EventAdmin eventAdmin) {
 		this.eventAdmin = eventAdmin;

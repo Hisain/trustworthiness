@@ -19,24 +19,24 @@
 		</constructor-arg>
 	</bean>
 	
-	<!-- <bean id="securityTest"
+	<bean id="securityTest"
 		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.SecurityMetricsTest"
 		init-method="initialize">
 		<constructor-arg>
 			<ref bean="securityMetric" />
 		</constructor-arg>
-	</bean> -->
+	</bean> 
 	
-	<!-- <bean id="qosTest"
+	<bean id="qosTest"
 		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.QoSMetricsTest"
 		init-method="initialize">
 		<constructor-arg>
 			<ref bean="qosMetric" />
 		</constructor-arg>
-	</bean> -->
+	</bean>
 	
 	
-	<!-- <bean id="twRequestTest"
+	<bean id="twRequestTest"
 		class="eu.aniketos.wp2.components.trustworthiness.mock.trust.management.atomic.TrustworthinessRequestTest"
 		init-method="requestTrustworthiness">
 		<constructor-arg>
@@ -45,7 +45,7 @@
 		<constructor-arg>
 			<ref bean="compositeTrustworthinessPredictionService" />
 		</constructor-arg>
-	</bean> -->
+	</bean> 
 	
 	<bean id="alertEventHandler"
 		class="eu.aniketos.wp2.components.trustworthiness.mock.trust.alerts.NotificationTest">

@@ -24,6 +24,6 @@ public interface ServiceTrustUpdatePolicy {
 	 * @return trustworthiness object
 	 * @throws Exception
 	 */
-	public abstract Trustworthiness calculateTrust(String serviceId) throws Exception;
+	public abstract Trustworthiness updateTrust(String serviceId) throws Exception;
 
 }
