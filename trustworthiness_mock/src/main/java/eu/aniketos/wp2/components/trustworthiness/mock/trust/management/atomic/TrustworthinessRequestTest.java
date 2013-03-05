@@ -94,15 +94,18 @@ public class TrustworthinessRequestTest {
 		try {
 			tw = ctwPrediction.getCompositeTrustworthiness("testXId02",
 					componentServices);
+			
+			if (tw != null) {
+				logger.info("testXId02 trustworthiness score = " + tw.getTrustworthinessScore() 
+						+ " confidence = " + tw.getQosConfidence());
+			} else {
+				logger.info("null was returned for testXId02 trustworthiness request");
+			}
+			
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
-		if (tw != null) {
-			logger.info("Trustworthiness score = " + tw.getTrustworthinessScore());
-			logger.info("Trustworthiness confidence = " + tw.getQosConfidence());
-		} else {
-			logger.info("null was returned for trustworthiness request");
-		}
+		
 
 		try {
 			Thread.sleep(5000);
@@ -116,16 +119,19 @@ public class TrustworthinessRequestTest {
 		try {
 			tw = ctwPrediction.getCompositeTrustworthiness("testXId03",
 					componentServices);
+			
+			if (tw == null) {
+				logger.info("testXId03 trustworthiness = null");
+			} else {
+				logger.info("testXId03 trustworthiness score = " + tw.getTrustworthinessScore() +
+						" confidence = " + tw.getQosConfidence());
+			}
+			
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 
-		if (tw == null) {
-			logger.info("Trustworthiness = null");
-		} else {
-			logger.info("Trustworthiness score = " + tw.getTrustworthinessScore());
-			logger.info("Trustworthiness confidence = " + tw.getQosConfidence());
-		}
+		
 
 		try {
 			Thread.sleep(5000);
@@ -139,16 +145,17 @@ public class TrustworthinessRequestTest {
 		try {
 			tw = ctwPrediction.getCompositeTrustworthiness("testXId03",
 					componentServices);
+			if (tw == null) {
+				logger.info("testXId03 trustworthiness = null");
+			} else {
+				logger.info("testXId03 trustworthiness score = " + tw.getTrustworthinessScore()
+						+ " confidence = " + tw.getQosConfidence());
+			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 
-		if (tw == null) {
-			logger.info("Trustworthiness = null");
-		} else {
-			logger.info("Trustworthiness score = " + tw.getTrustworthinessScore());
-			logger.info("Trustworthiness confidence = " + tw.getQosConfidence());
-		}
+		
 
 		try {
 			Thread.sleep(5000);
@@ -157,7 +164,7 @@ public class TrustworthinessRequestTest {
 			logger.error(e.getMessage());
 		}
 
-		logger.info("send null composite service 2");
+		logger.info("send null composite service but with components");
 		componentServices = new HashSet<String>();
 		componentServices.add("id05");
 		componentServices.add("id07");
@@ -166,14 +173,16 @@ public class TrustworthinessRequestTest {
 		try {
 			tw = ctwPrediction.getCompositeTrustworthiness(null,
 					componentServices);
+			
+			if (tw == null) {
+				logger.info("CS (null) trustworthiness = null");
+			} else {
+				logger.info("CS (null) trustworthiness score = " + tw.getTrustworthinessScore()
+						+ " confidence = " + tw.getQosConfidence());
+			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
-		if (tw == null) {
-			logger.info("Trustworthiness = null");
-		} else {
-			logger.info("Trustworthiness score = " + tw.getTrustworthinessScore());
-			logger.info("Trustworthiness confidence = " + tw.getQosConfidence());
-		}
+		
 	}
 }

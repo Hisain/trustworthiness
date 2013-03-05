@@ -23,6 +23,8 @@ public class MetricEventImpl implements TrustEvent {
 	
 	private String eventDescription;
 	
+	public MetricEventImpl() {}
+	
 	/**
 	 * @param serviceId
 	 *            atomic or composite serviceId object
@@ -30,17 +32,9 @@ public class MetricEventImpl implements TrustEvent {
 	 *            metric's trustworthiness property
 	 * @param subproperty
 	 *            subcategory of the trustworthiness property if exists
-	 * @param contractValue
-	 *            required value
-	 * @param type
-	 *            type of metric i.e. percentage, real number, etc.
-	 * @param limit
-	 *            the type of limit requirement i.e. max, min, etc
-	 * @param alertValue
+	 * @param metricValue
 	 *            actual metric value
 	 */
-	public MetricEventImpl() {}
-	
 	public MetricEventImpl(String serviceId, String property, String subproperty, String metricValue) {
 		
 		this.serviceId = serviceId;
