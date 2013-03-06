@@ -7,7 +7,7 @@
 	<osgi:reference id="trustworthinessPredictionService"
 		interface="eu.aniketos.wp2.components.trustworthiness.messaging.ITrustworthinessPrediction" />
 
-	<osgi:reference id="repMetric"
+	<osgi:reference id="reputationMetric"
 		interface="eu.aniketos.wp2.components.trustworthiness.messaging.ReputationMetricsService" />
 
 	<osgi:reference id="qosMetric"

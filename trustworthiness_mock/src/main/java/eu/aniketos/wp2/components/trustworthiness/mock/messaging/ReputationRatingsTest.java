@@ -74,6 +74,43 @@ public class ReputationRatingsTest {
 				logger.error(e.getMessage());
 			}
 		}
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+
+			logger.error(e.getMessage());
+		}
+		
+		for (int i = 0; i < 10; i++) {
+
+			TrustEvent event = new MetricEventImpl();
+
+			event.setServiceId("testId05");
+
+			event.setProperty("reputation");
+
+			event.setValue(Double.toString(0.9 + r.nextDouble() / 10));
+
+			DateTime dt = new DateTime();
+			DateTimeFormatter fmt = ISODateTimeFormat.dateTimeNoMillis();
+			String timestamp = fmt.print(dt);
+
+			event.setTimestamp(timestamp);
+
+			if (logger.isDebugEnabled()) {
+				logger.debug(" timestamp=" + timestamp);
+			}
+			
+			String eventDescription = "thanks..";
+			event.setEventDescription(eventDescription);
+
+			try {
+				repMetrics.processReputationRating(event);
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+			}
+		}
 
 		// rating with null or empty service id
 		logger.info("rating with null or empty service id");

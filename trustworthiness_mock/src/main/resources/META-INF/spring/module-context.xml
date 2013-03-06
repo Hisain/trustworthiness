@@ -15,7 +15,7 @@
 		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.ReputationRatingsTest"
 		init-method="initialize">
 		<constructor-arg>
-			<ref bean="repMetric" />
+			<ref bean="reputationMetric" />
 		</constructor-arg>
 	</bean>
 	

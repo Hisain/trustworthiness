@@ -4,7 +4,7 @@ import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustw
 
 /**
  * @author Hisain Elshaafi (TSSG)
- *
+ * 
  */
 public class ServiceTrustworthiness implements Trustworthiness {
 
@@ -12,82 +12,128 @@ public class ServiceTrustworthiness implements Trustworthiness {
 	private double trustworthinessScore;
 	private double qosConfidence;
 	private double qosScore;
+	private double repConfidence;
+	private double repScore;
 	private double securityScore;
 
 	/**
 	 * 
 	 */
-	public ServiceTrustworthiness() {}
+	public ServiceTrustworthiness() {
+	}
 
 	/**
 	 * @param serviceId
 	 * @param trustworthinessScore
 	 * @param qosConfidence
 	 */
-	public ServiceTrustworthiness(String serviceId, double trustworthinessScore, double qosScore, double qosConfidence, double securityScore) {
+	public ServiceTrustworthiness(String serviceId,
+			double trustworthinessScore, double qosScore, double qosConfidence,
+			double repScore, double repConfidence, double securityScore) {
 		this.serviceId = serviceId;
 		this.trustworthinessScore = trustworthinessScore;
 		this.qosScore = qosScore;
 		this.qosConfidence = qosConfidence;
+		this.repScore = repScore;
+		this.repConfidence = repConfidence;
 		this.securityScore = securityScore;
 	}
 
-	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness#getServiceId()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.
+	 * Trustworthiness#getServiceId()
 	 */
 	public String getServiceId() {
 		return serviceId;
 	}
 
-	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness#setServiceId(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.
+	 * Trustworthiness#setServiceId(java.lang.String)
 	 */
 	public void setServiceId(String serviceId) {
 		this.serviceId = serviceId;
 	}
 
-	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness#getScore()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.
+	 * Trustworthiness#getScore()
 	 */
 	public double getTrustworthinessScore() {
 		return trustworthinessScore;
 	}
 
-	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness#setScore(double)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.
+	 * Trustworthiness#setScore(double)
 	 */
 	public void setTrustworthinessScore(double score) {
 		this.trustworthinessScore = score;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness#getQosScore()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.
+	 * Trustworthiness#getQosScore()
 	 */
 	public double getQosScore() {
 		return qosScore;
 	}
 
-	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness#setQScore(double)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.
+	 * Trustworthiness#setQScore(double)
 	 */
 	public void setQosScore(double qosScore) {
 		this.qosScore = qosScore;
-		
+
 	}
-	
-	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness#getConfidence()
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.
+	 * Trustworthiness#getConfidence()
 	 */
 	public double getQosConfidence() {
 		return qosConfidence;
 	}
 
-	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness#setConfidence(double)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.
+	 * Trustworthiness#setConfidence(double)
 	 */
 	public void setQosConfidence(double confidence) {
 		this.qosConfidence = confidence;
+	}
+
+	public double getRepConfidence() {
+		return repConfidence;
+	}
+
+	public void setRepConfidence(double repConfidence) {
+		this.repConfidence = repConfidence;
+	}
+
+	public double getRepScore() {
+		return repScore;
+	}
+
+	public void setRepScore(double repScore) {
+		this.repScore = repScore;
 	}
 
 	public double getSecurityScore() {
@@ -96,8 +142,7 @@ public class ServiceTrustworthiness implements Trustworthiness {
 
 	public void setSecurityScore(double securityScore) {
 		this.securityScore = securityScore;
-		
-	}
 
+	}
 
 }

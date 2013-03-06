@@ -32,10 +32,14 @@ public class Service implements Serializable {
 	private double trustworthinessScore=0;
 	private double qosScore=0;
 	private double qosConfidence=0;
-	private double securityScore=0;
-	private double movingWt=0;
+	private double qosMovingWt=0;
 	private double calcTime=0;
-	private double deviation=0;
+	private double qosDeviation=0;
+	private double reputationScore=0;
+	private double reputationConfidence=0;
+	private double reputationMovingWt=0;
+	private double reputationDeviation=0;
+	private double securityScore=0;
 	//private boolean composite = false;
 
 	/**
@@ -133,17 +137,17 @@ public class Service implements Serializable {
 	/**
 	 * @return
 	 */
-	@Column (name="moving_wt")
+	@Column (name="qos_moving_wt")
 	@NotNull
-	public double getMovingWt() {
-		return movingWt;
+	public double getQosMovingWt() {
+		return qosMovingWt;
 	}
 
 	/**
-	 * @param movingWt
+	 * @param qosMovingWt
 	 */
-	public void setMovingWt(double movingWt) {
-		this.movingWt = movingWt;
+	public void setQosMovingWt(double movingWt) {
+		this.qosMovingWt = movingWt;
 	}
 
 	/**
@@ -165,29 +169,84 @@ public class Service implements Serializable {
 	/**
 	 * @return
 	 */
-	@Column (name="deviation")
+	@Column (name="qos_deviation")
 	@NotNull
-	public double getDeviation() {
-		return deviation;
+	public double getQosDeviation() {
+		return qosDeviation;
 	}
 
 	/**
-	 * @param deviation
+	 * @param qosDeviation
 	 */
-	public void setDeviation(double deviation) {
-		this.deviation = deviation;
+	public void setQosDeviation(double deviation) {
+		this.qosDeviation = deviation;
 	}
-
-	/*@Column(name="iscomposite")
-	public boolean isComposite() {
-		return composite;
-	}
-
-	public void setComposite(boolean composite) {
-		this.composite = composite;
-	}*/
 
 	
+
+	/**
+	 * @return
+	 */
+	@Column (name="rep_score")
+	@NotNull
+	public double getReputationScore() {
+		return reputationScore;
+	}
+
+	/**
+	 * @param reputationScore
+	 */
+	public void setReputationScore(double reputationScore) {
+		this.reputationScore = reputationScore;
+	}
+
+	/**
+	 * @return
+	 */
+	@Column (name="rep_confidence")
+	@NotNull
+	public double getReputationConfidence() {
+		return reputationConfidence;
+	}
+
+	/**
+	 * @param reputationConfidence
+	 */
+	public void setReputationConfidence(double reputationConfidence) {
+		this.reputationConfidence = reputationConfidence;
+	}
+
+	/**
+	 * @return
+	 */
+	@Column (name="rep_moving_wt")
+	@NotNull
+	public double getReputationMovingWt() {
+		return reputationMovingWt;
+	}
+
+	/**
+	 * @param reputationMovingWt
+	 */
+	public void setReputationMovingWt(double reputationMovingWt) {
+		this.reputationMovingWt = reputationMovingWt;
+	}
+
+	/**
+	 * @return
+	 */
+	@Column (name="rep_deviation")
+	@NotNull
+	public double getReputationDeviation() {
+		return reputationDeviation;
+	}
+
+	/**
+	 * @param reputationDeviation
+	 */
+	public void setReputationDeviation(double reputationDeviation) {
+		this.reputationDeviation = reputationDeviation;
+	}
 
 	@Override
 	public int hashCode() {

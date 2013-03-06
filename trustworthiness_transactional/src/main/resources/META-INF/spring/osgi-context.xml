@@ -13,6 +13,9 @@
 	<osgi:reference id="ratingDao"
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.RatingDao" />
 		
+	<osgi:reference id="qosDao"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.QoSMetricDao" />
+		
 	<osgi:reference id="secPropertyDao"
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.SecPropertyDao" />
 
@@ -25,6 +28,9 @@
 		
 	<osgi:service ref="ratingEntityService"
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.RatingEntityService" />
+		
+	<osgi:service ref="qosEntityService"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.QoSMetricEntityService" />
 		
 	<osgi:service ref="securityEntityService"
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.SecurityEntityService" />

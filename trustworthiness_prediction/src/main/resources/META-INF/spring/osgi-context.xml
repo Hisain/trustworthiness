@@ -15,6 +15,9 @@
 	<osgi:reference id="ratingEntityService"
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.RatingEntityService" />
 		
+	<osgi:reference id="qosEntityService"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.QoSMetricEntityService" />
+		
 	<osgi:reference id="securityEntityService"
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.SecurityEntityService" />
 		

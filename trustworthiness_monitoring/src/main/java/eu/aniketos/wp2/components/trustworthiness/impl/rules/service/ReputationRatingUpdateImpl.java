@@ -26,24 +26,24 @@ import eu.aniketos.wp2.components.trustworthiness.rules.model.event.TrustEvent;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RuleExecuter;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;
-import eu.aniketos.wp2.components.trustworthiness.trust.service.QoSMetricEntityService;
+import eu.aniketos.wp2.components.trustworthiness.trust.service.RatingEntityService;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.QoSMetric;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
 
 /**
  * @author Hisain Elshaafi (TSSG)
  * 
  */
-public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
+public class ReputationRatingUpdateImpl extends Observable implements RatingUpdate {
 
-	private static Logger logger = Logger.getLogger(QosRatingUpdateImpl.class);
+	private static Logger logger = Logger.getLogger(ReputationRatingUpdateImpl.class);
 
 	private ConfigurationManagement config;
 
 	private ServiceEntityService serviceEntityService;
 
-	private QoSMetricEntityService qosEntityService;
+	private RatingEntityService ratingEntityService;
 
 	private TrustFactory trustFactory;
 
@@ -300,8 +300,8 @@ public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
 
 		facts.add(ruleEvent);
 
-		QoSMetric metricRating = trustFactory.createQoSRating(service);
-		metricRating.setEventDescription(ruleEvent.getEventDescription());
+		Rating rating = trustFactory.createReputationRating(service);
+		rating.setEventDescription(ruleEvent.getEventDescription());
 
 		String serviceId = service.getId();
 
@@ -335,15 +335,15 @@ public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
 
 			scoreValue = Double.parseDouble(scoreBD.toString());
 
-			metricRating.setScore(scoreValue);
-			metricRating.setRecency(Long.parseLong((String) scoreMap.get("recency")));
-			metricRating.setProperty((String) scoreMap.get("property"));
+			rating.setScore(scoreValue);
+			rating.setRecency(Long.parseLong((String) scoreMap.get("recency")));
+			rating.setProperty((String) scoreMap.get("property"));
 
-			qosEntityService.addMetric(metricRating);
+			ratingEntityService.addRating(rating);
 
 			Dictionary props = new Properties();
 			props.put("service.id", serviceId);
-			props.put("score.id", metricRating.getId());
+			props.put("score.id", rating.getId());
 
 			Event osgiEvent = new Event("eu/aniketos/trustworthiness/qos",
 					props);
@@ -407,17 +407,17 @@ public class QosRatingUpdateImpl extends Observable implements RatingUpdate {
 	 * 
 	 * @return
 	 */
-	public QoSMetricEntityService getQosEntityService() {
-		return qosEntityService;
+	public RatingEntityService getRatingEntityService() {
+		return ratingEntityService;
 	}
 
 	/**
 	 * required for Spring dependency injection
 	 * 
-	 * @param qosEntityService
+	 * @param ratingEntityService
 	 */
-	public void setQosEntityService(QoSMetricEntityService qosEntityService) {
-		this.qosEntityService = qosEntityService;
+	public void setRatingEntityService(RatingEntityService ratingEntityService) {
+		this.ratingEntityService = ratingEntityService;
 	}
 
 	/**

@@ -5,6 +5,7 @@ import java.util.UUID;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Composite;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.QoSMetric;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.SecProperty;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Service;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
@@ -27,7 +28,7 @@ public Atomic createService(String serviceId) {
   /* (non-Javadoc)
  * @see eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory#createRating(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Service)
  */
-public Rating createRating(Service service) {
+public Rating createReputationRating(Service service) {
     Rating rating = new Rating();
     rating.setService(service);
     //id should be shared with member table
@@ -50,6 +51,15 @@ public SecProperty createSecPropertyRating(Service service) {
 	sec.setService(service);
 	sec.setId(UUID.randomUUID().toString());
 	return sec;
+}
+
+public QoSMetric createQoSRating(Service service) {
+	QoSMetric metric = new QoSMetric();
+	    metric.setService(service);
+	    //id should be shared with member table
+	    metric.setId(UUID.randomUUID().toString());
+	   
+	    return metric;
 }
   
 
