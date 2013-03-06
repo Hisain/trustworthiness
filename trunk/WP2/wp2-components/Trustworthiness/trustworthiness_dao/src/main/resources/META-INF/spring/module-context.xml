@@ -29,6 +29,11 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 	
+	<bean id="qosDao"
+		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.dao.QoSMetricDaoImpl">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	
 	<bean id="secPropertyDao"
 		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.dao.SecPropertyDaoImpl">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />

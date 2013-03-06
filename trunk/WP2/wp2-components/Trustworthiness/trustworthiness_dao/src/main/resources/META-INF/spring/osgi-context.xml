@@ -23,4 +23,7 @@
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.SecPropertyDao" />
 
 
+	<osgi:service ref="qosDao"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.QoSMetricDao" />
+		
 </beans>

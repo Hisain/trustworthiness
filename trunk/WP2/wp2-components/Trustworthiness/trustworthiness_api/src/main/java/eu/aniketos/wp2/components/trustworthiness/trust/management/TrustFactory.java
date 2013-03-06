@@ -2,6 +2,7 @@ package eu.aniketos.wp2.components.trustworthiness.trust.management;
 
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Composite;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.QoSMetric;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.SecProperty;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Service;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
@@ -31,12 +32,18 @@ public interface TrustFactory {
 	 *            new service object
 	 * @return new Rating object
 	 */
-	public abstract Rating createRating(Service service);
+	public abstract Rating createReputationRating(Service service);
 
 	/**
 	 * @param service service to rate
 	 * @return new SecProperty
 	 */
 	public abstract SecProperty createSecPropertyRating(Service service);
+
+	/**
+	 * @param service
+	 * @return
+	 */
+	public abstract QoSMetric createQoSRating(Service service);
 
 }

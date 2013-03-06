@@ -12,7 +12,7 @@
 	<bean name="qosMetric"
 		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.QoSMetricsServiceImpl">
 		<property name="config" ref="configService"></property>
-		<property name="ratingUpdate" ref="ratingUpdate"></property>
+		<property name="qosUpdate" ref="qosUpdate"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 	</bean>
 	
@@ -52,11 +52,22 @@
 	</bean>
 
 	<bean name="ratingUpdate"
+		class="eu.aniketos.wp2.components.trustworthiness.impl.rules.service.ReputationRatingUpdateImpl"
+		init-method="initialize">
+		<property name="config" ref="configService"></property>
+		<property name="serviceEntityService" ref="serviceEntityService"></property>
+		<property name="ratingEntityService" ref="ratingEntityService"></property>
+		<property name="trustFactory" ref="trustFactory"></property>
+		<property name="ruleExecuter" ref="ruleExecutor"></property>
+		<property name="eventAdmin" ref="eventAdminService"/>
+	</bean>
+	
+	<bean name="qosUpdate"
 		class="eu.aniketos.wp2.components.trustworthiness.impl.rules.service.QosRatingUpdateImpl"
 		init-method="initialize">
 		<property name="config" ref="configService"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
-		<property name="scoreEntityService" ref="scoreEntityService"></property>
+		<property name="qosEntityService" ref="qosEntityService"></property>
 		<property name="trustFactory" ref="trustFactory"></property>
 		<property name="ruleExecuter" ref="ruleExecutor"></property>
 		<property name="eventAdmin" ref="eventAdminService"/>

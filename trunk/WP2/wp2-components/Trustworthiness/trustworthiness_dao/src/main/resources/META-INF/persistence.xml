@@ -10,6 +10,7 @@
 		<class>eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Composite</class>
 		<class>eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic</class>
 		<class>eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating</class>
+		<class>eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.QoSMetric</class>
 		<class>eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.SecProperty</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>

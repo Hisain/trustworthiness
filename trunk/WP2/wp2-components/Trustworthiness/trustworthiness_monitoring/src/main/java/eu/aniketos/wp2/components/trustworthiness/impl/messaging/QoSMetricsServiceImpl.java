@@ -20,7 +20,7 @@ public class QoSMetricsServiceImpl implements QosMetricsService {
 
 	private ConfigurationManagement config;
 
-	private RatingUpdate ratingUpdate;
+	private RatingUpdate qosUpdate;
 
 	private ServiceEntityService serviceEntityService;
 
@@ -49,7 +49,7 @@ public class QoSMetricsServiceImpl implements QosMetricsService {
 
 		} else {
 
-			ratingUpdate.updateScore(metric);
+			qosUpdate.updateScore(metric);
 		}
 	}
 	
@@ -64,7 +64,7 @@ public class QoSMetricsServiceImpl implements QosMetricsService {
 
 		} else {
 
-			ratingUpdate.updateScore(event);
+			qosUpdate.updateScore(event);
 		}
 		
 	}
@@ -111,17 +111,17 @@ public class QoSMetricsServiceImpl implements QosMetricsService {
 	 * 
 	 * @return
 	 */
-	public RatingUpdate getRatingUpdate() {
-		return ratingUpdate;
+	public RatingUpdate getQosUpdate() {
+		return qosUpdate;
 	}
 
 	/**
 	 * required for Spring dependency injection
 	 * 
-	 * @param ratingUpdate
+	 * @param qosUpdate
 	 */
-	public void setRatingUpdate(RatingUpdate ratingUpdate) {
-		this.ratingUpdate = ratingUpdate;
+	public void setQosUpdate(RatingUpdate qosUpdate) {
+		this.qosUpdate = qosUpdate;
 	}
 
 }
