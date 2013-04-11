@@ -6,7 +6,7 @@ Build-Jdk: 1.7.0_15
 Bundle-Version: 1.0.0
 Tool: Bnd-0.0.238
 Bundle-Name: log4jproperties
-Bnd-LastModified: 1365672348945
+Bnd-LastModified: 1365692050228
 Created-By: Apache Maven Bundle Plugin
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: log4jproperties

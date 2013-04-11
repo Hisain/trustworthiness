@@ -33,7 +33,7 @@ Require-Bundle: trustworthiness-api;bundle-version="1.0.0",trustworthi
 DynamicImport-Package: org.apache.cxf.dosgi.dsw.qos,org.apache.cxf
 Build-Jdk: 1.7.0_15
 Bundle-Version: 1.0.0
-Bnd-LastModified: 1365672345476
+Bnd-LastModified: 1365692048327
 Bundle-ManifestVersion: 2
 Bundle-Description: This bundle contains the implementation of the				
  			Aniketos Trustworthiness Monitoring
