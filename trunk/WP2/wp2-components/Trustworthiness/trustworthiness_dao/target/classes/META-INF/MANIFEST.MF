@@ -29,7 +29,7 @@ Require-Bundle: trustworthiness-api;bundle-version="1.0.0",trustworthi
  "3.3.1.GA",com.springsource.antlr;bundle-version="2.7.7"
 Build-Jdk: 1.7.0_15
 Bundle-Version: 1.0.0
-Bnd-LastModified: 1365672346613
+Bnd-LastModified: 1365692048902
 Bundle-ManifestVersion: 2
 Bundle-Description: This bundle contains the implementation of the				
  			Aniketos Trustworthiness DAO

@@ -27,7 +27,7 @@ Require-Bundle: trustworthiness-domain;bundle-version="1.0.0",org.apac
  he.felix.eventadmin;bundle-version="1.2.14"
 Build-Jdk: 1.7.0_15
 Bundle-Version: 1.0.0
-Bnd-LastModified: 1365672340771
+Bnd-LastModified: 1365692045505
 Bundle-ManifestVersion: 2
 Bundle-Description: This bundle contains the interfaces of the							A
  niketos Trustworthiness

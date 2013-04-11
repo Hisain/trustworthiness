@@ -22,7 +22,7 @@ Require-Bundle: org.springframework.aop;bundle-version="2.5.6",org.spr
 Bundle-Vendor: wp2
 Build-Jdk: 1.7.0_15
 Bundle-Version: 1.0.0
-Bnd-LastModified: 1365672341267
+Bnd-LastModified: 1365692046008
 Bundle-ManifestVersion: 2
 Bundle-Description: This bundle contains the implementation of the				
  			Aniketos Trustworthiness Datasource
