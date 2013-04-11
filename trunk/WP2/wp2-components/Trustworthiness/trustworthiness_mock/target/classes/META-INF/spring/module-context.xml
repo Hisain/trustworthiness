@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="serviceManagementTest"
+		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.ServiceManagementTest"
+		init-method="initialize">
+		<constructor-arg>
+			<ref bean="serviceManagement" />
+		</constructor-arg>
+	</bean>
+	
+	<bean id="repTest"
+		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.ReputationRatingsTest"
+		init-method="initialize">
+		<constructor-arg>
+			<ref bean="reputationMetric" />
+		</constructor-arg>
+	</bean>
+	
+	<bean id="securityTest"
+		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.SecurityMetricsTest"
+		init-method="initialize">
+		<constructor-arg>
+			<ref bean="securityMetric" />
+		</constructor-arg>
+	</bean> 
+	
+	<bean id="qosTest"
+		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.QoSMetricsTest"
+		init-method="initialize">
+		<constructor-arg>
+			<ref bean="qosMetric" />
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="twRequestTest"
+		class="eu.aniketos.wp2.components.trustworthiness.mock.trust.management.atomic.TrustworthinessRequestTest"
+		init-method="requestTrustworthiness">
+		<constructor-arg>
+			<ref bean="trustworthinessPredictionService" />
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="compositeTrustworthinessPredictionService" />
+		</constructor-arg>
+	</bean> 
+	
+	<bean id="alertEventHandler"
+		class="eu.aniketos.wp2.components.trustworthiness.mock.trust.alerts.NotificationTest">
+	</bean>
+
+</beans>

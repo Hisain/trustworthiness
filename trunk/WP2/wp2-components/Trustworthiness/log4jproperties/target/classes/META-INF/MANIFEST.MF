@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Fragment-Host: com.springsource.org.apache.log4j;bundle-version="1.2.1
+ 5"
+Built-By: Roberto
+Build-Jdk: 1.7.0_15
+Bundle-Version: 1.0.0
+Tool: Bnd-0.0.238
+Bundle-Name: log4jproperties
+Bnd-LastModified: 1365672348945
+Created-By: Apache Maven Bundle Plugin
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: log4jproperties
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+

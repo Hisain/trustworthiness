@@ -1,0 +1,337 @@
+#created on: 05-Feb-2010
+package eu.aniketos.wp2.components.trustworthiness.impl.rules
+
+import java.util.Map
+
+import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.RuleMetricEventImpl
+import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.AlertEventImpl
+
+
+
+#declare any global variables 
+declare RuleMetricEventImpl
+	@role( event )
+end
+declare AlertEventImpl
+	@role( event )
+end
+
+function double calcQosMetric(String valueString, String contractValueString, String type, String limit){
+	//System.out.println("calculating score");
+	
+	double contractValue = 0;
+	double metricValue = 0;
+	
+	if (type.equals("percentage") || type.equals("real")) {
+	
+		contractValue = Double.parseDouble(contractValueString);
+		metricValue = Double.parseDouble(valueString);
+	
+	}
+
+	double score = 0;
+	//TODO: set reward/penalty in configuration
+	double reward = 0.5;
+	double penalty = -0.5;
+
+	if (limit.equals("min")) { 
+	
+		if (metricValue != 0) {
+			score = (contractValue/metricValue);
+		} else //shift values by x = 1 TBC 
+		{
+			score = ((contractValue+1)/(metricValue+1));
+		}
+	} 
+	else if (limit.equals("max")) {
+	
+		if (contractValue != 0) {
+			score = (metricValue/contractValue);
+		}	else //shift values by x = 1 TBC 
+		{
+			score = ((metricValue+1)/(contractValue+1));
+		}
+	} 
+	
+	/*if (score >= 0){
+		score = score + reward;
+	} else {
+		score = score + penalty;
+	}*/
+			
+	score = (score > 1)? 1:score;
+	score = (score < 0)? 0:score;
+	
+	return score;
+}
+
+function double calcSecMetric(String metricValueString, String contractValueString, String type, String limit){
+	//System.out.println("calculating score");
+	
+	double contractValue = 0;
+	double metricValue = 0;
+	
+	if (type.equals("binary")) {
+	
+		contractValue = Double.parseDouble(contractValueString);
+		metricValue = Double.parseDouble(metricValueString);
+	
+	}
+
+	double score = 0;
+	//TODO: set reward/penalty in configuration
+	//double reward = 0.5;
+	//double penalty = -0.5;
+
+	if (limit.equals("min")) { 
+	
+		if (metricValue == 0 && contractValue==1) {
+			score = 0;
+		} else if (contractValue==0) {
+			//0 means no security requirement -> score should be null
+			//score = null;
+		} else if (metricValue == 1) {
+			score = 1;
+		} 
+		
+	} 
+	else if (limit.equals("max")) {
+	
+		if (contractValue == 0 && metricValue==1) {
+			score = 0;
+		}	else if (contractValue==1) {
+			//1 1  means no security requirement -> score should be null
+			//score = null;
+		}  else if (metricValue == 0) {
+			score = 1;
+		} 
+	} 
+	
+	/*if (score >= 0){
+		score = score + reward;
+	} else {
+		score = score + penalty;
+	}		
+	score = (score > 1)? 1:score;
+	score = (score < 0)? 0:score;*/
+	
+	
+	return score;
+}
+
+function double calcAlert(String alertValueString, String contractValueString, String type, String limit){
+	//System.out.println("calculating score");
+	
+	double contractValue = 0;
+	double alertValue = 0;
+	
+	if (type.equals("percentage") || type.equals("real")) {
+	
+		contractValue = Double.parseDouble(contractValueString);
+		alertValue = Double.parseDouble(alertValueString);
+	
+	}
+
+	double score = 0;
+	//TODO: set reward/penalty in configuration
+	double reward = 0.5;
+	double penalty = -0.5;
+
+	if (limit.equals("min")) { 
+	
+		if (alertValue != 0) {
+			score = (contractValue/alertValue);
+			
+		} else //shift values by x = 1 TBC 
+		{
+			score = ((contractValue+1)/(alertValue+1));
+		}
+	} 
+	else if (limit.equals("max")) {
+	
+		if (contractValue != 0) {
+			score = (alertValue/contractValue);
+	
+		}	else //shift values by x = 1 TBC 
+		{
+			score = ((alertValue+1)/(contractValue+1));
+		}
+	}
+	
+	/*if (score >= 0){
+		score = score + reward;
+	} else {
+		score = RuleRuleMetricEventImpl;
+	}*/
+			
+	score = (score > 1)? 1:score;
+	score = (score < 0)? -1:score;	
+	return score;
+	
+	
+}
+
+rule reputation
+	no-loop
+	#
+	when
+		#	
+		$sme : RuleMetricEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty, $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
+		$scoreMap : Map( this["_type_"] == "Score" )
+		
+	then 
+		#
+		modify ($scoreMap) {
+		put ("score", calcQosMetric($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
+		};
+		
+				
+end
+
+rule confidentiality
+	no-loop
+	#
+	when
+		#	
+		$sme : RuleMetricEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty, $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
+		$scoreMap : Map( this["_type_"] == "Score" )
+		
+	then 
+		#
+		modify ($scoreMap) {
+		put ("score", calcSecMetric($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
+		};
+		
+				
+end
+
+rule integrity
+	no-loop
+	#
+	when
+		#	
+		$sme : RuleMetricEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty, $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
+		$scoreMap : Map( this["_type_"] == "Score" )
+		
+	then 
+		#
+		modify ($scoreMap) {
+		put ("score", calcSecMetric($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
+		};
+		
+end
+
+rule availability
+	no-loop
+	#
+	when
+		#	
+		$sme : RuleMetricEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
+		$scoreMap : Map( this["_type_"] == "Score" )
+		
+	then 
+		#
+		modify ($scoreMap) {
+		put ("score", calcQosMetric($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
+		}; 
+		
+		
+end
+
+rule reliability
+	no-loop
+	#
+	when
+		#	
+		$sme : RuleMetricEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
+		$scoreMap : Map( this["_type_"] == "Score" )
+		
+	then 
+		#
+		modify ($scoreMap) {
+		put ("score", calcQosMetric($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
+		};
+		
+end
+
+
+rule performance
+	no-loop
+	#
+	when
+		#	
+		$sme : RuleMetricEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
+		$scoreMap : Map( this["_type_"] == "Score" )
+		
+	then 
+		#
+		modify ($scoreMap) {
+		put ("score", calcQosMetric($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
+		};
+		
+end
+
+rule sla
+	no-loop
+	#
+	when
+		#	
+		$sme : RuleMetricEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
+		$scoreMap : Map( this["_type_"] == "Score" )
+		
+	then 
+		#
+		modify ($scoreMap) {
+		put ("score", calcQosMetric($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
+		};
+		
+end	
+
+/*
+rule "port-scanning"
+	no-loop
+	when
+	#	
+		$sme : AlertEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
+		$scoreMap : Map( this["_type_"] == "Score" )
+		
+	then 
+		#
+		modify ($scoreMap) {
+		put ("score", calcAlert($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
+		};
+	end
+	
+
+rule mitm
+	no-loop
+	when
+	#	
+		$sme : AlertEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
+		$scoreMap : Map( this["_type_"] == "Score" )
+		
+	then 
+		#
+		modify ($scoreMap) {
+		put ("score", calcAlert($value, $contractValue, $type, $limit)), 
+		put ("recency", $timestamp),
+		put ("property", $property)
+		};
+	end
+	*/

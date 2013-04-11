@@ -1,0 +1,16 @@
+// ------------------------------------------------------------------
+// Transitive dependencies of this project determined from the
+// maven pom organized by organization.
+// ------------------------------------------------------------------
+
+Apache CXF Distributed OSGi DSW Reference
+									Implementation
+
+
+From: 'an unknown organization'
+  - com.springsource.org.apache.log4j  org.apache.log4j:com.springsource.org.apache.log4j:jar:1.2.15
+
+
+
+
+
