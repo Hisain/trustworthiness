@@ -2,10 +2,10 @@ package eu.aniketos.wp2.components.trustworthiness.impl.rules.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
+//import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Iterator;
+//import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -24,37 +24,47 @@ import eu.aniketos.wp2.components.trustworthiness.rules.model.event.TrustEvent;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RuleExecuter;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;
-import eu.aniketos.wp2.components.trustworthiness.trust.service.QoSMetricEntityService;
+import eu.aniketos.wp2.components.trustworthiness.trust.service.ThreatEntityService;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.QoSMetric;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.ThreatLevel;
 
 /**
  * @author Hisain Elshaafi (TSSG)
  * 
  */
-public class QosRatingUpdateImpl implements RatingUpdate {
+public class ThreatLevelUpdateImpl implements RatingUpdate {
 
-	private static Logger logger = Logger.getLogger(QosRatingUpdateImpl.class);
+	private static Logger logger = Logger
+			.getLogger(ThreatLevelUpdateImpl.class);
 
 	private ConfigurationManagement config;
 
 	private ServiceEntityService serviceEntityService;
 
-	private QoSMetricEntityService qosEntityService;
+	private ThreatEntityService threatEntityService;
 
 	private TrustFactory trustFactory;
 
 	private RuleExecuter ruleExecuter;
 
-	private EventAdmin eventAdmin;
-
 	int maxDescriptionSize = 0;
+
+	private EventAdmin eventAdmin;
 
 	/**
 	 * 
 	 */
 	public void initialize() {
+		// replaced with osgi events *whiteboard*
+		// monitorHelperService.setupObservers(this);
+
+		/*
+		 * Map<String,Rating> props = new HashMap<String,Rating>();
+		 * props.put("test", new Rating()); logger.info(eventAdmin);
+		 * eventAdmin.sendEvent(new Event("trust-event/qos", props));
+		 */
+
 		if (config.getConfig().containsKey("max_event_description_size")) {
 			try {
 				maxDescriptionSize = config.getConfig().getInt(
@@ -112,12 +122,17 @@ public class QosRatingUpdateImpl implements RatingUpdate {
 			}
 		}
 
-		String eventValue = event.get("value");
+		String metricValue = event.get("value");
 
-		if (eventValue == null) {
+		if (metricValue == null) {
 			throw new Exception(
 					"metric did not contain required event elements. message will be ignored.");
 		}
+
+		String contractValue = config.getConfig().getString(
+				propertySub + "[@value]");
+		String type = config.getConfig().getString(propertySub + "[@type]");
+		String limit = config.getConfig().getString(propertySub + "[@limit]");
 
 		String eventTimestamp = event.get("timestamp");
 		String timestamp = null;
@@ -146,11 +161,6 @@ public class QosRatingUpdateImpl implements RatingUpdate {
 			timestamp = Long.toString(System.currentTimeMillis() / 3600000);
 		}
 
-		String contractValue = config.getConfig().getString(
-				propertySub + "[@value]");
-		String type = config.getConfig().getString(propertySub + "[@type]");
-		String limit = config.getConfig().getString(propertySub + "[@limit]");
-
 		if (logger.isDebugEnabled()) {
 			logger.debug("property=" + propertySub + ", contractValue="
 					+ contractValue + ", type=" + type + ", limit=" + limit
@@ -169,12 +179,13 @@ public class QosRatingUpdateImpl implements RatingUpdate {
 		if (event.get("type").equalsIgnoreCase("metric")) {
 
 			ruleEvent = new RuleMetricEventImpl(serviceId, property,
-					subproperty, contractValue, type, limit, eventValue,
+					subproperty, contractValue, type, limit, metricValue,
 					timestamp);
 
 		} else if (event.get("type").equalsIgnoreCase("alert")) {
+
 			ruleEvent = new AlertEventImpl(serviceId, property, subproperty,
-					contractValue, type, limit, eventValue, timestamp);
+					contractValue, type, limit, String.valueOf(1), timestamp);
 
 		}
 
@@ -182,12 +193,14 @@ public class QosRatingUpdateImpl implements RatingUpdate {
 		if (event.containsKey("eventDescription")) {
 			eventDescription = event.get("EventDescription");
 		}
+
 		if (eventDescription == null) {
 			eventDescription = "";
 		} else if (eventDescription.length() > maxDescriptionSize) {
 			eventDescription = eventDescription
 					.substring(0, maxDescriptionSize);
 		}
+
 		ruleEvent.setEventDescription(eventDescription);
 
 		fireRule(ruleEvent, service);
@@ -219,10 +232,6 @@ public class QosRatingUpdateImpl implements RatingUpdate {
 			}
 		}
 
-		// TODO: should do more checking of validity of fields
-
-		String metricValue = event.getValue();
-
 		String eventTimestamp = event.getTimestamp();
 		String timestamp = null;
 
@@ -251,16 +260,17 @@ public class QosRatingUpdateImpl implements RatingUpdate {
 			timestamp = Long.toString(System.currentTimeMillis() / 3600000);
 		}
 
+		// TODO: should do some checking of validity of fields
+
 		String contractValue = config.getConfig().getString(
 				propertySub + "[@value]");
 		String type = config.getConfig().getString(propertySub + "[@type]");
 		String limit = config.getConfig().getString(propertySub + "[@limit]");
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("property=" + propertySub + ", metricValue="
-					+ metricValue + ", contractValue=" + contractValue
-					+ ", type=" + type + ", limit=" + limit + ", timestamp= "
-					+ timestamp);
+			logger.debug("property=" + propertySub + ", contractValue="
+					+ contractValue + ", type=" + type + ", limit=" + limit
+					+ ", timestamp= " + timestamp);
 		}
 
 		// if property is missing quit
@@ -269,6 +279,8 @@ public class QosRatingUpdateImpl implements RatingUpdate {
 					+ " for the metric is missing in configuration.");
 			return;
 		}
+
+		String metricValue = event.getValue();
 
 		RuleMetricEventImpl ruleEvent = new RuleMetricEventImpl(serviceId,
 				property, subproperty, contractValue, type, limit, metricValue,
@@ -298,10 +310,17 @@ public class QosRatingUpdateImpl implements RatingUpdate {
 
 		facts.add(ruleEvent);
 
-		QoSMetric metricRating = trustFactory.createQoSRating(service);
-		metricRating.setEventDescription(ruleEvent.getEventDescription());
-
 		String serviceId = service.getId();
+
+		// retrieve existing threat data if already exists
+		ThreatLevel threat = threatEntityService.getThreatLevel(serviceId,
+				ruleEvent.getProperty());
+
+		if (threat == null) {
+			threat = trustFactory.createThreatRating(service);
+		}
+
+		threat.setUpdateDescription(ruleEvent.getEventDescription());
 
 		Map scoreMap = new HashMap();
 		scoreMap.put("_type_", "Score");
@@ -310,17 +329,17 @@ public class QosRatingUpdateImpl implements RatingUpdate {
 
 		logger.debug("now firing rules for score update");
 
-		Collection<?> results = ruleExecuter.execute(facts, ruleEvent
-				.getProperty().toLowerCase(), "Score", "score");
-		Iterator<?> scoreIterator = results.iterator();
-
-		if (scoreIterator.hasNext()) {
-			scoreMap = (Map) scoreIterator.next();
-
-			logger.debug(scoreMap.entrySet());
-		} else {
-			logger.warn("no score retrieved from rule");
-		}
+		// TODO: update the rules with threat rules
+		/*
+		 * Collection<?> results = ruleExecuter.execute(facts, ruleEvent
+		 * .getThreatName().toLowerCase(), "Score", "score"); Iterator<?>
+		 * scoreIterator = results.iterator();
+		 * 
+		 * if (scoreIterator.hasNext()) { scoreMap = (Map) scoreIterator.next();
+		 * 
+		 * logger.debug(scoreMap.entrySet()); } else {
+		 * logger.warn("no score retrieved from rule"); }
+		 */
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("size of retrieved score map " + scoreMap.size());
@@ -333,21 +352,21 @@ public class QosRatingUpdateImpl implements RatingUpdate {
 
 			scoreValue = Double.parseDouble(scoreBD.toString());
 
-			metricRating.setScore(scoreValue);
-			metricRating.setRecency(Long.parseLong((String) scoreMap.get("recency")));
-			metricRating.setProperty((String) scoreMap.get("property"));
+			threat.setThreatLevel(scoreValue);
+			threat.setRecency(Long.parseLong((String) scoreMap.get("recency")));
+			threat.setThreatName((String) scoreMap.get("property"));
 
-			qosEntityService.addMetric(metricRating);
+			threatEntityService.updateThreatLevel(threat);
 
 			Dictionary props = new Properties();
 			props.put("service.id", serviceId);
-			props.put("score.id", metricRating.getId());
+			props.put("score.id", threat.getId());
 
-			Event osgiEvent = new Event("eu/aniketos/trustworthiness/monitoring/qos",
+			Event osgiEvent = new Event("eu/aniketos/trustworthiness/monitoring/threatlevel",
 					props);
 			eventAdmin.sendEvent(osgiEvent);
 
-			logger.debug("sent event to topic eu/aniketos/trustworthiness/monitoring/qos ");
+			logger.debug("sent event to topic eu/aniketos/trustworthiness/monitoring/threatlevel");
 
 		} else {
 			logger.warn("no score calculated from alert for " + serviceId);
@@ -394,17 +413,18 @@ public class QosRatingUpdateImpl implements RatingUpdate {
 	 * 
 	 * @return
 	 */
-	public QoSMetricEntityService getQosEntityService() {
-		return qosEntityService;
+	public ThreatEntityService getThreatEntityService() {
+		return threatEntityService;
 	}
 
 	/**
 	 * required for Spring dependency injection
 	 * 
-	 * @param qosEntityService
+	 * @param threatEntityService
 	 */
-	public void setQosEntityService(QoSMetricEntityService qosEntityService) {
-		this.qosEntityService = qosEntityService;
+	public void setThreatEntityService(
+			ThreatEntityService threatEntityService) {
+		this.threatEntityService = threatEntityService;
 	}
 
 	/**

@@ -20,10 +20,12 @@
 
 	<osgi:reference id="securityEntityService"
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.SecurityEntityService" />
+		
+	
 
 	<osgi:reference id="trustFactory"
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory" />
-
+		
 	<osgi:service ref="serviceManagement"
 		interface="eu.aniketos.wp2.components.trustworthiness.messaging.ServiceManagement" />
 
@@ -35,10 +37,15 @@
 
 	<osgi:service ref="securityMetric"
 		interface="eu.aniketos.wp2.components.trustworthiness.messaging.SecurityMetricsService" />
+		
+	<osgi:service ref="notification"
+		interface="eu.aniketos.wp4.components.notification.INotification" />	
 
 	<osgi:reference id="eventAdminService" interface="org.osgi.service.event.EventAdmin" />
 
 	<osgi:reference id="transactionManager"
 		interface="org.springframework.transaction.PlatformTransactionManager" />
+	
 	<tx:annotation-driven transaction-manager="transactionManager" />
+	
 </beans>

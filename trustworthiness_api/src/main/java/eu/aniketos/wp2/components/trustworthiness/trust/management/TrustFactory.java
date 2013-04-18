@@ -6,6 +6,8 @@ import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.QoSMetric;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.SecProperty;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Service;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.ThreatLevel;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
 
 /**
  * @author Hisain Elshaafi (TSSG)
@@ -45,5 +47,17 @@ public interface TrustFactory {
 	 * @return
 	 */
 	public abstract QoSMetric createQoSRating(Service service);
+
+	/**
+	 * @param service
+	 * @return
+	 */
+	public abstract ThreatLevel createThreatRating(Service service);
+	
+	/**
+	 * @param serviceId
+	 * @return
+	 */
+	public abstract Trustworthiness createTrustworthiness(String serviceId);
 
 }

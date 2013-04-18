@@ -5,9 +5,9 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
 import eu.aniketos.wp2.components.trustworthiness.messaging.ICompositeTrustworthinessPrediction;
 import eu.aniketos.wp2.components.trustworthiness.messaging.ITrustworthinessPrediction;
-import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness;
 
 /**
  * @author Hisain Elshaafi (TSSG)

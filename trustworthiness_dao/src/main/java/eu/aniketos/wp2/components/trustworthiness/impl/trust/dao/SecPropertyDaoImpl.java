@@ -29,7 +29,7 @@ public class SecPropertyDaoImpl  extends JpaDaoSupport implements SecPropertyDao
 	/* (non-Javadoc)
 	 * @see eu.aniketos.wp2.components.trustworthiness.trust.dao.SecPropertyDao#addSecProperty(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.SecProperty)
 	 */
-	public void addSecProperty(SecProperty secProperty) {
+	public void addThreatLevel(SecProperty secProperty) {
 
 		try {
 			getJpaTemplate().persist(secProperty);

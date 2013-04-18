@@ -17,19 +17,22 @@ public class TrustworthinessChangeAlerter implements EventHandler {
 	private ServiceEntityService serviceEntityService;
 
 	private IAlert alert;
-	
 
-	/* (non-Javadoc)
-	 * @see org.osgi.service.event.EventHandler#handleEvent(org.osgi.service.event.Event)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.osgi.service.event.EventHandler#handleEvent(org.osgi.service.event
+	 * .Event)
 	 */
 	public void handleEvent(Event event) {
 
 		String topicName = event.getTopic();
 
-		if (topicName.endsWith("eu/aniketos/trustworthiness/alert")) {
+		if (topicName.endsWith("eu/aniketos/trustworthiness/prediction/alert")) {
 
 			if (logger.isDebugEnabled()) {
-				logger.debug("Received a new trust alert, topic:" + topicName);
+				logger.debug("Received a new trust alert, type:" + event.getProperty("alert.type"));
 				logger.debug("with properties:");
 				String[] propertyNames = event.getPropertyNames();
 				for (String propertyName : propertyNames) {
@@ -42,24 +45,10 @@ public class TrustworthinessChangeAlerter implements EventHandler {
 			String serviceId = (String) event.getProperty("service.id");
 			String trustScore = (String) event
 					.getProperty("trustworthiness.score");
-			
-			if (serviceEntityService.getComposite(serviceId) != null) {
+			String alertDescription = (String) event.getProperty("alert.description");
 
-				alert.alert(serviceId, Notification.TRUST_LEVEL_CHANGE, trustScore,
-						AlertDescription.UNTRUSTED_SERVICE_COMPOSITION);
-				
-				if (logger.isDebugEnabled()) {
-					logger.debug("Sent alert on composition trust change of "
-							+ serviceId);
-				}
-				
-			} else {
-				alert.alert(serviceId, Notification.TRUST_LEVEL_CHANGE, trustScore);
-				
-				if (logger.isDebugEnabled()) {
-					logger.debug("Sent alert on atomic service trust change of "
-							+ serviceId);
-				}
+			if (event.getProperty("alert.type").equals("TRUST_LEVEL_CHANGE")) {
+				alert.alert(serviceId, Notification.TRUST_LEVEL_CHANGE, trustScore, alertDescription);
 			}
 
 		} else {
@@ -79,9 +68,11 @@ public class TrustworthinessChangeAlerter implements EventHandler {
 	}
 
 	/**
-	 * @param serviceEntityService data access service object for Web services
+	 * @param serviceEntityService
+	 *            data access service object for Web services
 	 */
-	public void setServiceEntityService(ServiceEntityService serviceEntityService) {
+	public void setServiceEntityService(
+			ServiceEntityService serviceEntityService) {
 		this.serviceEntityService = serviceEntityService;
 	}
 
@@ -93,7 +84,8 @@ public class TrustworthinessChangeAlerter implements EventHandler {
 	}
 
 	/**
-	 * @param alert notification module alert
+	 * @param alert
+	 *            notification module alert
 	 */
 	public void setAlert(IAlert alert) {
 		this.alert = alert;

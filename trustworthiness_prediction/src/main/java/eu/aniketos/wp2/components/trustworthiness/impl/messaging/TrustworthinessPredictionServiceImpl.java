@@ -2,11 +2,9 @@ package eu.aniketos.wp2.components.trustworthiness.impl.messaging;
 
 import org.apache.log4j.Logger;
 
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Composite;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
 import eu.aniketos.wp2.components.trustworthiness.messaging.ITrustworthinessPrediction;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdatePolicy;
-import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.composite.CompositeTrustUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 
@@ -26,38 +24,38 @@ public class TrustworthinessPredictionServiceImpl implements
 
 	CompositeTrustUpdate csTrustUpdate;
 
-	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.messaging.ITrustworthinessPrediction#getTrustworthiness(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.messaging.
+	 * ITrustworthinessPrediction#getTrustworthiness(java.lang.String)
 	 */
-	public Trustworthiness getTrustworthiness(String serviceId) throws Exception {
+	public Trustworthiness getTrustworthiness(String serviceId)
+			throws Exception {
 
 		if (serviceId == null) {
 			logger.warn("received serviceId is null");
 			throw new Exception("received serviceId is null");
-			
+
 		}
 
-		Atomic service = serviceEntityService.getAtomic(serviceId);
+		Trustworthiness trustworthiness = null;
 
-		Trustworthiness tw = null;
+		if (serviceEntityService.isAtomic(serviceId)) {
 
-		if (service != null) {
-			tw = trustUpdate.updateTrust(serviceId);
+			trustworthiness = trustUpdate.updateTrust(serviceId);
 
+		} else if (serviceEntityService.isComposite(serviceId)) {
+
+			trustworthiness = csTrustUpdate.aggregateTrustworthiness(serviceId);
 		} else {
-
-			Composite cs = serviceEntityService.getComposite(serviceId);
-
-			if (cs != null) {
-				tw = csTrustUpdate.aggregateTrustworthiness(serviceId);
-			} else {
-				logger.warn("Could not find service in " + serviceId + " the repository.");
-				throw new Exception("Could not find service in " + serviceId + " the repository");
-			}
-
+			logger.warn("Could not find service in " + serviceId
+					+ " the repository.");
+			throw new Exception("Could not find service in " + serviceId
+					+ " the repository");
 		}
 
-		return tw;
+		return trustworthiness;
 
 	}
 

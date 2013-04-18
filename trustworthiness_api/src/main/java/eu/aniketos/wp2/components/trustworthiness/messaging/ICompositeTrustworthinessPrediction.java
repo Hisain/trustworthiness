@@ -2,7 +2,8 @@ package eu.aniketos.wp2.components.trustworthiness.messaging;
 
 import java.util.Set;
 
-import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
+
 
 /**
  * @author Hisain Elshaafi (TSSG)

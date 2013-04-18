@@ -37,16 +37,16 @@ public interface ServiceDao {
 	public abstract void updateComposite(Composite service);
 
 	/**
-	 * @param id service id
+	 * @param serviceId service serviceId
 	 * @return atomic service object 
 	 */
-	public abstract Atomic getAtomic(final String id);
+	public abstract Atomic getAtomic(final String serviceId);
 	
 	/**
-	 * @param id service id
+	 * @param serviceId service serviceId
 	 * @return composite service object 
 	 */
-	public abstract Composite getComposite(final String id);
+	public abstract Composite getComposite(final String serviceId);
 	
 	/**
 	 * @param service atomic service object 
@@ -57,6 +57,18 @@ public interface ServiceDao {
 	 * @param service composite service object 
 	 */
 	public abstract void deleteComposite(Composite service);
+	
+	/**
+	 * @param serviceId
+	 * @return
+	 */
+	public abstract boolean isComposite(String serviceId);
+
+	/**
+	 * @param serviceId
+	 * @return
+	 */
+	public abstract boolean isAtomic(String serviceId);
 	
 	/**
 	 * @return list of all atomic service objects 

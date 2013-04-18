@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Properties;
 
 import org.joda.time.format.DateTimeFormatter;
@@ -35,7 +33,7 @@ import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
  * @author Hisain Elshaafi (TSSG)
  * 
  */
-public class ReputationRatingUpdateImpl extends Observable implements RatingUpdate {
+public class ReputationRatingUpdateImpl implements RatingUpdate {
 
 	private static Logger logger = Logger.getLogger(ReputationRatingUpdateImpl.class);
 
@@ -345,26 +343,15 @@ public class ReputationRatingUpdateImpl extends Observable implements RatingUpda
 			props.put("service.id", serviceId);
 			props.put("score.id", rating.getId());
 
-			Event osgiEvent = new Event("eu/aniketos/trustworthiness/qos",
+			Event osgiEvent = new Event("eu/aniketos/trustworthiness/monitoring/reputation",
 					props);
 			eventAdmin.sendEvent(osgiEvent);
 
-			logger.debug("sent event to topic eu/aniketos/trustworthiness/qos ");
+			logger.debug("sent event to topic eu/aniketos/trustworthiness/monitoring/reputation");
 
 		} else {
 			logger.warn("no score calculated from alert for " + serviceId);
 		}
-	}
-
-	// needs testing
-	/**
-	 * required for Spring dependency injection
-	 * 
-	 * @param o
-	 */
-	public void addRemoteObserver(Observer o) {
-		addObserver(o);
-
 	}
 
 	/**

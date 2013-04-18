@@ -60,6 +60,10 @@ public class AlertEventImpl implements RuleAlertEvent {
 		this.timestamp = timestamp;
 	}
 
+	public AlertEventImpl(String serviceId) {
+		this.serviceId = serviceId;
+	}
+
 	/**
 	 * @return
 	 */

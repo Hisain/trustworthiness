@@ -22,8 +22,13 @@
 	<osgi:service ref="secPropertyDao"
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.SecPropertyDao" />
 
-
 	<osgi:service ref="qosDao"
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.QoSMetricDao" />
+		
+	<osgi:service ref="threatLevelDao"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.ThreatLevelDao" />
+		
+	<osgi:service ref="trustworthinessDao"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.TrustworthinessDao" />
 		
 </beans>

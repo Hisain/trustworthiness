@@ -17,17 +17,14 @@
 	<integrity>
 		<signing type="binary" limit="min" value="1" />
 	</integrity>
-	<sla>
-		<sla-violation type="real" limit="max" value="0" />
-	</sla>
-	<communication>
-		<messages type="real" limit="min" value="0" />
-		<bad-messages type="real" limit="max" value="0" />
-	</communication>
-	<port-scanning>
-		<port-scanning type="real" limit="min" value="1" />
-	</port-scanning>
-	<mitm>
-		<mitm type="real" limit="max" value="1" />
-	</mitm>
+	<contract_violation>
+		<contract_violation type="real" limit="max" value="0" />
+	</contract_violation>
+	<threat>
+		<privacy_violation type="real" limit="max" value="0" />
+		<incompatibility_issues type="real" limit="max" value="0" />
+		<malicious_provider type="real" limit="max" value="0" />
+		<ddos type="real" limit="max" value="0" />
+		<malicious_service type="real" limit="max" value="0" />
+	</threat>	
 </properties>

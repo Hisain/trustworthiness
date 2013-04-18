@@ -7,9 +7,9 @@ import org.apache.log4j.Logger;
 
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Composite;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
 import eu.aniketos.wp2.components.trustworthiness.messaging.ICompositeTrustworthinessPrediction;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;
-import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.composite.CompositeTrustUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 
@@ -43,7 +43,7 @@ public class CompositeTrustworthinessPredictionServiceImpl implements
 
 		Composite cs = serviceEntityService.getComposite(serviceId);
 
-		Trustworthiness tw = null;
+		Trustworthiness trustworthiness = null;
 
 		if (cs == null) {
 			logger.info("Could not find service in the repository. New composite service will be created");
@@ -51,6 +51,7 @@ public class CompositeTrustworthinessPredictionServiceImpl implements
 			cs = tFactory.createComposite(serviceId);
 
 			Set<Atomic> services = new HashSet<Atomic>();
+			
 			for (String s : componentServices) {
 				
 				Atomic service = serviceEntityService.getAtomic(s);
@@ -66,16 +67,16 @@ public class CompositeTrustworthinessPredictionServiceImpl implements
 			
 			serviceEntityService.addComposite(cs);
 
-			tw = csTrustUpdate.aggregateTrustworthiness(serviceId);
+			trustworthiness = csTrustUpdate.aggregateTrustworthiness(serviceId);
 			
 		} else {
 			
 				logger.debug("aggregating trustworthiness");
-				tw = csTrustUpdate.aggregateTrustworthiness(serviceId);
+				trustworthiness = csTrustUpdate.aggregateTrustworthiness(serviceId);
 			
 		}
 
-		return tw;
+		return trustworthiness;
 
 	}
 
