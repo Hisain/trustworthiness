@@ -35,11 +35,11 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 			.getLogger(ServiceTrustUpdateRecursiveImpl.class);
 
 	private ServiceEntityService serviceEntityService;
-	
+
 	private TrustworthinessEntityService trustworthinessEntityService;
 
 	private TrustFactory trustFactory;
-	
+
 	private RatingEntityService ratingEntityService;
 
 	private QoSMetricEntityService qosEntityService;
@@ -262,7 +262,8 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		securityScore = Double.parseDouble(securityBD.toString());
 		trustworthinessScore = Double.parseDouble(trustworthinessBD.toString());
 
-		Trustworthiness trustworthiness = trustworthinessEntityService.getTrustworthiness(serviceId);
+		Trustworthiness trustworthiness = trustworthinessEntityService
+				.getTrustworthiness(serviceId);
 		if (trustworthiness == null) {
 			trustworthiness = trustFactory.createTrustworthiness(serviceId);
 		}
@@ -279,7 +280,6 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		trustworthiness.setCalcTime(nowInHour);
 		trustworthiness.setSecurityScore(securityScore);
 		trustworthiness.setTrustworthinessScore(trustworthinessScore);
-	
 
 		// send alert if trustworthiness > allowed change before alert
 		double scoreChange = Math.abs(trustworthinessScore
@@ -306,11 +306,10 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 
 			} else {
 				logger.debug("trustworthiness above threshold.");
-
 			}
 
-			Event osgiEvent = new Event("eu/aniketos/trustworthiness/prediction/alert",
-					props);
+			Event osgiEvent = new Event(
+					"eu/aniketos/trustworthiness/prediction/alert", props);
 			eventAdmin.sendEvent(osgiEvent);
 
 			logger.debug("trustworthiness change above alert level: "
@@ -319,7 +318,6 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		} else {
 			logger.debug("trustworthiness change below alert level: "
 					+ scoreChange);
-
 		}
 
 		logger.debug("updating service with results..");
@@ -377,8 +375,8 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		securityScore = Double.parseDouble(securityBD.toString());
 		trustworthinessScore = Double.parseDouble(trustworthinessBD.toString());
 
-
-		Trustworthiness trustworthiness = trustworthinessEntityService.getTrustworthiness(serviceId);
+		Trustworthiness trustworthiness = trustworthinessEntityService
+				.getTrustworthiness(serviceId);
 		if (trustworthiness == null) {
 			trustworthiness = trustFactory.createTrustworthiness(serviceId);
 		}
@@ -395,7 +393,6 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		trustworthiness.setCalcTime(nowInHour);
 		trustworthiness.setSecurityScore(securityScore);
 		trustworthiness.setTrustworthinessScore(trustworthinessScore);
-	
 
 		// send alert if trustworthiness > allowed change before alert
 		double scoreChange = Math.abs(trustworthinessScore
@@ -425,8 +422,8 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 
 			}
 
-			Event osgiEvent = new Event("eu/aniketos/trustworthiness/prediction/alert",
-					props);
+			Event osgiEvent = new Event(
+					"eu/aniketos/trustworthiness/prediction/alert", props);
 			eventAdmin.sendEvent(osgiEvent);
 
 			logger.debug("trustworthiness change above alert level: "
@@ -450,7 +447,8 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 
 		String serviceId = ratingScore.getService().getId();
 
-		Trustworthiness trustworthiness = trustworthinessEntityService.getTrustworthiness(serviceId);
+		Trustworthiness trustworthiness = trustworthinessEntityService
+				.getTrustworthiness(serviceId);
 
 		double qosScore = 0;
 
@@ -607,7 +605,8 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 
 		String serviceId = ratingScore.getService().getId();
 
-		Trustworthiness trustworthiness = trustworthinessEntityService.getTrustworthiness(serviceId);
+		Trustworthiness trustworthiness = trustworthinessEntityService
+				.getTrustworthiness(serviceId);
 
 		double repScore = 0;
 
@@ -802,7 +801,8 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		securityScore = Double.parseDouble(securityBD.toString());
 		trustworthinessScore = Double.parseDouble(trustworthinessBD.toString());
 
-		Trustworthiness trustworthiness = trustworthinessEntityService.getTrustworthiness(serviceId);
+		Trustworthiness trustworthiness = trustworthinessEntityService
+				.getTrustworthiness(serviceId);
 		if (trustworthiness == null) {
 			trustworthiness = trustFactory.createTrustworthiness(serviceId);
 		}
@@ -819,7 +819,6 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		trustworthiness.setCalcTime(nowInHour);
 		trustworthiness.setSecurityScore(securityScore);
 		trustworthiness.setTrustworthinessScore(trustworthinessScore);
-	
 
 		// send alert if trustworthiness > allowed change before alert
 		double scoreChange = Math.abs(trustworthinessScore
@@ -849,8 +848,8 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 
 			}
 
-			Event osgiEvent = new Event("eu/aniketos/trustworthiness/prediction/alert",
-					props);
+			Event osgiEvent = new Event(
+					"eu/aniketos/trustworthiness/prediction/alert", props);
 			eventAdmin.sendEvent(osgiEvent);
 
 			logger.debug("trustworthiness change above alert level: "
@@ -899,7 +898,8 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		double qosScore = 0;
 		double qosConfidence = 0;
 
-		Trustworthiness trustworthiness = trustworthinessEntityService.getTrustworthiness(serviceId);
+		Trustworthiness trustworthiness = trustworthinessEntityService
+				.getTrustworthiness(serviceId);
 
 		if (trustworthiness != null) {
 
@@ -1030,7 +1030,8 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 
 		double repConfidence = 0;
 
-		Trustworthiness trustworthiness = trustworthinessEntityService.getTrustworthiness(serviceId);
+		Trustworthiness trustworthiness = trustworthinessEntityService
+				.getTrustworthiness(serviceId);
 
 		if (trustworthiness != null) {
 
@@ -1204,7 +1205,7 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 	public void setTrustFactory(TrustFactory trustFactory) {
 		this.trustFactory = trustFactory;
 	}
-	
+
 	/**
 	 * required for Spring dependency injection
 	 * 
