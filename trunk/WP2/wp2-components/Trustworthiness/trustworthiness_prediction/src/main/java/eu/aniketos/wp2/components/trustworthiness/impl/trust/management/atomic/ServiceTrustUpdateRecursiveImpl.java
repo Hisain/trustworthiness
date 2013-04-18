@@ -10,12 +10,14 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 
 import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement;
+import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdatePolicy;
-import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.QoSMetricEntityService;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.RatingEntityService;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.SecurityEntityService;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
+import eu.aniketos.wp2.components.trustworthiness.trust.service.TrustworthinessEntityService;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.QoSMetric;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
@@ -38,8 +40,12 @@ public class ServiceTrustUpdateRecursiveImpl implements
 
 	private ServiceEntityService serviceEntityService;
 
-	private RatingEntityService ratingEntityService;
+	private TrustworthinessEntityService trustworthinessEntityService;
+
+	private TrustFactory trustFactory;
 	
+	private RatingEntityService ratingEntityService;
+
 	private QoSMetricEntityService qosEntityService;
 
 	private SecurityEntityService securityEntityService;
@@ -52,9 +58,9 @@ public class ServiceTrustUpdateRecursiveImpl implements
 	private double defaultScore = 0.0;
 
 	private double reputationWeight = 0.5;
-	 
+
 	private double qosWeight = 0.5;
-	
+
 	private double confidentialityWeight = 0.0;
 
 	private double integrityWeight = 0.0;
@@ -116,8 +122,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 		if (!config.getConfig().containsKey("qos_weight")) {
 			logger.warn("qos weight is not specified, will be set to .5");
 		} else {
-			qosWeight = config.getConfig().getFloat(
-					"qos_weight");
+			qosWeight = config.getConfig().getFloat("qos_weight");
 
 			if ((qosWeight < 0) || (qosWeight > 1)) {
 				logger.error("incorrect qos weight specified. "
@@ -126,15 +131,14 @@ public class ServiceTrustUpdateRecursiveImpl implements
 				qosWeight = .5f;
 			}
 		}
-		
+
 		/**
 		 * set reputation weight
 		 */
 		if (!config.getConfig().containsKey("reputation_weight")) {
 			logger.warn("reputation weight is not specified, will be set to .5");
 		} else {
-			reputationWeight = config.getConfig().getFloat(
-					"reputation_weight");
+			reputationWeight = config.getConfig().getFloat("reputation_weight");
 
 			if ((reputationWeight < 0) || (reputationWeight > 1)) {
 				logger.error("incorrect reputation weight specified. "
@@ -143,15 +147,15 @@ public class ServiceTrustUpdateRecursiveImpl implements
 				reputationWeight = .5f;
 			}
 		}
-		
+
 		/**
 		 * ensure weights sum is 1
 		 */
-		if (reputationWeight+qosWeight != 1){
+		if (reputationWeight + qosWeight != 1) {
 			logger.error("incorrect reputation and qos weights specified. "
 					+ "total must be equal to 1. ");
-			reputationWeight=.5;
-			qosWeight=.5;
+			reputationWeight = .5;
+			qosWeight = .5;
 		}
 
 		/**
@@ -170,7 +174,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 				confidentialityWeight = 1.0f;
 			}
 		}
-		
+
 		/**
 		 * set integrity weight
 		 */
@@ -267,7 +271,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 		List<Rating> serviceRepScores = null;
 
 		serviceRepScores = ratingEntityService.getRatingsByServiceId(serviceId);
-		
+
 		List<QoSMetric> serviceQosScores = null;
 
 		serviceQosScores = qosEntityService.getMetricsByServiceId(serviceId);
@@ -289,7 +293,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 		}
 
 		Map<String, Double> qos = calcQoS(serviceQosScores);
-		
+
 		Map<String, Double> reputation = calcReputation(serviceRepScores);
 
 		double securityScore = calcSecurityScore(serviceSecProps);
@@ -299,16 +303,18 @@ public class ServiceTrustUpdateRecursiveImpl implements
 		double qosDeviation = qos.get("qosDeviation");
 		double nowInHour = qos.get("nowInHour");
 		double qosTotalScoreWt = qos.get("qosTotalScoreWt");
-		
+
 		double repScore = reputation.get("repScore");
 		double repConfidence = reputation.get("repConfidence");
 		double repDeviation = reputation.get("repDeviation");
-		//double nowInHour = qos.get("nowInHour");
+		// double nowInHour = qos.get("nowInHour");
 		double repTotalScoreWt = reputation.get("repTotalScoreWt");
 
 		// determine overall trustworthiness score
 		// TODO: more advanced formula
-		double trustworthinessScore = (qosWeight*qosScore+reputationWeight*repScore) * securityScore;
+		double trustworthinessScore = (qosWeight * qosScore + reputationWeight
+				* repScore)
+				* securityScore;
 
 		if (logger.isInfoEnabled()) {
 			logger.info("trustworthiness for " + service + "="
@@ -316,35 +322,38 @@ public class ServiceTrustUpdateRecursiveImpl implements
 		}
 
 		BigDecimal securityBD = new BigDecimal(String.valueOf(securityScore))
-		.setScale(3, BigDecimal.ROUND_HALF_UP);
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
 		BigDecimal trustworthinessBD = new BigDecimal(
-		String.valueOf(trustworthinessScore)).setScale(3,
-		BigDecimal.ROUND_HALF_UP);
-		
+				String.valueOf(trustworthinessScore)).setScale(3,
+				BigDecimal.ROUND_HALF_UP);
+
 		securityScore = Double.parseDouble(securityBD.toString());
 		trustworthinessScore = Double.parseDouble(trustworthinessBD.toString());
 
-		Trustworthiness trust = new ServiceTrustworthiness(service.getId(),
-				trustworthinessScore, qosScore, qosConfidence, repScore, repConfidence, securityScore);
+		Trustworthiness trustworthiness = trustworthinessEntityService.getTrustworthiness(serviceId);
+		if (trustworthiness == null) {
+			trustworthiness = trustFactory.createTrustworthiness(serviceId);
+		}
 
-		service.setQosScore(qosScore);
-		service.setQosConfidence(qosConfidence);
-		service.setQosDeviation(qosDeviation);
-		service.setQosMovingWt(qosTotalScoreWt);
-		service.setReputationScore(repScore);
-		service.setReputationConfidence(repConfidence);
-		service.setReputationDeviation(repDeviation);
-		service.setReputationMovingWt(repTotalScoreWt);
-		service.setCalcTime(nowInHour);
-		service.setSecurityScore(securityScore);
-		service.setTrustworthinessScore(trustworthinessScore);
+		trustworthiness.setId(serviceId);
+		trustworthiness.setQosScore(qosScore);
+		trustworthiness.setQosConfidence(qosConfidence);
+		trustworthiness.setQosDeviation(qosDeviation);
+		trustworthiness.setQosMovingWt(qosTotalScoreWt);
+		trustworthiness.setReputationScore(repScore);
+		trustworthiness.setReputationConfidence(repConfidence);
+		trustworthiness.setReputationDeviation(repDeviation);
+		trustworthiness.setReputationMovingWt(repTotalScoreWt);
+		trustworthiness.setCalcTime(nowInHour);
+		trustworthiness.setSecurityScore(securityScore);
+		trustworthiness.setTrustworthinessScore(trustworthinessScore);
 
-		logger.debug("updating service with results..");
-		serviceEntityService.updateAtomic(service);
+		// send alert if trustworthiness > allowed change before alert
+		double scoreChange = Math.abs(trustworthinessScore - trustworthiness.getLastAlertScore());
+		if (scoreChange > config
+				.getConfig().getDouble("trust_change_alert")) {
 
-		// send alert if trustworthiness < alert threshold
-		if (trustworthinessScore < config.getConfig().getDouble(
-				"alert_threshold")) {
+			trustworthiness.setLastAlertScore(trustworthinessScore);
 
 			Map<String, String> props = new HashMap<String, String>();
 			props.put("service.id", serviceId);
@@ -352,18 +361,35 @@ public class ServiceTrustUpdateRecursiveImpl implements
 					Double.toString(trustworthinessScore));
 			props.put("trustworthiness.confidence",
 					Double.toString(qosConfidence));
+			props.put("alert.type", "TRUST_LEVEL_CHANGE");
 
-			Event osgiEvent = new Event("eu/aniketos/trustworthiness/alert",
+			// send alert if trustworthiness < threshold
+			if (trustworthinessScore < config.getConfig().getDouble("trust_threshold")) {
+
+				props.put("alert.description", "UNTRUSTED_ATOMIC_SERVICE");
+
+				logger.debug("trustworthiness below threshold.");
+
+			} else {
+				logger.debug("trustworthiness above threshold.");
+
+			}
+
+			Event osgiEvent = new Event("eu/aniketos/trustworthiness/prediction/alert",
 					props);
 			eventAdmin.sendEvent(osgiEvent);
 
-			logger.debug("trustworthiness below threshold, sent an alert.");
+			logger.debug("trustworthiness change above alert level: " + scoreChange + ", sent an alert. ");
+
 		} else {
-			logger.debug("trustworthiness above threshold.");
+			logger.debug("trustworthiness change below alert level: " + scoreChange);
 
 		}
 
-		return trust;
+		logger.debug("updating service with results..");
+		trustworthinessEntityService.updateTrustworthiness(trustworthiness);
+
+		return trustworthiness;
 	}
 
 	private Map<String, Double> calcReputation(List<Rating> serviceScores) {
@@ -496,7 +522,8 @@ public class ServiceTrustUpdateRecursiveImpl implements
 			 * calculate deviation
 			 */
 			double scoreWt = serviceScore.getScoreWt();
-			repDeviation += scoreWt * Math.abs(repScore - serviceScore.getScore());
+			repDeviation += scoreWt
+					* Math.abs(repScore - serviceScore.getScore());
 			totalWt += scoreWt;
 		}
 
@@ -523,17 +550,16 @@ public class ServiceTrustUpdateRecursiveImpl implements
 				.setScale(5, BigDecimal.ROUND_HALF_UP);
 		BigDecimal nowInHourBD = new BigDecimal(String.valueOf(nowInHour))
 				.setScale(3, BigDecimal.ROUND_HALF_UP);
-		BigDecimal totalScoreWtBD = new BigDecimal(String.valueOf(repTotalScoreWt))
-				.setScale(3, BigDecimal.ROUND_HALF_UP);
-		
+		BigDecimal totalScoreWtBD = new BigDecimal(
+				String.valueOf(repTotalScoreWt)).setScale(3,
+				BigDecimal.ROUND_HALF_UP);
 
 		repScore = Double.parseDouble(scoreBD.toString());
 		repConfidence = Double.parseDouble(confidenceBD.toString());
 		repDeviation = Double.parseDouble(deviationBD.toString());
 		nowInHour = Double.parseDouble(nowInHourBD.toString());
 		repTotalScoreWt = Double.parseDouble(totalScoreWtBD.toString());
-		
-		
+
 		reputation.put("repScore", repScore);
 		reputation.put("repConfidence", repConfidence);
 		reputation.put("repTotalScoreWt", repTotalScoreWt);
@@ -542,7 +568,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 
 		return reputation;
 	}
-	
+
 	private Map<String, Double> calcQoS(List<QoSMetric> serviceScores) {
 
 		Map<String, Double> qos = new HashMap<String, Double>();
@@ -702,15 +728,13 @@ public class ServiceTrustUpdateRecursiveImpl implements
 				.setScale(3, BigDecimal.ROUND_HALF_UP);
 		BigDecimal totalScoreWtBD = new BigDecimal(String.valueOf(totalScoreWt))
 				.setScale(3, BigDecimal.ROUND_HALF_UP);
-		
 
 		qosScore = Double.parseDouble(scoreBD.toString());
 		qosConfidence = Double.parseDouble(confidenceBD.toString());
 		deviation = Double.parseDouble(deviationBD.toString());
 		nowInHour = Double.parseDouble(nowInHourBD.toString());
 		totalScoreWt = Double.parseDouble(totalScoreWtBD.toString());
-		
-		
+
 		qos.put("qosScore", qosScore);
 		qos.put("qosConfidence", qosConfidence);
 		qos.put("qosTotalScoreWt", totalScoreWt);
@@ -758,6 +782,39 @@ public class ServiceTrustUpdateRecursiveImpl implements
 	}
 
 	/**
+	 * @return
+	 */
+	public TrustworthinessEntityService getTrustworthinessEntityService() {
+		return trustworthinessEntityService;
+	}
+
+	/**
+	 * @param trustworthinessEntityService
+	 */
+	public void setTrustworthinessEntityService(
+			TrustworthinessEntityService trustworthinessEntityService) {
+		this.trustworthinessEntityService = trustworthinessEntityService;
+	}
+	
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @return
+	 */
+	public TrustFactory getTrustFactory() {
+		return trustFactory;
+	}
+
+	/**
+	 * required for Spring dependency injection
+	 * 
+	 * @param trustFactory
+	 */
+	public void setTrustFactory(TrustFactory trustFactory) {
+		this.trustFactory = trustFactory;
+	}
+	
+	/**
 	 * required for Spring dependency injection
 	 * 
 	 * @return data access service for rating scores
@@ -789,7 +846,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 	public void setQosEntityService(QoSMetricEntityService qosEntityService) {
 		this.qosEntityService = qosEntityService;
 	}
-	
+
 	/**
 	 * @return
 	 */

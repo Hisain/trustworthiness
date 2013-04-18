@@ -29,6 +29,12 @@
 		<property name="secPropertyUpdate" ref="secPropertyUpdate"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 	</bean>
+	
+	<bean name="notification"
+		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.NotificationServiceImpl">
+		<property name="trustFactory" ref="trustFactory"></property>
+		<property name="serviceEntityService" ref="serviceEntityService"></property>
+	</bean>
 
 	<bean name="reportFactory"
 		class="eu.aniketos.wp2.components.trustworthiness.impl.rules.service.ReportFactoryImpl">

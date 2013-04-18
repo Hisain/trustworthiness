@@ -24,7 +24,7 @@ public class SecurityEntityServiceImpl implements SecurityEntityService {
 	 * @see eu.aniketos.wp2.components.trustworthiness.trust.service.RatingEntityService#addSecProperty(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating)
 	 */
 	public void addSecProperty(SecProperty secProperty) {
-		secPropertyDao.addSecProperty(secProperty);
+		secPropertyDao.addThreatLevel(secProperty);
 
 	}
 

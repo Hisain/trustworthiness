@@ -2,9 +2,9 @@ package eu.aniketos.wp2.components.trustworthiness.impl.trust.management.atomic;
 
 
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdatePolicy;
-import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.Trustworthiness;
 
 
 

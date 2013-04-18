@@ -20,6 +20,9 @@
 		
 	<osgi:reference id="securityEntityService"
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.SecurityEntityService" />
+	
+	<osgi:reference id="trustworthinessEntityService"
+		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.TrustworthinessEntityService" />
 		
 	<osgi:reference id="configService"
 		interface="eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement" />
@@ -42,7 +45,7 @@
 	
 	<osgi:service ref="eventHandler" interface="org.osgi.service.event.EventHandler">
 		<osgi:service-properties>
-			<entry key="event.topics" value="eu/aniketos/trustworthiness/*"/>
+			<entry key="event.topics" value="eu/aniketos/trustworthiness/monitoring/*"/>
 		</osgi:service-properties>
 	</osgi:service>
 	

@@ -14,7 +14,7 @@ public class NotificationTest implements EventHandler {
 	public void handleEvent(Event event) {
 		String topicName = event.getTopic();
 
-		if (topicName.endsWith("eu/aniketos/trustworthiness/alert")) {
+		if (topicName.endsWith("eu/aniketos/trustworthiness/prediction/alert")) {
 
 			logger.info("Received a new trust alert, topic:" + topicName);
 			logger.info("with properties:");

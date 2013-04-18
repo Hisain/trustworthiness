@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.orm.jpa.support.JpaDaoSupport;
 
 import eu.aniketos.wp2.components.trustworthiness.trust.dao.ServiceDao;
@@ -235,6 +236,8 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 		} catch (Exception e) {
 			logger.error("deleteAtomic: " + e.getMessage());
 		}
+		
+		//TODO; delete cascading records
 
 	}
 
@@ -260,6 +263,43 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 			}
 		} catch (Exception e) {
 			logger.error("deleteComposite: " + e.getMessage());
+		}
+
+	}
+
+	public boolean isComposite(String serviceId) {
+
+		try {
+
+			boolean exists = getJpaTemplate().contains(new Composite(serviceId));
+			
+			if (logger.isDebugEnabled()){
+				logger.debug("composite service " + serviceId + "  exists " + exists);
+			}
+			return exists;
+
+		} catch (DataAccessException e) {
+
+			logger.error("isComposite: " + e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean isAtomic(String serviceId) {
+
+		try {
+
+			boolean exists = getJpaTemplate().contains(new Atomic(serviceId));
+			
+			if (logger.isDebugEnabled()){
+				logger.debug("atomic service " + serviceId + "  exists " + exists);
+			}
+			return exists;
+
+		} catch (DataAccessException e) {
+
+			logger.error("isAtomic: " + e.getMessage());
+			return false;
 		}
 
 	}
@@ -303,4 +343,5 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 		}
 		return serviceNames;
 	}
+
 }

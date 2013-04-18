@@ -38,12 +38,20 @@
 		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.dao.SecPropertyDaoImpl">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
+	
+	<bean id="threatLevelDao"
+		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.dao.ThreatLevelDaoImpl">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
 
 	<bean id="serviceDao"
 		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.dao.ServiceDaoImpl">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
-
+	<bean id="trustworthinessDao"
+		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.dao.TrustworthinessDaoImpl">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
 
 </beans>

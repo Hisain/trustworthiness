@@ -69,20 +69,7 @@ public class ServiceEntityServiceImpl implements ServiceEntityService {
 		return serviceDao.getAllAtomicNames();
 	}
 
-	/**
-	 * @return Web service DAO
-	 */
-	public ServiceDao getServiceDao() {
-		return serviceDao;
-	}
-
-	/**
-	 * @param serviceDao Web service DAO
-	 */
-	public void setServiceDao(ServiceDao serviceDao) {
-		this.serviceDao = serviceDao;
-	}
-
+	
 	/* (non-Javadoc)
 	 * @see eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService#addComposite(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Composite)
 	 */
@@ -111,6 +98,37 @@ public class ServiceEntityServiceImpl implements ServiceEntityService {
 	public void deleteComposite(Composite service) {
 		serviceDao.deleteComposite(service);
 	}
+
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService#isComposite(java.lang.String)
+	 */
+	public boolean isComposite(String serviceId) {
+		
+		return serviceDao.isComposite(serviceId);
+	}
+
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService#isAtomic(java.lang.String)
+	 */
+	public boolean isAtomic(String serviceId) {
+		
+		return serviceDao.isAtomic(serviceId);
+	}
+	
+	/**
+	 * @return Web service DAO
+	 */
+	public ServiceDao getServiceDao() {
+		return serviceDao;
+	}
+
+	/**
+	 * @param serviceDao Web service DAO
+	 */
+	public void setServiceDao(ServiceDao serviceDao) {
+		this.serviceDao = serviceDao;
+	}
+
 
 	
 }
