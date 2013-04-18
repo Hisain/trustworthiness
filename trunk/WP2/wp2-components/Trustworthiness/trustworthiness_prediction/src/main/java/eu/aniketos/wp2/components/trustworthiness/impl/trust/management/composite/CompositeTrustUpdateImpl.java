@@ -138,23 +138,52 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 				* repScore)
 				* securityScore;
 
-		BigDecimal scoreBD = new BigDecimal(
-				String.valueOf(trustworthinessScore)).setScale(3,
-				BigDecimal.ROUND_HALF_UP);
-		BigDecimal confidenceBD = new BigDecimal(String.valueOf(qosConfidence))
-				.setScale(3, BigDecimal.ROUND_HALF_UP);
-
-		trustworthinessScore = Double.parseDouble(scoreBD.toString());
-		qosConfidence = Double.parseDouble(confidenceBD.toString());
-
 		Trustworthiness csTw = trustworthinessEntityService
 				.getTrustworthiness(serviceId);
 		if (csTw == null) {
 			csTw = trustFactory.createTrustworthiness(serviceId);
 		}
 
+		BigDecimal trustworthinessScoreBD = new BigDecimal(
+				String.valueOf(trustworthinessScore)).setScale(3,
+				BigDecimal.ROUND_HALF_UP);
+		BigDecimal qosScoreBD = new BigDecimal(
+				String.valueOf(trustworthinessScore)).setScale(3,
+				BigDecimal.ROUND_HALF_UP);
+		BigDecimal qosConfidenceBD = new BigDecimal(
+				String.valueOf(qosConfidence)).setScale(3,
+				BigDecimal.ROUND_HALF_UP);
+		BigDecimal repScoreBD = new BigDecimal(
+				String.valueOf(trustworthinessScore)).setScale(3,
+				BigDecimal.ROUND_HALF_UP);
+		BigDecimal repConfidenceBD = new BigDecimal(
+				String.valueOf(qosConfidence)).setScale(3,
+				BigDecimal.ROUND_HALF_UP);
+		BigDecimal securityScoreBD = new BigDecimal(
+				String.valueOf(qosConfidence)).setScale(3,
+				BigDecimal.ROUND_HALF_UP);
+		BigDecimal averageComponentTrustworthinessScoreBD = new BigDecimal(
+				String.valueOf(averageComponentTrustworthinessScore)).setScale(
+				3, BigDecimal.ROUND_HALF_UP);
+		BigDecimal lowestComponentTrustworthinessScoreBD = new BigDecimal(
+				String.valueOf(lowestComponentTrustworthinessScore)).setScale(
+				3, BigDecimal.ROUND_HALF_UP);
+
+		trustworthinessScore = Double.parseDouble(trustworthinessScoreBD
+				.toString());
+		qosScore = Double.parseDouble(qosScoreBD.toString());
+		qosConfidence = Double.parseDouble(qosConfidenceBD.toString());
+		repScore = Double.parseDouble(repScoreBD.toString());
+		repConfidence = Double.parseDouble(repConfidenceBD.toString());
+		securityScore = Double.parseDouble(securityScoreBD.toString());
+		averageComponentTrustworthinessScore = Double
+				.parseDouble(averageComponentTrustworthinessScoreBD.toString());
+		lowestComponentTrustworthinessScore = Double
+				.parseDouble(lowestComponentTrustworthinessScoreBD.toString());
+
 		// save trustworthiness info
 		csTw.setTrustworthinessScore(trustworthinessScore);
+		csTw.setSecurityScore(securityScore);
 		csTw.setQosScore(qosScore);
 		csTw.setQosConfidence(qosConfidence);
 		csTw.setReputationScore(repScore);
@@ -190,8 +219,8 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 
 			}
 
-			Event osgiEvent = new Event("eu/aniketos/trustworthiness/prediction/alert",
-					props);
+			Event osgiEvent = new Event(
+					"eu/aniketos/trustworthiness/prediction/alert", props);
 			eventAdmin.sendEvent(osgiEvent);
 
 			logger.debug("trustworthiness change above alert level: "
