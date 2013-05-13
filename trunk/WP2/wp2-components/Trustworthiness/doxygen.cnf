@@ -26,6 +26,7 @@ PROJECT_BRIEF          = "Trustworthiness module"
 # with spaces.
 
 INPUT                  = .\trustworthiness_api\ \
+			  .\trustworthiness_ext_api\ \
                          .\trustworthiness_configuration\ \
                          .\trustworthiness_dao\ \
                          .\trustworthiness_datasource\ \
