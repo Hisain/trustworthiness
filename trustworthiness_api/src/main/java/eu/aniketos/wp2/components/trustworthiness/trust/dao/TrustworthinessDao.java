@@ -1,6 +1,6 @@
 package eu.aniketos.wp2.components.trustworthiness.trust.dao;
 
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.TrustworthinessEntity;
 
 
 /**
@@ -14,25 +14,25 @@ public interface TrustworthinessDao {
 	 * add 
 	 * @param 
 	 */
-	public abstract void addTrustworthiness(Trustworthiness trustworthiness);
+	public abstract void addTrustworthiness(TrustworthinessEntity trustworthinessEntity);
 	
 	
 	/**
 	 * @param service composite service object 
 	 */
-	public abstract void updateTrustworthiness(Trustworthiness trustworthiness);
+	public abstract void updateTrustworthiness(TrustworthinessEntity trustworthinessEntity);
 
 	/**
 	 * @param 
 	 * @return
 	 */
-	public abstract Trustworthiness getTrustworthiness(String serviceId);
+	public abstract TrustworthinessEntity getTrustworthiness(String serviceId);
 	
 	
 	/**
 	 * @param
 	 */
-	public abstract void deleteTrustworthiness(Trustworthiness trustworthiness);
+	public abstract void deleteTrustworthiness(TrustworthinessEntity trustworthinessEntity);
 	
 	
 

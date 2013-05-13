@@ -12,7 +12,7 @@ import org.osgi.service.event.EventAdmin;
 import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdatePolicy;
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.TrustworthinessEntity;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.QoSMetricEntityService;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.RatingEntityService;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.SecurityEntityService;
@@ -224,9 +224,9 @@ public class ServiceTrustUpdateRecursiveImpl implements
 	 * @throws Exception
 	 * 
 	 */
-	public Trustworthiness calculateTrust(Rating rating) throws Exception {
+	public TrustworthinessEntity calculateTrust(Rating rating) throws Exception {
 
-		Trustworthiness trust = null;
+		TrustworthinessEntity trust = null;
 
 		Service service = rating.getService();
 
@@ -252,7 +252,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 	 * @see eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.
 	 * ServiceTrustUpdatePolicy#calculateTrust(java.lang.String)
 	 */
-	public Trustworthiness updateTrust(String serviceId) throws Exception {
+	public TrustworthinessEntity updateTrust(String serviceId) throws Exception {
 
 		logger.debug("try retrieve previous score");
 
@@ -330,30 +330,30 @@ public class ServiceTrustUpdateRecursiveImpl implements
 		securityScore = Double.parseDouble(securityBD.toString());
 		trustworthinessScore = Double.parseDouble(trustworthinessBD.toString());
 
-		Trustworthiness trustworthiness = trustworthinessEntityService.getTrustworthiness(serviceId);
-		if (trustworthiness == null) {
-			trustworthiness = trustFactory.createTrustworthiness(serviceId);
+		TrustworthinessEntity trustworthinessEntity = trustworthinessEntityService.getTrustworthiness(serviceId);
+		if (trustworthinessEntity == null) {
+			trustworthinessEntity = trustFactory.createTrustworthiness(serviceId);
 		}
 
-		trustworthiness.setId(serviceId);
-		trustworthiness.setQosScore(qosScore);
-		trustworthiness.setQosConfidence(qosConfidence);
-		trustworthiness.setQosDeviation(qosDeviation);
-		trustworthiness.setQosMovingWt(qosTotalScoreWt);
-		trustworthiness.setReputationScore(repScore);
-		trustworthiness.setReputationConfidence(repConfidence);
-		trustworthiness.setReputationDeviation(repDeviation);
-		trustworthiness.setReputationMovingWt(repTotalScoreWt);
-		trustworthiness.setCalcTime(nowInHour);
-		trustworthiness.setSecurityScore(securityScore);
-		trustworthiness.setTrustworthinessScore(trustworthinessScore);
+		trustworthinessEntity.setId(serviceId);
+		trustworthinessEntity.setQosScore(qosScore);
+		trustworthinessEntity.setQosConfidence(qosConfidence);
+		trustworthinessEntity.setQosDeviation(qosDeviation);
+		trustworthinessEntity.setQosMovingWt(qosTotalScoreWt);
+		trustworthinessEntity.setReputationScore(repScore);
+		trustworthinessEntity.setReputationConfidence(repConfidence);
+		trustworthinessEntity.setReputationDeviation(repDeviation);
+		trustworthinessEntity.setReputationMovingWt(repTotalScoreWt);
+		trustworthinessEntity.setCalcTime(nowInHour);
+		trustworthinessEntity.setSecurityScore(securityScore);
+		trustworthinessEntity.setTrustworthinessScore(trustworthinessScore);
 
 		// send alert if trustworthiness > allowed change before alert
-		double scoreChange = Math.abs(trustworthinessScore - trustworthiness.getLastAlertScore());
+		double scoreChange = Math.abs(trustworthinessScore - trustworthinessEntity.getLastAlertScore());
 		if (scoreChange > config
 				.getConfig().getDouble("trust_change_alert")) {
 
-			trustworthiness.setLastAlertScore(trustworthinessScore);
+			trustworthinessEntity.setLastAlertScore(trustworthinessScore);
 
 			Map<String, String> props = new HashMap<String, String>();
 			props.put("service.id", serviceId);
@@ -387,9 +387,9 @@ public class ServiceTrustUpdateRecursiveImpl implements
 		}
 
 		logger.debug("updating service with results..");
-		trustworthinessEntityService.updateTrustworthiness(trustworthiness);
+		trustworthinessEntityService.updateTrustworthiness(trustworthinessEntity);
 
-		return trustworthiness;
+		return trustworthinessEntity;
 	}
 
 	private Map<String, Double> calcReputation(List<Rating> serviceScores) {

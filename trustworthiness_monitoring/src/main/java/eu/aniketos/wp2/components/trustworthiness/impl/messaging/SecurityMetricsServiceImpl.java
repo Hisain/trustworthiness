@@ -5,7 +5,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement;
-import eu.aniketos.wp2.components.trustworthiness.messaging.SecurityMetricsService;
+import eu.aniketos.wp2.components.trustworthiness.ext.messaging.SecurityMetricsService;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 

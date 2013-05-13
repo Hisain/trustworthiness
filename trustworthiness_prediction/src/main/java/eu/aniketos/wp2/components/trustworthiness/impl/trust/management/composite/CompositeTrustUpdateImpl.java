@@ -14,7 +14,7 @@ import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Composite;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdatePolicy;
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.TrustworthinessEntity;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.composite.CompositeTrustUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.TrustworthinessEntityService;
@@ -49,7 +49,7 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 	 * eu.aniketos.wp2.components.trustworthiness.trust.management.composite
 	 * .CompositeTrustUpdate#aggregateTrustworthiness(java.lang.String)
 	 */
-	public Trustworthiness aggregateTrustworthiness(String serviceId)
+	public TrustworthinessEntity aggregateTrustworthiness(String serviceId)
 			throws Exception {
 
 		Composite compositeService = serviceEntityService
@@ -90,7 +90,7 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 			++i;
 
 			logger.debug("component service " + service.getId());
-			Trustworthiness componentTrustworthiness = trustUpdate
+			TrustworthinessEntity componentTrustworthiness = trustUpdate
 					.updateTrust(service.getId());
 
 			double componentTrustworthinessScore = componentTrustworthiness
@@ -138,7 +138,7 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 				* repScore)
 				* securityScore;
 
-		Trustworthiness csTw = trustworthinessEntityService
+		TrustworthinessEntity csTw = trustworthinessEntityService
 				.getTrustworthiness(serviceId);
 		if (csTw == null) {
 			csTw = trustFactory.createTrustworthiness(serviceId);
@@ -157,10 +157,10 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 				String.valueOf(trustworthinessScore)).setScale(3,
 				BigDecimal.ROUND_HALF_UP);
 		BigDecimal repConfidenceBD = new BigDecimal(
-				String.valueOf(qosConfidence)).setScale(3,
+				String.valueOf(repConfidence)).setScale(3,
 				BigDecimal.ROUND_HALF_UP);
 		BigDecimal securityScoreBD = new BigDecimal(
-				String.valueOf(qosConfidence)).setScale(3,
+				String.valueOf(securityScore)).setScale(3,
 				BigDecimal.ROUND_HALF_UP);
 		BigDecimal averageComponentTrustworthinessScoreBD = new BigDecimal(
 				String.valueOf(averageComponentTrustworthinessScore)).setScale(

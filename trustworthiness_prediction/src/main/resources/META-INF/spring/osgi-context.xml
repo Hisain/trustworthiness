@@ -34,10 +34,10 @@
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory" />
 
 	<osgi:service ref="trustworthinessPredictionService"
-		interface="eu.aniketos.wp2.components.trustworthiness.messaging.ITrustworthinessPrediction" />
+		interface="eu.aniketos.wp2.components.trustworthiness.ext.messaging.ITrustworthinessPrediction" />
 
 	<osgi:service ref="compositeTrustworthinessPredictionService"
-		interface="eu.aniketos.wp2.components.trustworthiness.messaging.ICompositeTrustworthinessPrediction" />
+		interface="eu.aniketos.wp2.components.trustworthiness.ext.messaging.ICompositeTrustworthinessPrediction" />
 
 	<osgi:reference id="transactionManager"
 		interface="org.springframework.transaction.PlatformTransactionManager" />

@@ -10,7 +10,7 @@ import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.SecProperty;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Service;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.ThreatLevel;
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.TrustworthinessEntity;
 
 /**
  * @author Hisain Elshaafi (TSSG)
@@ -86,11 +86,11 @@ public class TrustFactoryImpl implements TrustFactory {
 		return threatLevel;
 	}
 	
-	public Trustworthiness createTrustworthiness(String serviceId) {
-		Trustworthiness trustworthiness = new Trustworthiness();
-		trustworthiness.setId(serviceId);
+	public TrustworthinessEntity createTrustworthiness(String serviceId) {
+		TrustworthinessEntity trustworthinessEntity = new TrustworthinessEntity();
+		trustworthinessEntity.setId(serviceId);
 
-		return trustworthiness;
+		return trustworthinessEntity;
 	}
 
 }

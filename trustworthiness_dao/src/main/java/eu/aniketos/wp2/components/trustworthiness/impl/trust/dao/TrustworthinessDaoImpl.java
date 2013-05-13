@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 import org.springframework.orm.jpa.support.JpaDaoSupport;
 
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.TrustworthinessEntity;
 import eu.aniketos.wp2.components.trustworthiness.trust.dao.TrustworthinessDao;
 
 /**
@@ -25,9 +25,9 @@ public class TrustworthinessDaoImpl extends JpaDaoSupport implements
 		super();
 	}
 
-	public void addTrustworthiness(Trustworthiness trustworthiness) {
+	public void addTrustworthiness(TrustworthinessEntity trustworthinessEntity) {
 		try {
-			getJpaTemplate().persist(trustworthiness);
+			getJpaTemplate().persist(trustworthinessEntity);
 			getJpaTemplate().flush();
 
 			logger.debug("addTrustworthiness: trustworthiness saved");
@@ -36,9 +36,9 @@ public class TrustworthinessDaoImpl extends JpaDaoSupport implements
 		}
 	}
 
-	public void updateTrustworthiness(Trustworthiness trustworthiness) {
+	public void updateTrustworthiness(TrustworthinessEntity trustworthinessEntity) {
 		try {
-			getJpaTemplate().merge(trustworthiness);
+			getJpaTemplate().merge(trustworthinessEntity);
 			getJpaTemplate().flush();
 
 			logger.debug("updateTrustworthiness: trustworthiness saved");
@@ -47,13 +47,13 @@ public class TrustworthinessDaoImpl extends JpaDaoSupport implements
 		}
 	}
 
-	public Trustworthiness getTrustworthiness(String id) {
+	public TrustworthinessEntity getTrustworthiness(String id) {
 
-		Trustworthiness trustworthiness = null;
+		TrustworthinessEntity trustworthinessEntity = null;
 
 		try {
-			trustworthiness = (Trustworthiness) getJpaTemplate().getReference(
-					Trustworthiness.class, id);
+			trustworthinessEntity = (TrustworthinessEntity) getJpaTemplate().getReference(
+					TrustworthinessEntity.class, id);
 			getJpaTemplate().flush();
 
 		} catch (EntityNotFoundException enf) {
@@ -62,7 +62,7 @@ public class TrustworthinessDaoImpl extends JpaDaoSupport implements
 
 			logger.error("getTrustworthiness: " + e.getMessage());
 		}
-		if (trustworthiness != null) {
+		if (trustworthinessEntity != null) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("getTrustworthiness: found service: " + id);
 			}
@@ -70,17 +70,17 @@ public class TrustworthinessDaoImpl extends JpaDaoSupport implements
 			logger.debug("getTrustworthiness: service " + id + " not found");
 		}
 
-		return trustworthiness;
+		return trustworthinessEntity;
 	}
 
-	public void deleteTrustworthiness(Trustworthiness trustworthiness) {
+	public void deleteTrustworthiness(TrustworthinessEntity trustworthinessEntity) {
 
-		String serviceName = trustworthiness.getId();
+		String serviceName = trustworthinessEntity.getId();
 
 		try {
 
-			trustworthiness = getJpaTemplate().merge(trustworthiness);
-			getJpaTemplate().remove(trustworthiness);
+			trustworthinessEntity = getJpaTemplate().merge(trustworthinessEntity);
+			getJpaTemplate().remove(trustworthinessEntity);
 			getJpaTemplate().flush();
 
 			if (logger.isDebugEnabled()) {

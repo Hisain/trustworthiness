@@ -1,6 +1,6 @@
 package eu.aniketos.wp2.components.trustworthiness.trust.service;
 
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.TrustworthinessEntity;
 
 /**
  * data access service for trustworthiness
@@ -11,24 +11,24 @@ import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthines
 public interface TrustworthinessEntityService {
 
 	/**
-	 * @param trustworthiness
+	 * @param trustworthinessEntity
 	 */
-	public abstract void addTrustworthiness(Trustworthiness trustworthiness);
+	public abstract void addTrustworthiness(TrustworthinessEntity trustworthinessEntity);
 
 	/**
-	 * @param trustworthiness
+	 * @param trustworthinessEntity
 	 */
-	public abstract void updateTrustworthiness(Trustworthiness trustworthiness);
+	public abstract void updateTrustworthiness(TrustworthinessEntity trustworthinessEntity);
 
 	/**
 	 * @param source
 	 * @return
 	 */
-	public abstract Trustworthiness getTrustworthiness(String source);
+	public abstract TrustworthinessEntity getTrustworthiness(String source);
 
 	/**
-	 * @param trustworthiness
+	 * @param trustworthinessEntity
 	 */
-	public abstract void deleteTrustworthiness(Trustworthiness trustworthiness);
+	public abstract void deleteTrustworthiness(TrustworthinessEntity trustworthinessEntity);
 
 }

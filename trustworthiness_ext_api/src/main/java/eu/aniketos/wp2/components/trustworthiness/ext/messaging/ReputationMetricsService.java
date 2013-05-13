@@ -1,8 +1,8 @@
-package eu.aniketos.wp2.components.trustworthiness.messaging;
+package eu.aniketos.wp2.components.trustworthiness.ext.messaging;
 
 import java.util.Map;
 
-import eu.aniketos.wp2.components.trustworthiness.rules.model.event.TrustEvent;
+import eu.aniketos.wp2.components.trustworthiness.ext.rules.model.event.TrustEvent;
 
 
 /**

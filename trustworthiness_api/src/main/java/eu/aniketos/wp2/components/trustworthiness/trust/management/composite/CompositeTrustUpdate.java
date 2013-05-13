@@ -1,6 +1,6 @@
 package eu.aniketos.wp2.components.trustworthiness.trust.management.composite;
 
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.TrustworthinessEntity;
 
 
 
@@ -15,5 +15,5 @@ public interface CompositeTrustUpdate {
 	 * @return trustworthiness object
 	 * @throws Exception
 	 */
-	abstract public Trustworthiness aggregateTrustworthiness(String serviceId) throws Exception;
+	abstract public TrustworthinessEntity aggregateTrustworthiness(String serviceId) throws Exception;
 }

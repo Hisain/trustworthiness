@@ -1,6 +1,4 @@
-package eu.aniketos.wp2.components.trustworthiness.messaging;
-
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
+package eu.aniketos.wp2.components.trustworthiness.ext.messaging;
 
 
 /**

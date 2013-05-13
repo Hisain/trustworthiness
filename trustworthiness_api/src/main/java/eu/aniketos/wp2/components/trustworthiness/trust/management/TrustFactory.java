@@ -7,7 +7,7 @@ import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.SecProperty;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Service;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.ThreatLevel;
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.TrustworthinessEntity;
 
 /**
  * @author Hisain Elshaafi (TSSG)
@@ -58,6 +58,6 @@ public interface TrustFactory {
 	 * @param serviceId
 	 * @return
 	 */
-	public abstract Trustworthiness createTrustworthiness(String serviceId);
+	public abstract TrustworthinessEntity createTrustworthiness(String serviceId);
 
 }
