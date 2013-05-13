@@ -7,8 +7,8 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
-import eu.aniketos.wp2.components.trustworthiness.messaging.ReputationMetricsService;
-import eu.aniketos.wp2.components.trustworthiness.rules.model.event.TrustEvent;
+import eu.aniketos.wp2.components.trustworthiness.ext.messaging.ReputationMetricsService;
+import eu.aniketos.wp2.components.trustworthiness.ext.rules.model.event.TrustEvent;
 
 /**
  * @author Hisain Elshaafi (TSSG)

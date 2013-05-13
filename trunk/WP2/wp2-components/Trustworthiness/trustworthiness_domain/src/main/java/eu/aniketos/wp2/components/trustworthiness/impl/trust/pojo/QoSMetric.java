@@ -141,7 +141,7 @@ public class QoSMetric implements Serializable {
 	 * @return
 	 */
 	@NotNull
-	@Column(precision = 6, scale = 2)
+	@Column(precision = 7, scale = 6)
 	public double getScore() {
 		return score;
 	}

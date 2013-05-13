@@ -6,16 +6,13 @@
 	<groupId>eu.aniketos.wp2.components</groupId>
 	<artifactId>wp2-components-trustworthiness</artifactId>
 	<version>1.0.0</version>
-
-
- <parent>
+	
+	 <parent>
       <groupId>eu.aniketos.wp2.components</groupId>
       <artifactId>wp2-components</artifactId>
       <version>1.0-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
     </parent>
-
-
 
 	<packaging>pom</packaging>
 	<name>Aniketos WP2 Components Implementation Parent</name>
@@ -57,8 +54,8 @@
 		<h2.version>1.1.118</h2.version>
 		<felix.plugin.version>1.4.0</felix.plugin.version>
 		<javax.persistence.version>1.0.0</javax.persistence.version>
-	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -167,8 +164,6 @@
 						</execution>
 					</executions>
 				</plugin>
-
-
 			</plugins>
 		</pluginManagement>
 
@@ -207,22 +202,24 @@
 	</build>
 
 	<modules>
+		<module>trustworthiness_ext_api</module>
 		<module>trustworthiness_api</module>
 		<module>trustworthiness_datasource</module>
 		<module>trustworthiness_prediction</module>
 		<module>trustworthiness_configuration</module>
+		<module>trustworthiness_alert</module>
 		<module>trustworthiness_monitoring</module>
 		<module>trustworthiness_domain</module>
 		<module>trustworthiness_dao</module>
 		<module>trustworthiness_transactional</module>
 		<!-- <module>trustworthiness_test</module> -->
 		<module>trustworthiness_mock</module>
-		<!--	<module>datasource_tests</module> -->
+		<module>datasource_tests</module>
 		<module>log4jproperties</module>
-		<!--<module>antlr-hibernate-fragment</module> -->
+		<module>antlr-hibernate-fragment</module>
 	</modules>
 
-	<repositories>
+	<!-- <repositories>
 		<repository>
 			<id>apache.snapshots</id>
 			<name>Apache Maven Snapshot Repository</name>
@@ -231,11 +228,11 @@
 				<enabled>false</enabled>
 			</releases>
 			<snapshots>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 			</snapshots>
 		</repository>
 
-		<!-- I21 repository -->
+		I21 repository
 		<repository>
 			<id>i21-s3-maven-repo</id>
 			<name>i21 S3 milestone repo</name>
@@ -261,7 +258,7 @@
 			</snapshots>
 		</repository>
 
-		<!-- ServiceMix repo -->
+		ServiceMix repo
 		<repository>
 			<id>servicemix</id>
 			<name>ServiceMix Repository</name>
@@ -274,7 +271,7 @@
 			</snapshots>
 		</repository>
 
-		<!-- OPS4j repository -->
+		OPS4j repository
 		<repository>
 			<id>ops4j</id>
 			<name>OPS4j repo</name>
@@ -301,7 +298,7 @@
 
 		<repository>
 			<snapshots>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 			</snapshots>
 			<id>springframework.org</id>
 			<name>Springframework Maven SNAPSHOT Repository</name>
@@ -325,17 +322,23 @@
 			<name>SpringSource Enterprise Bundle Repository - SpringSource Bundle
 			Releases</name>
 			<url>http://repository.springsource.com/maven/bundles/release</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 		<repository>
 			<id>com.springsource.repository.bundles.external</id>
 			<name>SpringSource Enterprise Bundle Repository - External Bundle
 			Releases</name>
 			<url>http://repository.springsource.com/maven/bundles/external</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 		<repository>
 			<id>spring-osgified-artifacts</id>
 			<snapshots>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 			</snapshots>
 			<name>Springframework Maven OSGified Artifacts Repository</name>
 			<url>http://maven.springframework.org/osgi</url>
@@ -344,6 +347,9 @@
 			<id>spring-maven-milestone</id>
 			<name>Springframework Maven Repository</name>
 			<url>http://s3.amazonaws.com/maven.springframework.org/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 
 	</repositories>
@@ -361,7 +367,7 @@
 				<enabled>false</enabled>
 			</releases>
 		</pluginRepository>
-	</pluginRepositories>
+	</pluginRepositories> -->
 
 
 </project>

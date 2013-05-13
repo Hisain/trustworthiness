@@ -2,7 +2,7 @@ package eu.aniketos.wp2.components.trustworthiness.rules.service;
 
 import java.util.Map;
 
-import eu.aniketos.wp2.components.trustworthiness.rules.model.event.TrustEvent;
+import eu.aniketos.wp2.components.trustworthiness.ext.rules.model.event.TrustEvent;
 
 /**
  * @author Hisain Elshaafi (TSSG)

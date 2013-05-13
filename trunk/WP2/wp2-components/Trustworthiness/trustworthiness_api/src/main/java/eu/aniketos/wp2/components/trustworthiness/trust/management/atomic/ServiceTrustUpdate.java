@@ -1,7 +1,7 @@
 package eu.aniketos.wp2.components.trustworthiness.trust.management.atomic;
 
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.TrustworthinessEntity;
 
 
 /**
@@ -16,6 +16,6 @@ public interface ServiceTrustUpdate {
 	 * @return trustworthiness object
 	 * @throws Exception
 	 */
-	public abstract Trustworthiness calculateScore(Rating rating, ServiceTrustUpdatePolicy policy) throws Exception;
+	public abstract TrustworthinessEntity calculateScore(Rating rating, ServiceTrustUpdatePolicy policy) throws Exception;
 
 }

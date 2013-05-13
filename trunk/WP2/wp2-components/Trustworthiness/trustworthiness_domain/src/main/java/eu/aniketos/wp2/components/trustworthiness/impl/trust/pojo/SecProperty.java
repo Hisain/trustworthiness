@@ -106,7 +106,6 @@ public class SecProperty implements Serializable {
 	 * @return
 	 */
 	@NotNull
-	@Column(precision = 6, scale = 2)
 	public double getScore() {
 		return score;
 	}

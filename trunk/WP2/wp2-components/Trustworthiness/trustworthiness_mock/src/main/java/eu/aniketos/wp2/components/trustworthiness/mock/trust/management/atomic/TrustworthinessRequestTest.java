@@ -5,9 +5,9 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
-import eu.aniketos.wp2.components.trustworthiness.messaging.ICompositeTrustworthinessPrediction;
-import eu.aniketos.wp2.components.trustworthiness.messaging.ITrustworthinessPrediction;
+import eu.aniketos.wp2.components.trustworthiness.ext.messaging.Trustworthiness;
+import eu.aniketos.wp2.components.trustworthiness.ext.messaging.ICompositeTrustworthinessPrediction;
+import eu.aniketos.wp2.components.trustworthiness.ext.messaging.ITrustworthinessPrediction;
 
 /**
  * @author Hisain Elshaafi (TSSG)
@@ -97,7 +97,7 @@ public class TrustworthinessRequestTest {
 			
 			if (tw != null) {
 				logger.info("testXId02 trustworthiness score = " + tw.getTrustworthinessScore() 
-						+ " confidence = " + tw.getQosConfidence());
+						+ " qos confidence = " + tw.getQosConfidence());
 			} else {
 				logger.info("null was returned for testXId02 trustworthiness request");
 			}
@@ -124,7 +124,7 @@ public class TrustworthinessRequestTest {
 				logger.info("testXId03 trustworthiness = null");
 			} else {
 				logger.info("testXId03 trustworthiness score = " + tw.getTrustworthinessScore() +
-						" confidence = " + tw.getQosConfidence());
+						" qos confidence = " + tw.getQosConfidence());
 			}
 			
 		} catch (Exception e) {
@@ -149,7 +149,7 @@ public class TrustworthinessRequestTest {
 				logger.info("testXId03 trustworthiness = null");
 			} else {
 				logger.info("testXId03 trustworthiness score = " + tw.getTrustworthinessScore()
-						+ " confidence = " + tw.getQosConfidence());
+						+ " qos confidence = " + tw.getQosConfidence());
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -178,7 +178,7 @@ public class TrustworthinessRequestTest {
 				logger.info("CS (null) trustworthiness = null");
 			} else {
 				logger.info("CS (null) trustworthiness score = " + tw.getTrustworthinessScore()
-						+ " confidence = " + tw.getQosConfidence());
+						+ " qos confidence = " + tw.getQosConfidence());
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());

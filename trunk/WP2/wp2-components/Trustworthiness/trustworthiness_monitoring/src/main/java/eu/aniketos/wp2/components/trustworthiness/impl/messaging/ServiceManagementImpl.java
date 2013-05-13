@@ -5,7 +5,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
-import eu.aniketos.wp2.components.trustworthiness.messaging.ServiceManagement;
+import eu.aniketos.wp2.components.trustworthiness.ext.messaging.ServiceManagement;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 

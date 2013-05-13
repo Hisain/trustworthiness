@@ -7,8 +7,8 @@ import org.apache.log4j.Logger;
 
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Composite;
 import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic;
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
-import eu.aniketos.wp2.components.trustworthiness.messaging.ICompositeTrustworthinessPrediction;
+import eu.aniketos.wp2.components.trustworthiness.ext.messaging.Trustworthiness;
+import eu.aniketos.wp2.components.trustworthiness.ext.messaging.ICompositeTrustworthinessPrediction;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.composite.CompositeTrustUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;

@@ -1,6 +1,6 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event;
 
-import eu.aniketos.wp2.components.trustworthiness.rules.model.event.RuleMetricEvent;
+import eu.aniketos.wp2.components.trustworthiness.ext.rules.model.event.RuleMetricEvent;
 
 /**
  * metric events class

@@ -25,21 +25,15 @@ import org.hibernate.validator.NotNull;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("general")
-public class Trustworthiness implements Serializable {
+public class TrustworthinessEntity extends eu.aniketos.wp2.components.trustworthiness.ext.messaging.Trustworthiness implements Serializable {
 	
 	private static final long serialVersionUID = 7661205089410810957L;
-	private String id = null;
-	private double trustworthinessScore=0;
-	private double qosScore=0;
-	private double qosConfidence=0;
+
 	private double qosMovingWt=0;
 	private double calcTime=0;
 	private double qosDeviation=0;
-	private double reputationScore=0;
-	private double reputationConfidence=0;
 	private double reputationMovingWt=0;
 	private double reputationDeviation=0;
-	private double securityScore=0;
 	private double lastAlertScore=0;
 	/**
 	 * 
@@ -59,14 +53,14 @@ public class Trustworthiness implements Serializable {
 	@Id
 	@Column(name="id")
 	public String getId() {
-		return id;
+		return serviceId;
 	}
 
 	/**
 	 * @param id
 	 */
 	public void setId(String id) {
-		this.id = id;
+		this.serviceId = id;
 	}
 
 	/**
@@ -89,7 +83,7 @@ public class Trustworthiness implements Serializable {
 	/**
 	 * @return
 	 */
-	@Column (name="qos_score")
+	@Column (name="qos_score", precision = 4, scale = 3)
 	@NotNull
 	public double getQosScore() {
 		return qosScore;
@@ -106,7 +100,7 @@ public class Trustworthiness implements Serializable {
 	/**
 	 * @return
 	 */
-	@Column (name="qos_confidence")
+	@Column (name="qos_confidence", precision = 4, scale = 3)
 	@NotNull
 	public double getQosConfidence() {
 		return qosConfidence;
@@ -122,7 +116,7 @@ public class Trustworthiness implements Serializable {
 	/**
 	 * @return
 	 */
-	@Column (name="security_score")
+	@Column (name="security_score", precision = 4, scale = 3)
 	@NotNull
 	public double getSecurityScore() {
 		return securityScore;
@@ -185,7 +179,7 @@ public class Trustworthiness implements Serializable {
 	/**
 	 * @return
 	 */
-	@Column (name="rep_score")
+	@Column (name="rep_score", precision = 4, scale = 3)
 	@NotNull
 	public double getReputationScore() {
 		return reputationScore;
@@ -201,7 +195,7 @@ public class Trustworthiness implements Serializable {
 	/**
 	 * @return
 	 */
-	@Column (name="rep_confidence")
+	@Column (name="rep_confidence", precision = 4, scale = 3)
 	@NotNull
 	public double getReputationConfidence() {
 		return reputationConfidence;
@@ -251,7 +245,7 @@ public class Trustworthiness implements Serializable {
 	/**
 	 * @return
 	 */
-	@Column (name="avg_comp_trust")
+	@Column (name="avg_comp_trust", precision = 4, scale = 3)
 	public double getAverageComponentTrustworthinessScore() {
 
 		return averageComponentTrustworthinessScore;
@@ -270,7 +264,7 @@ public class Trustworthiness implements Serializable {
 	/**
 	 * @return
 	 */
-	@Column (name="lo_comp_trust")
+	@Column (name="lo_comp_trust", precision = 4, scale = 3)
 	public double getLowestComponentTrustworthinessScore() {
 		return lowestComponentTrustworthinessScore;
 	}
@@ -287,7 +281,7 @@ public class Trustworthiness implements Serializable {
 	/**
 	 * @return
 	 */
-	@Column (name="alert_score")
+	@Column (name="alert_score", precision = 4, scale = 3)
 	@NotNull
 	public double getLastAlertScore() {
 		return lastAlertScore;
@@ -306,7 +300,7 @@ public class Trustworthiness implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((serviceId == null) ? 0 : serviceId.hashCode());
 		return result;
 	}
 
@@ -318,18 +312,18 @@ public class Trustworthiness implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Trustworthiness other = (Trustworthiness) obj;
-		if (id == null) {
-			if (other.id != null)
+		TrustworthinessEntity other = (TrustworthinessEntity) obj;
+		if (serviceId == null) {
+			if (other.serviceId != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!serviceId.equals(other.serviceId))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Service [id=" + id + " -> trustworthiness=" + trustworthinessScore +"]";
+		return "Service [id=" + serviceId + " -> trustworthiness=" + trustworthinessScore +"]";
 	}
 
 }

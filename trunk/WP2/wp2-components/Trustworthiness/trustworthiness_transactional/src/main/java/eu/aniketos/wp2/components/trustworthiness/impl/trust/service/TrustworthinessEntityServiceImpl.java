@@ -3,7 +3,7 @@ package eu.aniketos.wp2.components.trustworthiness.impl.trust.service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
+import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.TrustworthinessEntity;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.TrustworthinessEntityService;
 import eu.aniketos.wp2.components.trustworthiness.trust.dao.TrustworthinessDao;
 
@@ -25,21 +25,21 @@ public class TrustworthinessEntityServiceImpl implements
 		this.trustworthinessDao = trustworthinessDao;
 	}
 
-	public void addTrustworthiness(Trustworthiness trustworthiness) {
-		trustworthinessDao.addTrustworthiness(trustworthiness);
+	public void addTrustworthiness(TrustworthinessEntity trustworthinessEntity) {
+		trustworthinessDao.addTrustworthiness(trustworthinessEntity);
 	}
 
-	public void updateTrustworthiness(Trustworthiness trustworthiness) {
-		trustworthinessDao.updateTrustworthiness(trustworthiness);
+	public void updateTrustworthiness(TrustworthinessEntity trustworthinessEntity) {
+		trustworthinessDao.updateTrustworthiness(trustworthinessEntity);
 	}
 
 	@Transactional(readOnly = true)
-	public Trustworthiness getTrustworthiness(String source) {
+	public TrustworthinessEntity getTrustworthiness(String source) {
 		return trustworthinessDao.getTrustworthiness(source);
 	}
 
-	public void deleteTrustworthiness(Trustworthiness trustworthiness) {
-		trustworthinessDao.deleteTrustworthiness(trustworthiness);
+	public void deleteTrustworthiness(TrustworthinessEntity trustworthinessEntity) {
+		trustworthinessDao.deleteTrustworthiness(trustworthinessEntity);
 	}
 
 }

@@ -15,7 +15,7 @@
 	<!-- -->
 	<properties>
 		<bundle.require.bundle>
-			trustworthiness-api;bundle-version="1.0.0",trustworthiness-domain;bundle-version="1.0.0",org.springframework.aop;bundle-version="${spring.version}",org.springframework.beans;bundle-version="${spring.version}",org.springframework.context;bundle-version="${spring.version}",org.springframework.core;bundle-version="${spring.version}",org.springframework.jms;bundle-version="${spring.version}",org.springframework.transaction;bundle-version="${spring.version}",org.springframework.jdbc;bundle-version="${spring.version}",org.springframework.osgi.core;bundle-version="${spring.osgi.version}",org.springframework.osgi.extender;bundle-version="${spring.osgi.version}",org.springframework.osgi.io;bundle-version="${spring.osgi.version}",com.springsource.javax.jms;bundle-version="1.1.0",com.springsource.org.apache.log4j;bundle-version="1.2.15",com.springsource.org.joda.time;bundle-version="1.6.0"
+			trustworthiness-ext-api;bundle-version="1.0.0",trustworthiness-api;bundle-version="1.0.0",trustworthiness-domain;bundle-version="1.0.0",org.springframework.aop;bundle-version="${spring.version}",org.springframework.beans;bundle-version="${spring.version}",org.springframework.context;bundle-version="${spring.version}",org.springframework.core;bundle-version="${spring.version}",org.springframework.jms;bundle-version="${spring.version}",org.springframework.transaction;bundle-version="${spring.version}",org.springframework.jdbc;bundle-version="${spring.version}",org.springframework.osgi.core;bundle-version="${spring.osgi.version}",org.springframework.osgi.extender;bundle-version="${spring.osgi.version}",org.springframework.osgi.io;bundle-version="${spring.osgi.version}",com.springsource.javax.jms;bundle-version="1.1.0",com.springsource.org.apache.log4j;bundle-version="1.2.15",com.springsource.org.joda.time;bundle-version="1.6.0"
 		</bundle.require.bundle>
 		<bundle.import.package>
 			org.osgi.framework;version="1.3.0",*
@@ -121,6 +121,13 @@
 		</dependency>
 
 
+		<dependency>
+			<groupId>eu.aniketos.wp2.components.trustworthiness</groupId>
+			<artifactId>trustworthiness-ext-api</artifactId>
+			<version>1.0.0</version>
+			<type>bundle</type>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

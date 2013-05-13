@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.AlertEventImpl;
 import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.RuleMetricEventImpl;
-import eu.aniketos.wp2.components.trustworthiness.rules.model.event.TrustEvent;
+import eu.aniketos.wp2.components.trustworthiness.ext.rules.model.event.TrustEvent;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RuleExecuter;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;

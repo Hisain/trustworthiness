@@ -1,4 +1,4 @@
-package eu.aniketos.wp2.components.trustworthiness.rules.model.event;
+package eu.aniketos.wp2.components.trustworthiness.ext.rules.model.event;
 
 
 public interface RuleMetricEvent extends TrustEvent {

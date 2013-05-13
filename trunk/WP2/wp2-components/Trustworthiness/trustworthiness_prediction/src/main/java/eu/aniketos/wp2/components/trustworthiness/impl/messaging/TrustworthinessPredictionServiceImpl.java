@@ -2,8 +2,8 @@ package eu.aniketos.wp2.components.trustworthiness.impl.messaging;
 
 import org.apache.log4j.Logger;
 
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
-import eu.aniketos.wp2.components.trustworthiness.messaging.ITrustworthinessPrediction;
+import eu.aniketos.wp2.components.trustworthiness.ext.messaging.Trustworthiness;
+import eu.aniketos.wp2.components.trustworthiness.ext.messaging.ITrustworthinessPrediction;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.atomic.ServiceTrustUpdatePolicy;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.composite.CompositeTrustUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;

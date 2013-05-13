@@ -1,8 +1,8 @@
-package eu.aniketos.wp2.components.trustworthiness.messaging;
+package eu.aniketos.wp2.components.trustworthiness.ext.messaging;
 
 import java.util.Set;
 
-import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Trustworthiness;
+
 
 
 /**

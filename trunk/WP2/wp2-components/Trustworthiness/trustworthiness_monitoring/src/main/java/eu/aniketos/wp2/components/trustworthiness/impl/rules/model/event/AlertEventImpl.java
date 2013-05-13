@@ -1,6 +1,6 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event;
 
-import eu.aniketos.wp2.components.trustworthiness.rules.model.event.RuleAlertEvent;
+import eu.aniketos.wp2.components.trustworthiness.ext.rules.model.event.RuleAlertEvent;
 
 /**
  * alert events class

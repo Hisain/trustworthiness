@@ -27,16 +27,16 @@
 		interface="eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory" />
 		
 	<osgi:service ref="serviceManagement"
-		interface="eu.aniketos.wp2.components.trustworthiness.messaging.ServiceManagement" />
+		interface="eu.aniketos.wp2.components.trustworthiness.ext.messaging.ServiceManagement" />
 
 	<osgi:service ref="qosMetric"
-		interface="eu.aniketos.wp2.components.trustworthiness.messaging.QosMetricsService" />
+		interface="eu.aniketos.wp2.components.trustworthiness.ext.messaging.QosMetricsService" />
 
 	<osgi:service ref="reputationMetric"
-		interface="eu.aniketos.wp2.components.trustworthiness.messaging.ReputationMetricsService" />
+		interface="eu.aniketos.wp2.components.trustworthiness.ext.messaging.ReputationMetricsService" />
 
 	<osgi:service ref="securityMetric"
-		interface="eu.aniketos.wp2.components.trustworthiness.messaging.SecurityMetricsService" />
+		interface="eu.aniketos.wp2.components.trustworthiness.ext.messaging.SecurityMetricsService" />
 		
 	<osgi:service ref="notification"
 		interface="eu.aniketos.wp4.components.notification.INotification" />	

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import eu.aniketos.wp2.components.trustworthiness.messaging.SecurityMetricsService;
+import eu.aniketos.wp2.components.trustworthiness.ext.messaging.SecurityMetricsService;
 
 /**
  * @author Hisain Elshaafi (TSSG)
