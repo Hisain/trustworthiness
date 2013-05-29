@@ -17,7 +17,7 @@ public class ServiceManagementImpl implements ServiceManagement {
 	
 	private TrustFactory trustFactory;
 	
-	public void addService(Map<String, String> serviceData) throws Exception {
+	public void addService(Map<String, String> serviceData) {
 		if (serviceData == null
 				|| serviceData.size() == 0
 				|| !serviceData.containsKey("serviceId")
@@ -25,7 +25,7 @@ public class ServiceManagementImpl implements ServiceManagement {
 				|| serviceData.get("serviceId") == ""
 				) {
 			logger.warn("received service data contains null or empty element");
-			throw new Exception("received service data contains null or empty element");
+			throw new RuntimeException("received service data contains null or empty element");
 
 		} else {
 
@@ -42,12 +42,12 @@ public class ServiceManagementImpl implements ServiceManagement {
 		}
 	}
 
-	public void addService(String serviceId) throws Exception {
+	public void addService(String serviceId) {
 		if (serviceId == null
 				|| serviceId.length() == 0
 				) {
 			logger.warn("received serviceId is null or empty");
-			throw new Exception("received serviceId is null or empty");
+			throw new RuntimeException("received serviceId is null or empty");
 
 		} else {
 
@@ -63,13 +63,13 @@ public class ServiceManagementImpl implements ServiceManagement {
 		}
 	}
 
-	public void removeService(String serviceId) throws Exception {
+	public void removeService(String serviceId) {
 		if (serviceId == null
 				|| serviceId.length() == 0
 				) {
 			logger.warn("received serviceId is null or empty");
 			
-			throw new Exception("received serviceId is null or empty");
+			throw new RuntimeException("received serviceId is null or empty");
 
 		} else {
 

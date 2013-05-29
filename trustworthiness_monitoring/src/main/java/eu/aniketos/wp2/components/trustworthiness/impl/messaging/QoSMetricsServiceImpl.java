@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.wp2.components.trustworthiness.ext.messaging.QosMetricsService;
 import eu.aniketos.wp2.components.trustworthiness.ext.rules.model.event.TrustEvent;
-import eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate;
+import eu.aniketos.wp2.components.trustworthiness.rules.service.MetricRatingUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 
 /**
@@ -15,20 +15,23 @@ import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntitySer
  * 
  */
 public class QoSMetricsServiceImpl implements QosMetricsService {
-	
+
 	private static Logger logger = Logger.getLogger(QosMetricsService.class);
 
 	private ConfigurationManagement config;
 
-	private RatingUpdate qosUpdate;
+	private MetricRatingUpdate qosUpdate;
 
 	private ServiceEntityService serviceEntityService;
 
-
-	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.messaging.QosMetricsService#receiveMetrics(java.util.Map)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * eu.aniketos.wp2.components.trustworthiness.messaging.QosMetricsService
+	 * #receiveMetrics(java.util.Map)
 	 */
-	public void receiveMetrics(Map<String, String> metric) throws Exception {
+	public void receiveMetrics(Map<String, String> metric) {
 
 		if (metric == null
 				|| metric.size() == 0
@@ -45,34 +48,43 @@ public class QoSMetricsServiceImpl implements QosMetricsService {
 						.get("subproperty") == null || metric
 						.get("subproperty") == ""))) {
 			logger.warn("received metric contains null or empty data");
-			throw new Exception("received metric contains null or empty data");
+			throw new RuntimeException(
+					"received metric contains null or empty data");
 
 		} else {
 
-			qosUpdate.updateScore(metric);
+			try {
+				qosUpdate.updateScore(metric);
+			} catch (Exception e) {
+				logger.error("Exception: " + e.getMessage());
+			}
 		}
 	}
-	
-	public void processQoSMetric(TrustEvent event) throws Exception {
-		
-		if (event == null
-				|| event.getServiceId() == null
-				|| event.getProperty() == null
-				|| event.getValue() == null) {
+
+	public void processQoSMetric(TrustEvent event) {
+
+		if (event == null || event.getServiceId() == null
+				|| event.getProperty() == null || event.getValue() == null) {
 			logger.warn("received metric contains null or empty data");
-			throw new Exception("received metric contains null or empty data");
+			throw new RuntimeException(
+					"received metric contains null or empty data");
 
 		} else {
 
-			qosUpdate.updateScore(event);
+			try {
+				qosUpdate.updateScore(event);
+			} catch (Exception e) {
+				logger.error("Exception: " + e.getMessage());
+			}
 		}
-		
+
 	}
 
 	/**
 	 * required for Spring dependency injection
 	 * 
-	 * @param config set configuration field
+	 * @param config
+	 *            set configuration field
 	 */
 	public void setConfig(ConfigurationManagement config) {
 		this.config = config;
@@ -90,7 +102,8 @@ public class QoSMetricsServiceImpl implements QosMetricsService {
 	/**
 	 * required for Spring dependency injection
 	 * 
-	 * @param serviceEntityService data access service object for Web services
+	 * @param serviceEntityService
+	 *            data access service object for Web services
 	 */
 	public void setServiceEntityService(
 			ServiceEntityService serviceEntityService) {
@@ -111,7 +124,7 @@ public class QoSMetricsServiceImpl implements QosMetricsService {
 	 * 
 	 * @return
 	 */
-	public RatingUpdate getQosUpdate() {
+	public MetricRatingUpdate getQosUpdate() {
 		return qosUpdate;
 	}
 
@@ -120,7 +133,7 @@ public class QoSMetricsServiceImpl implements QosMetricsService {
 	 * 
 	 * @param qosUpdate
 	 */
-	public void setQosUpdate(RatingUpdate qosUpdate) {
+	public void setQosUpdate(MetricRatingUpdate qosUpdate) {
 		this.qosUpdate = qosUpdate;
 	}
 

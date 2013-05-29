@@ -15,7 +15,7 @@ import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntitySer
 
 /**
  * @author Hisain Elshaafi (TSSG)
- *
+ * 
  */
 public class CompositeTrustworthinessPredictionServiceImpl implements
 		ICompositeTrustworthinessPrediction {
@@ -29,51 +29,63 @@ public class CompositeTrustworthinessPredictionServiceImpl implements
 
 	private TrustFactory tFactory;
 
-	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.messaging.ICompositeTrustworthinessPrediction#getCompositeTrustworthiness(java.lang.String, java.util.Set)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.messaging.
+	 * ICompositeTrustworthinessPrediction
+	 * #getCompositeTrustworthiness(java.lang.String, java.util.Set)
 	 */
 	public Trustworthiness getCompositeTrustworthiness(String serviceId,
-			Set<String> componentServices) throws Exception {
-		
+			Set<String> componentServices) {
+
 		// return an exception if empty or null parameters
-		if (serviceId == null || componentServices== null || serviceId.length() == 0 || componentServices.size()==0) {
+		if (serviceId == null || componentServices == null
+				|| serviceId.length() == 0 || componentServices.size() == 0) {
 			logger.warn("received serviceId or components are null or empty");
-			throw new Exception("received serviceId or components are null or empty");
+			throw new RuntimeException(
+					"received serviceId or components are null or empty");
 		}
 
 		Composite cs = serviceEntityService.getComposite(serviceId);
 
 		Trustworthiness trustworthiness = null;
 
-		if (cs == null) {
-			logger.info("Could not find service in the repository. New composite service will be created");
+		try {
+			if (cs == null) {
+				logger.info("Could not find service in the repository. New composite service will be created");
 
-			cs = tFactory.createComposite(serviceId);
+				cs = tFactory.createComposite(serviceId);
 
-			Set<Atomic> services = new HashSet<Atomic>();
-			
-			for (String s : componentServices) {
-				
-				Atomic service = serviceEntityService.getAtomic(s);
-				
-				
-				// return an exception if component service is unknown
-				if (service==null) throw new Exception("Could not find service " + s + " in the repository");
-				
-				logger.debug("adding component " + service.getId());
-				services.add(service);
-			}
-			cs.setComponentServices(services);
-			
-			serviceEntityService.addComposite(cs);
+				Set<Atomic> services = new HashSet<Atomic>();
 
-			trustworthiness = csTrustUpdate.aggregateTrustworthiness(serviceId);
-			
-		} else {
-			
+				for (String s : componentServices) {
+
+					Atomic service = serviceEntityService.getAtomic(s);
+
+					// return an exception if component service is unknown
+					if (service == null)
+						throw new RuntimeException("Could not find service " + s
+								+ " in the repository");
+
+					logger.debug("adding component " + service.getId());
+					services.add(service);
+				}
+				cs.setComponentServices(services);
+
+				serviceEntityService.addComposite(cs);
+
+				trustworthiness = csTrustUpdate.aggregateTrustworthiness(serviceId);
+
+			} else {
+
 				logger.debug("aggregating trustworthiness");
 				trustworthiness = csTrustUpdate.aggregateTrustworthiness(serviceId);
+
+			}
+		} catch (Exception e) {
 			
+			logger.error("Exception: " + e.getMessage());
 		}
 
 		return trustworthiness;
@@ -92,16 +104,17 @@ public class CompositeTrustworthinessPredictionServiceImpl implements
 	/**
 	 * required for Spring dependency injection
 	 * 
-	 * @param sEntityService data access service for atomic and composite Web services
+	 * @param sEntityService
+	 *            data access service for atomic and composite Web services
 	 */
 	public void setServiceEntityService(ServiceEntityService sEntityService) {
 		this.serviceEntityService = sEntityService;
 	}
-	
+
 	/**
 	 * required for Spring dependency injection
 	 * 
-	 * @return 
+	 * @return
 	 */
 	public CompositeTrustUpdate getCsTrustUpdate() {
 		return csTrustUpdate;
@@ -128,7 +141,8 @@ public class CompositeTrustworthinessPredictionServiceImpl implements
 	/**
 	 * required for Spring dependency injection
 	 * 
-	 * @param tFactory service and rating score objects factory
+	 * @param tFactory
+	 *            service and rating score objects factory
 	 */
 	public void settFactory(TrustFactory tFactory) {
 		this.tFactory = tFactory;

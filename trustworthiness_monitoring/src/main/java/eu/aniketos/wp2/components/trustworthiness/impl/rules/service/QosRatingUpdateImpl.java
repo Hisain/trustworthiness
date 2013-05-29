@@ -22,7 +22,7 @@ import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.AlertEv
 import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.RuleMetricEventImpl;
 import eu.aniketos.wp2.components.trustworthiness.ext.rules.model.event.TrustEvent;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RuleExecuter;
-import eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate;
+import eu.aniketos.wp2.components.trustworthiness.rules.service.MetricRatingUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.QoSMetricEntityService;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
@@ -33,7 +33,7 @@ import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.QoSMetric;
  * @author Hisain Elshaafi (TSSG)
  * 
  */
-public class QosRatingUpdateImpl implements RatingUpdate {
+public class QosRatingUpdateImpl implements MetricRatingUpdate {
 
 	private static Logger logger = Logger.getLogger(QosRatingUpdateImpl.class);
 
@@ -70,7 +70,7 @@ public class QosRatingUpdateImpl implements RatingUpdate {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate
+	 * eu.aniketos.wp2.components.trustworthiness.rules.service.MetricRatingUpdate
 	 * #updateScore(java.util.Map)
 	 */
 	public void updateScore(Map<String, String> event) throws Exception {

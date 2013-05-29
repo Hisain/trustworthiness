@@ -3,7 +3,7 @@ package eu.aniketos.wp2.components.trustworthiness.impl.messaging;
 import org.apache.log4j.Logger;
 
 import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.AlertEventImpl;
-import eu.aniketos.wp2.components.trustworthiness.ext.rules.model.event.RuleAlertEvent;
+import eu.aniketos.wp2.components.trustworthiness.rules.model.event.RuleAlertEvent;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 import eu.aniketos.wp4.components.notification.INotification;
@@ -11,7 +11,8 @@ import eu.aniketos.wp4.components.notification.Notification;
 
 public class NotificationServiceImpl implements INotification {
 
-	private static Logger logger = Logger.getLogger(NotificationServiceImpl.class);
+	private static Logger logger = Logger
+			.getLogger(NotificationServiceImpl.class);
 
 	private ServiceEntityService serviceEntityService;
 
@@ -45,24 +46,24 @@ public class NotificationServiceImpl implements INotification {
 		}
 
 		if (alert.getAlertType().equals("ThreatLevelChange")) {
-			
+
 			RuleAlertEvent event = new AlertEventImpl(serviceId);
-			
+
 			event.setEventDescription(alert.getAlertDesc());
-			
+
 			event.setProperty("threat");
-			
-			//TODO: update ratings and trustworthiness as result of threat
-		
+
+			// TODO: update ratings and trustworthiness as result of threat
+
 		} else if (alert.getAlertType().equals("ContractViolation")) {
-			
+
 			RuleAlertEvent event = new AlertEventImpl(serviceId);
-			
+
 			event.setEventDescription(alert.getAlertDesc());
-			
+
 			event.setProperty("contract_violation");
-			
-			//TODO: update ratings and trustworthiness as result of violation
+
+			// TODO: update ratings and trustworthiness as result of violation
 		}
 	}
 

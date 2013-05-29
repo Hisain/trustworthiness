@@ -5,11 +5,15 @@ import java.util.Map
 
 import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.RuleMetricEventImpl
 import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.AlertEventImpl
+import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.RuleConsumerRatingEventImpl
 
 
 
 #declare any global variables 
 declare RuleMetricEventImpl
+	@role( event )
+end
+declare RuleConsumerRatingEventImpl
 	@role( event )
 end
 declare AlertEventImpl
@@ -176,7 +180,7 @@ rule reputation
 	#
 	when
 		#	
-		$sme : RuleMetricEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty, $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
+		$sme : RuleConsumerRatingEventImpl($serviceId : serviceId, $consumerId : consumerId, $transactionId : transactionId, $property : property, $subproperty : subproperty, $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
 		$scoreMap : Map( this["_type_"] == "Score" )
 		
 	then 

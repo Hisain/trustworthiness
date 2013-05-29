@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.wp2.components.trustworthiness.ext.messaging.SecurityMetricsService;
-import eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate;
+import eu.aniketos.wp2.components.trustworthiness.rules.service.MetricRatingUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
 
 /**
@@ -14,20 +14,24 @@ import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntitySer
  * 
  */
 public class SecurityMetricsServiceImpl implements SecurityMetricsService {
-	
-	private static Logger logger = Logger.getLogger(SecurityMetricsService.class);
+
+	private static Logger logger = Logger
+			.getLogger(SecurityMetricsService.class);
 
 	private ConfigurationManagement config;
 
-	private RatingUpdate secPropertyUpdate;
+	private MetricRatingUpdate secPropertyUpdate;
 
 	private ServiceEntityService serviceEntityService;
 
-
-	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.messaging.QosMetricsService#receiveMetrics(java.util.Map)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * eu.aniketos.wp2.components.trustworthiness.messaging.QosMetricsService
+	 * #receiveMetrics(java.util.Map)
 	 */
-	public void receiveMetrics(Map<String, String> metric) throws Exception {
+	public void receiveMetrics(Map<String, String> metric) {
 
 		if (metric == null
 				|| metric.size() == 0
@@ -44,18 +48,24 @@ public class SecurityMetricsServiceImpl implements SecurityMetricsService {
 						.get("subproperty") == null || metric
 						.get("subproperty") == ""))) {
 			logger.warn("received metric contains null or empty data");
-			throw new Exception("received metric contains null or empty data");
+			throw new RuntimeException(
+					"received metric contains null or empty data");
 
 		} else {
 
-			secPropertyUpdate.updateScore(metric);
+			try {
+				secPropertyUpdate.updateScore(metric);
+			} catch (Exception e) {
+				logger.error("Exception: " + e.getMessage());
+			}
 		}
 	}
 
 	/**
 	 * required for Spring dependency injection
 	 * 
-	 * @param config set configuration field
+	 * @param config
+	 *            set configuration field
 	 */
 	public void setConfig(ConfigurationManagement config) {
 		this.config = config;
@@ -73,7 +83,8 @@ public class SecurityMetricsServiceImpl implements SecurityMetricsService {
 	/**
 	 * required for Spring dependency injection
 	 * 
-	 * @param serviceEntityService data access service object for Web services
+	 * @param serviceEntityService
+	 *            data access service object for Web services
 	 */
 	public void setServiceEntityService(
 			ServiceEntityService serviceEntityService) {
@@ -94,7 +105,7 @@ public class SecurityMetricsServiceImpl implements SecurityMetricsService {
 	 * 
 	 * @return
 	 */
-	public RatingUpdate getSecPropertyUpdate() {
+	public MetricRatingUpdate getSecPropertyUpdate() {
 		return secPropertyUpdate;
 	}
 
@@ -103,7 +114,7 @@ public class SecurityMetricsServiceImpl implements SecurityMetricsService {
 	 * 
 	 * @param secPropertyUpdate
 	 */
-	public void setSecPropertyUpdate(RatingUpdate secPropertyUpdate) {
+	public void setSecPropertyUpdate(MetricRatingUpdate secPropertyUpdate) {
 		this.secPropertyUpdate = secPropertyUpdate;
 	}
 
