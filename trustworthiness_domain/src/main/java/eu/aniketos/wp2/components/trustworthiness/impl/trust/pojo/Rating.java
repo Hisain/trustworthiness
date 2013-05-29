@@ -38,6 +38,10 @@ public class Rating implements Serializable {
 	private String id;
 
 	private Service service;
+	
+	private String consumerId;
+	
+	private String transactionId;
 
 	private double score;
 
@@ -120,6 +124,39 @@ public class Rating implements Serializable {
 	 */
 	public void setService(Service service) {
 		this.service = service;
+	}
+
+	
+	/**
+	 * @return
+	 */
+	@NotNull
+	@Column(name="transaction_id")
+	public String getTransactionId() {
+		return transactionId;
+	}
+
+	/**
+	 * @param transactionId
+	 */
+	public void setTransactionId(String transaction) {
+		this.transactionId = transaction;
+	}
+
+	/**
+	 * @return
+	 */
+	@NotNull
+	@Column(name="consumer_id")
+	public String getConsumerId() {
+		return consumerId;
+	}
+
+	/**
+	 * @param consumerId
+	 */
+	public void setConsumerId(String consumerId) {
+		this.consumerId = consumerId;
 	}
 
 	/**
@@ -263,4 +300,5 @@ public class Rating implements Serializable {
 						"recency", recency).append("property", property)
 				.toString();
 	}
+
 }
