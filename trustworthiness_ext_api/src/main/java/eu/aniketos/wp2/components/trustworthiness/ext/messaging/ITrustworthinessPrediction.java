@@ -12,5 +12,5 @@ public interface ITrustworthinessPrediction {
 	 * @return Trustworthiness object
 	 * @throws Exception
 	 */
-	abstract public Trustworthiness getTrustworthiness(String serviceId) throws Exception;
+	abstract public Trustworthiness getTrustworthiness(String serviceId);
 }

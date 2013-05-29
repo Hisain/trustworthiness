@@ -15,11 +15,11 @@ public interface QosMetricsService {
 	 * @param metric Map containing an evaluation of a trustworthiness property
 	 * @throws Exception
 	 */
-	public abstract void receiveMetrics(Map<String, String> metric) throws Exception;
+	public abstract void receiveMetrics(Map<String, String> metric);
 
 	/**
 	 * @param event
 	 */
-	public abstract void processQoSMetric(TrustEvent event) throws Exception;
+	public abstract void processQoSMetric(TrustEvent event);
 	
 }
