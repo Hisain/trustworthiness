@@ -30,31 +30,36 @@ public class TrustworthinessPredictionServiceImpl implements
 	 * @see eu.aniketos.wp2.components.trustworthiness.messaging.
 	 * ITrustworthinessPrediction#getTrustworthiness(java.lang.String)
 	 */
-	public Trustworthiness getTrustworthiness(String serviceId)
-			throws Exception {
+	public Trustworthiness getTrustworthiness(String serviceId) {
 
 		if (serviceId == null) {
 			logger.warn("received serviceId is null");
-			throw new Exception("received serviceId is null");
+			throw new RuntimeException("received serviceId is null");
 
 		}
 
 		Trustworthiness trustworthiness = null;
 
-		if (serviceEntityService.isAtomic(serviceId)) {
+		try {
+			if (serviceEntityService.isAtomic(serviceId)) {
 
-			trustworthiness = trustUpdate.updateTrust(serviceId);
+				trustworthiness = trustUpdate.updateTrust(serviceId);
 
-		} else if (serviceEntityService.isComposite(serviceId)) {
+			} else if (serviceEntityService.isComposite(serviceId)) {
 
-			trustworthiness = csTrustUpdate.aggregateTrustworthiness(serviceId);
-		} else {
-			logger.warn("Could not find service in " + serviceId
-					+ " the repository.");
-			throw new Exception("Could not find service in " + serviceId
-					+ " the repository");
+				trustworthiness = csTrustUpdate
+						.aggregateTrustworthiness(serviceId);
+			} else {
+				logger.warn("Could not find service in " + serviceId
+						+ " the repository.");
+				throw new RuntimeException("Could not find service in "
+						+ serviceId + " the repository");
+			}
+		} catch (Exception e) {
+			logger.error("Exception: " + e.getMessage());
 		}
 
+		
 		return trustworthiness;
 
 	}

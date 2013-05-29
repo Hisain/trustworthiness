@@ -17,7 +17,7 @@
 	</bean>
 	
 	<bean name="reputationMetric"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.ReputationMetricsServiceImpl">
+		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.ReputationRatingServiceImpl">
 		<property name="config" ref="configService"></property>
 		<property name="ratingUpdate" ref="ratingUpdate"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>

@@ -18,11 +18,11 @@ import org.osgi.service.event.EventAdmin;
 import org.apache.commons.configuration.ConversionException;
 import org.apache.log4j.Logger;
 import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement;
-import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.AlertEventImpl;
-import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.RuleMetricEventImpl;
-import eu.aniketos.wp2.components.trustworthiness.ext.rules.model.event.TrustEvent;
+import eu.aniketos.wp2.components.trustworthiness.rules.model.event.RuleConsumerRatingEvent;
+import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.RuleConsumerRatingEventImpl;
+import eu.aniketos.wp2.components.trustworthiness.ext.rules.model.event.ConsumerRatingEvent;
 import eu.aniketos.wp2.components.trustworthiness.rules.service.RuleExecuter;
-import eu.aniketos.wp2.components.trustworthiness.rules.service.RatingUpdate;
+import eu.aniketos.wp2.components.trustworthiness.rules.service.ReputationRatingUpdate;
 import eu.aniketos.wp2.components.trustworthiness.trust.management.TrustFactory;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.RatingEntityService;
 import eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService;
@@ -33,7 +33,7 @@ import eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating;
  * @author Hisain Elshaafi (TSSG)
  * 
  */
-public class ReputationRatingUpdateImpl implements RatingUpdate {
+public class ReputationRatingUpdateImpl implements ReputationRatingUpdate {
 
 	private static Logger logger = Logger.getLogger(ReputationRatingUpdateImpl.class);
 
@@ -101,6 +101,8 @@ public class ReputationRatingUpdateImpl implements RatingUpdate {
 		 * TODO: organise with type of metric, content, names, etc
 		 */
 
+		String consumerId = event.get("consumerId");
+		String transactionId = event.get("transactionId");
 		String property = event.get("property");
 		String propertySub = property;
 		String subproperty = null;
@@ -164,19 +166,15 @@ public class ReputationRatingUpdateImpl implements RatingUpdate {
 			return;
 		}
 
-		TrustEvent ruleEvent = null;
+		RuleConsumerRatingEvent ruleEvent = null;
 
 		if (event.get("type").equalsIgnoreCase("metric")) {
 
-			ruleEvent = new RuleMetricEventImpl(serviceId, property,
+			ruleEvent = new RuleConsumerRatingEventImpl(serviceId, consumerId, transactionId, property,
 					subproperty, contractValue, type, limit, eventValue,
 					timestamp);
 
-		} else if (event.get("type").equalsIgnoreCase("alert")) {
-			ruleEvent = new AlertEventImpl(serviceId, property, subproperty,
-					contractValue, type, limit, eventValue, timestamp);
-
-		}
+		} 
 
 		String eventDescription = null;
 		if (event.containsKey("eventDescription")) {
@@ -194,7 +192,7 @@ public class ReputationRatingUpdateImpl implements RatingUpdate {
 
 	}
 
-	public void updateScore(TrustEvent event) throws Exception {
+	public void updateScore(ConsumerRatingEvent event) throws Exception {
 
 		String serviceId = event.getServiceId();
 		Atomic service = null;
@@ -209,6 +207,8 @@ public class ReputationRatingUpdateImpl implements RatingUpdate {
 		 * TODO: organise with type of metric, content, names, etc
 		 */
 
+		String consumerId = event.getConsumerId();
+		String transactionId = event.getTransactionId();
 		String property = event.getProperty();
 		String propertySub = property;
 		String subproperty = null;
@@ -221,7 +221,7 @@ public class ReputationRatingUpdateImpl implements RatingUpdate {
 
 		// TODO: should do more checking of validity of fields
 
-		String metricValue = event.getValue();
+		String eventValue = event.getValue();
 
 		String eventTimestamp = event.getTimestamp();
 		String timestamp = null;
@@ -258,7 +258,7 @@ public class ReputationRatingUpdateImpl implements RatingUpdate {
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("property=" + propertySub + ", metricValue="
-					+ metricValue + ", contractValue=" + contractValue
+					+ eventValue + ", contractValue=" + contractValue
 					+ ", type=" + type + ", limit=" + limit + ", timestamp= "
 					+ timestamp);
 		}
@@ -270,8 +270,8 @@ public class ReputationRatingUpdateImpl implements RatingUpdate {
 			return;
 		}
 
-		RuleMetricEventImpl ruleEvent = new RuleMetricEventImpl(serviceId,
-				property, subproperty, contractValue, type, limit, metricValue,
+		RuleConsumerRatingEvent ruleEvent = new RuleConsumerRatingEventImpl(serviceId, consumerId, transactionId, property,
+				subproperty, contractValue, type, limit, eventValue,
 				timestamp);
 
 		String eventDescription = event.getEventDescription();
@@ -292,13 +292,16 @@ public class ReputationRatingUpdateImpl implements RatingUpdate {
 	 * @param service
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void fireRule(TrustEvent ruleEvent, Atomic service) {
+	public void fireRule(ConsumerRatingEvent ruleEvent, Atomic service) {
 
 		List<Object> facts = new ArrayList<Object>();
 
 		facts.add(ruleEvent);
 
 		Rating rating = trustFactory.createReputationRating(service);
+		
+		rating.setConsumerId(ruleEvent.getConsumerId());
+		rating.setTransactionId(ruleEvent.getTransactionId());
 		rating.setEventDescription(ruleEvent.getEventDescription());
 
 		String serviceId = service.getId();
@@ -336,6 +339,7 @@ public class ReputationRatingUpdateImpl implements RatingUpdate {
 			rating.setScore(scoreValue);
 			rating.setRecency(Long.parseLong((String) scoreMap.get("recency")));
 			rating.setProperty((String) scoreMap.get("property"));
+			
 
 			ratingEntityService.addRating(rating);
 

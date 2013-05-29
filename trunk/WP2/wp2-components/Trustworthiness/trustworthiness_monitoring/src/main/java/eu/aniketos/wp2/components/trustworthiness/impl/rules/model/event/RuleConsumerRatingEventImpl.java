@@ -1,34 +1,40 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event;
 
-import eu.aniketos.wp2.components.trustworthiness.rules.model.event.RuleMetricEvent;
+import eu.aniketos.wp2.components.trustworthiness.rules.model.event.RuleConsumerRatingEvent;
 
 /**
  * metric events class
  * 
  * @author Hisain Elshaafi (TSSG)
- * 
+ *
  */
-public class RuleMetricEventImpl implements RuleMetricEvent {
+public class RuleConsumerRatingEventImpl implements RuleConsumerRatingEvent {
 
 	private String serviceId;
-
+	
+	private String consumerId;
+	
+	private String transactionId;
+	
 	private String property;
-
+	
 	private String subproperty;
+	
+	// new metricValue reading causing the event
+	private String metricValue;
 
-	// new value reading causing the event
-	private String value;
+// proposed value in contractValue
+		private String contractValue;
+		
+		private String type;
 
-	// proposed value in contractValue
-	private String contractValue;
-
-	private String type;
-
-	private String limit;
-
+		private String limit;
+	
 	private String timestamp;
-
+	
 	private String eventDescription;
+	
+	public RuleConsumerRatingEventImpl() {}
 	
 	/**
 	 * @param serviceId
@@ -37,75 +43,102 @@ public class RuleMetricEventImpl implements RuleMetricEvent {
 	 *            metric's trustworthiness property
 	 * @param subproperty
 	 *            subcategory of the trustworthiness property if exists
-	 * @param contractValue
-	 *            required value
-	 * @param type
-	 *            type of metric i.e. percentage, real number, etc.
-	 * @param limit
-	 *            the type of limit requirement i.e. max, min, etc
-	 * @param alertValue
+	 * @param metricValue
 	 *            actual metric value
 	 */
-	public RuleMetricEventImpl(String serviceId, String property,
-			String subproperty, String contractValue, String type,
+	public RuleConsumerRatingEventImpl(String serviceId, String consumerId, String transactionId, String property, String subproperty,  String contractValue, String type,
 			String limit, String value, String timestamp) {
-
+		
 		this.serviceId = serviceId;
+		this.consumerId = consumerId;
+		this.transactionId = transactionId;
 		this.property = property;
 		this.subproperty = subproperty;
 		this.contractValue = contractValue;
 		this.type = type;
 		this.limit = limit;
-		this.value = value;
+		this.metricValue = value;
 		this.timestamp = timestamp;
 	}
+	
+	
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEvent
-	 * #getService()
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEvent#getService()
 	 */
 	public String getServiceId() {
 		return serviceId;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEvent
-	 * #
-	 * setService(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.String
-	 * )
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEvent#setService(eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.String)
 	 */
 	public void setServiceId(String serviceId) {
 		this.serviceId = serviceId;
 	}
+	
+	public String getConsumerId() {
+		// 
+		return consumerId;
+	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEvent
-	 * #getMetricValue()
+	public void setConsumerId(String consumerId) {
+		// 
+		this.consumerId = consumerId;
+	}
+
+	public String getTransactionId() {
+		// 
+		return transactionId;
+	}
+
+	public void setTransactionId(String transactionId) {
+		// 
+		this.transactionId = transactionId;
+	}
+
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEvent#getMetricValue()
 	 */
 	public String getValue() {
-		return value;
+		return metricValue;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEvent
-	 * #setMetricValue(java.lang.String)
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEvent#setMetricValue(java.lang.String)
 	 */
 	public void setValue(String metricValue) {
-		this.value = metricValue;
+		this.metricValue = metricValue;
+	}
+	
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEvent#setProperty(java.lang.String)
+	 */
+	public void setProperty(String property) {
+		this.property = property;
 	}
 
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEvent#getProperty()
+	 */
+	public String getProperty() {
+		return property;
+	}
+
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEvent#getSubproperty()
+	 */
+	public String getSubproperty() {
+		return subproperty;
+	}
+
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEvent#setSubproperty(java.lang.String)
+	 */
+	public void setSubproperty(String subproperty) {
+		this.subproperty = subproperty;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -172,67 +205,15 @@ public class RuleMetricEventImpl implements RuleMetricEvent {
 		return limit;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEvent
-	 * #setProperty(java.lang.String)
-	 */
-	public void setProperty(String property) {
-		this.property = property;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEvent
-	 * #getProperty()
-	 */
-	public String getProperty() {
-		return property;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEvent
-	 * #getSubproperty()
-	 */
-	public String getSubproperty() {
-		return subproperty;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.MetricEvent
-	 * #setSubproperty(java.lang.String)
-	 */
-	public void setSubproperty(String subproperty) {
-		this.subproperty = subproperty;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * eu.aniketos.wp2.components.trustworthiness.rules.model.event.TrustEvent
-	 * #getTimestamp()
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.rules.model.event.TrustEvent#getTimestamp()
 	 */
 	public String getTimestamp() {
 		return timestamp;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * eu.aniketos.wp2.components.trustworthiness.rules.model.event.TrustEvent
-	 * #setTimestamp(java.lang.String)
+	/* (non-Javadoc)
+	 * @see eu.aniketos.wp2.components.trustworthiness.rules.model.event.TrustEvent#setTimestamp(java.lang.String)
 	 */
 	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
@@ -254,4 +235,8 @@ public class RuleMetricEventImpl implements RuleMetricEvent {
 		this.eventDescription = eventDescription;
 		
 	}
+
+	
+	
+	
 }
