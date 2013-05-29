@@ -69,7 +69,7 @@ public class ReputationRatingServiceImpl implements ReputationMetricsService {
 	}
 
 	public void processReputationRating(ConsumerRatingEvent event)
-			throws Exception {
+			 {
 
 		if (event == null || event.getServiceId() == null
 				|| event.getConsumerId() == null
@@ -81,12 +81,16 @@ public class ReputationRatingServiceImpl implements ReputationMetricsService {
 				|| event.getProperty().length() == 0
 				|| event.getValue().length() == 0) {
 			logger.warn("received consumer rating contains null or empty data");
-			throw new Exception(
+			throw new RuntimeException(
 					"received consumer rating contains null or empty data");
 
 		} else {
 
-			ratingUpdate.updateScore(event);
+			try {
+				ratingUpdate.updateScore(event);
+			} catch (Exception e) {
+				logger.error("Exception: " + e.getMessage());
+			}
 		}
 
 	}
