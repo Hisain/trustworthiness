@@ -2,13 +2,14 @@ package eu.aniketos.wp2.components.trustworthiness.rules.service;
 
 import java.util.Map;
 
-import eu.aniketos.wp2.components.trustworthiness.ext.rules.model.event.TrustEvent;
+import eu.aniketos.wp2.components.trustworthiness.ext.rules.model.event.ConsumerRatingEvent;
+
 
 /**
  * @author Hisain Elshaafi (TSSG)
  * triggers generation of ratings through invoking JBoss rules
  */
-public interface RatingUpdate {
+public interface ReputationRatingUpdate {
 
 	/**
 	 * @param metric
@@ -20,6 +21,6 @@ public interface RatingUpdate {
 	 * @param event
 	 * @throws Exception
 	 */
-	void updateScore(TrustEvent event) throws Exception;
+	void updateScore(ConsumerRatingEvent event) throws Exception;
 
 }
