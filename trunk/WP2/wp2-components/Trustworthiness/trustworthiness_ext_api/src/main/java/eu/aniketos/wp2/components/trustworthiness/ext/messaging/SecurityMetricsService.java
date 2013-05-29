@@ -13,6 +13,6 @@ public interface SecurityMetricsService {
 	 * @param metric Map containing an evaluation of a trustworthiness property
 	 * @throws Exception
 	 */
-	public void receiveMetrics(Map<String, String> metric) throws Exception;
+	public void receiveMetrics(Map<String, String> metric);
 	
 }

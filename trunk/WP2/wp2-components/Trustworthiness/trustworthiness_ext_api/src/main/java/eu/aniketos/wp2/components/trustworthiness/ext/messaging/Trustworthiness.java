@@ -33,7 +33,9 @@ public class Trustworthiness implements Serializable {
 	 */
 	protected double lowestComponentTrustworthinessScore = 0;
 
-	
+	/**
+	 * TODO: add status description e.g. unavailable info/experience
+	 */
 
 	/**
 	 * @return

@@ -17,5 +17,5 @@ public interface ICompositeTrustworthinessPrediction {
 	 * @return Trustworthiness object
 	 * @throws Exception
 	 */
-	abstract public Trustworthiness getCompositeTrustworthiness(String serviceId, Set<String> componentServices) throws Exception;
+	abstract public Trustworthiness getCompositeTrustworthiness(String serviceId, Set<String> componentServices);
 }
