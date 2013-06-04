@@ -6,7 +6,7 @@
 
 	
 	<osgi:reference id="serviceEntityService"
-		interface="eu.aniketos.wp2.components.trustworthiness.trust.service.ServiceEntityService" />
+		interface="eu.aniketos.trustworthiness.trust.service.ServiceEntityService" />
 
 	<osgi:reference id="alert"
 		interface="eu.aniketos.wp4.components.notification.IAlert" />
