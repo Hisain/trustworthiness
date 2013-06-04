@@ -1,4 +1,4 @@
-package eu.aniketos.wp2.components.trustworthiness.mock.trust.management.atomic;
+package eu.aniketos.wp2.components.trustworthiness.mock.test.trust.management.atomic;
 
 import java.util.HashSet;
 import java.util.Set;

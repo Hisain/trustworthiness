@@ -34,16 +34,16 @@ public class TrustworthinessEntity extends eu.aniketos.wp2.components.trustworth
 	private double qosDeviation=0;
 	private double reputationMovingWt=0;
 	private double reputationDeviation=0;
-	private double lastAlertScore=0;
+	private double lastAlertScore;
 	/**
 	 * 
 	 */
-	private double averageComponentTrustworthinessScore = 0;
+	private double averageComponentTrustworthinessScore;
 
 	/**
 	 * 
 	 */
-	private double lowestComponentTrustworthinessScore = 0;
+	private double lowestComponentTrustworthinessScore;
 
 	
 
@@ -245,7 +245,7 @@ public class TrustworthinessEntity extends eu.aniketos.wp2.components.trustworth
 	/**
 	 * @return
 	 */
-	@Column (name="avg_comp_trust", precision = 4, scale = 3)
+	@Column (name="avg_comp_trust", nullable=true, precision = 4, scale = 3)
 	public double getAverageComponentTrustworthinessScore() {
 
 		return averageComponentTrustworthinessScore;
@@ -264,7 +264,7 @@ public class TrustworthinessEntity extends eu.aniketos.wp2.components.trustworth
 	/**
 	 * @return
 	 */
-	@Column (name="lo_comp_trust", precision = 4, scale = 3)
+	@Column (name="lo_comp_trust", nullable=true, precision = 4, scale = 3)
 	public double getLowestComponentTrustworthinessScore() {
 		return lowestComponentTrustworthinessScore;
 	}
@@ -281,7 +281,7 @@ public class TrustworthinessEntity extends eu.aniketos.wp2.components.trustworth
 	/**
 	 * @return
 	 */
-	@Column (name="alert_score", precision = 4, scale = 3)
+	@Column (name="alert_score", nullable=true, precision = 4, scale = 3)
 	@NotNull
 	public double getLastAlertScore() {
 		return lastAlertScore;

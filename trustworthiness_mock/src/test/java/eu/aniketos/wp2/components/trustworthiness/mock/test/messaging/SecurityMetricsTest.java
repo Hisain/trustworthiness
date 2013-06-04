@@ -1,4 +1,4 @@
-package eu.aniketos.wp2.components.trustworthiness.mock.messaging;
+package eu.aniketos.wp2.components.trustworthiness.mock.test.messaging;
 
 import java.util.HashMap;
 import java.util.Map;

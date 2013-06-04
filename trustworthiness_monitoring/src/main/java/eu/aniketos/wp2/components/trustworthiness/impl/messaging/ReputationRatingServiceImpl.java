@@ -68,8 +68,7 @@ public class ReputationRatingServiceImpl implements ReputationMetricsService {
 		}
 	}
 
-	public void processReputationRating(ConsumerRatingEvent event)
-			 {
+	public void processReputationRating(ConsumerRatingEvent event) {
 
 		if (event == null || event.getServiceId() == null
 				|| event.getConsumerId() == null

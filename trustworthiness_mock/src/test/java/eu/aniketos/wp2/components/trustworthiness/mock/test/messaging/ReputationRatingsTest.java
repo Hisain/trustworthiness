@@ -1,4 +1,4 @@
-package eu.aniketos.wp2.components.trustworthiness.mock.messaging;
+package eu.aniketos.wp2.components.trustworthiness.mock.test.messaging;
 
 import java.util.Random;
 
@@ -9,6 +9,7 @@ import org.joda.time.format.ISODateTimeFormat;
 
 import eu.aniketos.wp2.components.trustworthiness.ext.messaging.ReputationMetricsService;
 import eu.aniketos.wp2.components.trustworthiness.ext.rules.model.event.ConsumerRatingEvent;
+import eu.aniketos.wp2.components.trustworthiness.mock.messaging.ConsumerRatingEventImpl;
 
 /**
  * @author Hisain Elshaafi (TSSG)

@@ -3,8 +3,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="serviceManagementTest"
-		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.ServiceManagementTest"
+	<bean id="serviceRegistration"
+		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.ServiceRegistration"
 		init-method="initialize">
 		<constructor-arg>
 			<ref bean="serviceManagement" />
@@ -12,7 +12,7 @@
 	</bean>
 	
 	<bean id="repTest"
-		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.ReputationRatingsTest"
+		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.ReputationRatings"
 		init-method="initialize">
 		<constructor-arg>
 			<ref bean="reputationMetric" />
@@ -20,7 +20,7 @@
 	</bean>
 	
 	<bean id="securityTest"
-		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.SecurityMetricsTest"
+		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.SecurityProperties"
 		init-method="initialize">
 		<constructor-arg>
 			<ref bean="securityMetric" />
@@ -28,7 +28,7 @@
 	</bean> 
 	
 	<bean id="qosTest"
-		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.QoSMetricsTest"
+		class="eu.aniketos.wp2.components.trustworthiness.mock.messaging.QoSMetrics"
 		init-method="initialize">
 		<constructor-arg>
 			<ref bean="qosMetric" />
@@ -37,7 +37,7 @@
 	
 	
 	<bean id="twRequestTest"
-		class="eu.aniketos.wp2.components.trustworthiness.mock.trust.management.atomic.TrustworthinessRequestTest"
+		class="eu.aniketos.wp2.components.trustworthiness.mock.trust.management.atomic.TrustworthinessRequest"
 		init-method="requestTrustworthiness">
 		<constructor-arg>
 			<ref bean="trustworthinessPredictionService" />
@@ -48,7 +48,7 @@
 	</bean> 
 	
 	<bean id="alertEventHandler"
-		class="eu.aniketos.wp2.components.trustworthiness.mock.trust.alerts.NotificationTest">
+		class="eu.aniketos.wp2.components.trustworthiness.mock.trust.alerts.Notification">
 	</bean>
 
 </beans>

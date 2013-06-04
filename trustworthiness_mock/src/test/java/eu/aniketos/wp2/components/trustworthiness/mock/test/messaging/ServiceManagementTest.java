@@ -1,4 +1,4 @@
-package eu.aniketos.wp2.components.trustworthiness.mock.messaging;
+package eu.aniketos.wp2.components.trustworthiness.mock.test.messaging;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,8 +50,7 @@ public class ServiceManagementTest {
 
 			logger.error(e.getMessage());
 		}
-		
-		
+
 		for (int i = 0; i < 1; i++) {
 			Map<String, String> serviceData = new HashMap<String, String>();
 			serviceData.put("serviceId", "");
@@ -70,8 +69,7 @@ public class ServiceManagementTest {
 
 			logger.error(e.getMessage());
 		}
-		
-		
+
 		for (int i = 0; i < 1; i++) {
 			Map<String, String> serviceData = new HashMap<String, String>();
 			serviceData.put("serviceId", "testId01");
@@ -90,7 +88,7 @@ public class ServiceManagementTest {
 
 			logger.error(e.getMessage());
 		}
-		
+
 		for (int i = 0; i < 1; i++) {
 			String serviceId = null;
 			try {
@@ -106,7 +104,7 @@ public class ServiceManagementTest {
 
 			logger.error(e.getMessage());
 		}
-		
+
 		for (int i = 0; i < 1; i++) {
 			String serviceId = "";
 			try {
@@ -122,9 +120,9 @@ public class ServiceManagementTest {
 
 			logger.error(e.getMessage());
 		}
-		
+
 		for (int i = 0; i < 1; i++) {
-			String serviceId ="testId02";
+			String serviceId = "testId02";
 			try {
 				serviceManagement.addService(serviceId);
 			} catch (Exception e) {
@@ -138,7 +136,7 @@ public class ServiceManagementTest {
 
 			logger.error(e.getMessage());
 		}
-		
+
 		for (int i = 0; i < 1; i++) {
 			String serviceId = "testId01";
 			try {
@@ -153,7 +151,8 @@ public class ServiceManagementTest {
 		} catch (InterruptedException e) {
 
 			logger.error(e.getMessage());
-		}
+		}		
+		
 	}
 
 	public ServiceManagement getServiceManagement() {

@@ -2,6 +2,7 @@ package eu.aniketos.wp2.components.trustworthiness.impl.rules.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -52,18 +53,13 @@ public class SecurityRatingUpdateImpl implements MetricRatingUpdate {
 
 	private EventAdmin eventAdmin;
 
+	Map<String, String> properties = new HashMap<String, String>();
+
 	/**
 	 * 
 	 */
+	@SuppressWarnings("unchecked")
 	public void initialize() {
-		// replaced with osgi events *whiteboard*
-		// monitorHelperService.setupObservers(this);
-
-		/*
-		 * Map<String,Rating> props = new HashMap<String,Rating>();
-		 * props.put("test", new Rating()); logger.info(eventAdmin);
-		 * eventAdmin.sendEvent(new Event("trust-event/qos", props));
-		 */
 
 		if (config.getConfig().containsKey("max_event_description_size")) {
 			try {
@@ -74,6 +70,125 @@ public class SecurityRatingUpdateImpl implements MetricRatingUpdate {
 						+ ce.getMessage());
 			}
 		}
+
+		logger.debug("check number of properties");
+		Object props = config.getConfig().getProperty("property.name");
+
+		if (props == null) {
+
+			logger.warn("No properties found");
+			
+		} else if (props instanceof Collection) {
+
+			if (logger.isDebugEnabled()) {
+				logger.debug("Number of properties: "
+						+ ((Collection<?>) props).size());
+			}
+
+			Object[] propsObjArray = ((Collection<String>) props).toArray();
+			String[] propsArray = Arrays.copyOf(propsObjArray,
+					propsObjArray.length, String[].class);
+
+			for (int i = 0; i < propsObjArray.length; i++) {
+
+				Object subprops = config.getConfig().getProperty(
+						"property(" + i + ").subproperties.subproperty.name");
+				Object subpropTypes = config.getConfig().getProperty(
+						"property(" + i + ").subproperties.subproperty.type");
+				Object subpropLimits = config.getConfig().getProperty(
+						"property(" + i + ").subproperties.subproperty.limit");
+				Object subpropValues = config.getConfig().getProperty(
+						"property(" + i + ").subproperties.subproperty.value");
+
+				if (logger.isDebugEnabled()) {
+					logger.debug("subproperties " + subprops);
+				}
+
+				String[] subpropsArray = null;
+				if (subprops instanceof Collection) {
+
+					if (logger.isDebugEnabled()) {
+						logger.debug("Number of subproperties for "
+								+ propsArray[i] + "="
+								+ ((Collection<?>) subprops).size());
+					}
+
+					Object[] subpropsObjArray = ((Collection<String>) subprops)
+							.toArray();
+					subpropsArray = Arrays.copyOf(subpropsObjArray,
+							subpropsObjArray.length, String[].class);
+
+					String[] subpropTypesArray = null;
+					if (subpropTypes instanceof Collection) {
+						Object[] subpropTypesObjArray = ((Collection<String>) subpropTypes)
+								.toArray();
+						subpropTypesArray = Arrays.copyOf(subpropTypesObjArray,
+								subpropTypesObjArray.length, String[].class);
+					}
+
+					String[] subpropLimitsArray = null;
+					if (subpropLimits instanceof Collection) {
+						Object[] subpropLimitsObjArray = ((Collection<String>) subpropLimits)
+								.toArray();
+						subpropLimitsArray = Arrays.copyOf(
+								subpropLimitsObjArray,
+								subpropLimitsObjArray.length, String[].class);
+					}
+
+					String[] subpropValuesArray = null;
+					if (subprops instanceof Collection) {
+						Object[] subpropValuesObjArray = ((Collection<String>) subpropValues)
+								.toArray();
+						subpropValuesArray = Arrays.copyOf(
+								subpropValuesObjArray,
+								subpropValuesObjArray.length, String[].class);
+					}
+
+					//
+
+					int j = 0;
+					for (String subprop : subpropsArray) {
+
+						if (logger.isDebugEnabled()) {
+							logger.debug(subprop);
+						}
+
+						properties.put(propsArray[i] + "." + subprop + ".type",
+								subpropTypesArray[j]);
+						properties.put(
+								propsArray[i] + "." + subprop + ".limit",
+								subpropLimitsArray[j]);
+						properties.put(
+								propsArray[i] + "." + subprop + ".value",
+								subpropValuesArray[j]);
+
+						if (logger.isDebugEnabled()) {
+							logger.debug("added subproperty: " + propsArray[i]
+									+ "." + subprop);
+						}
+
+						j++;
+					}
+
+				} else if (subprops != null
+						&& !(subprops instanceof Collection)) {
+
+					properties.put(propsArray[i] + "." + subprops + ".type",
+							(String) subpropTypes);
+					properties.put(propsArray[i] + "." + subprops + ".limit",
+							(String) subpropLimits);
+					properties.put(propsArray[i] + "." + subprops + ".value",
+							(String) subpropValues);
+
+					if (logger.isDebugEnabled()) {
+						logger.debug("added subproperty: " + propsArray[i]
+								+ "." + subprops);
+					}
+				}
+
+			}
+		}
+
 	}
 
 	/*
@@ -117,9 +232,13 @@ public class SecurityRatingUpdateImpl implements MetricRatingUpdate {
 		if (event.containsKey("subproperty")) {
 			subproperty = event.get("subproperty");
 			propertySub = property + "." + subproperty;
-			if (logger.isDebugEnabled()) {
-				logger.debug(property);
-			}
+
+		} else {
+			propertySub = property + "." + property;
+		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug(propertySub);
 		}
 
 		String metricValue = event.get("value");
@@ -129,10 +248,9 @@ public class SecurityRatingUpdateImpl implements MetricRatingUpdate {
 					"metric did not contain required event elements. message will be ignored.");
 		}
 
-		String contractValue = config.getConfig().getString(
-				propertySub + "[@value]");
-		String type = config.getConfig().getString(propertySub + "[@type]");
-		String limit = config.getConfig().getString(propertySub + "[@limit]");
+		String contractValue = properties.get(propertySub + ".value");
+		String type = properties.get(propertySub + ".type");
+		String limit = properties.get(propertySub + ".limit");
 
 		String eventTimestamp = event.get("timestamp");
 		String timestamp = null;
@@ -225,11 +343,17 @@ public class SecurityRatingUpdateImpl implements MetricRatingUpdate {
 		String property = event.getProperty();
 		String propertySub = property;
 		String subproperty = null;
+
 		if ((subproperty = event.getSubproperty()) != null) {
+			subproperty = event.getSubproperty();
 			propertySub = property + "." + subproperty;
-			if (logger.isDebugEnabled()) {
-				logger.debug(property);
-			}
+
+		} else {
+			propertySub = property + "." + property;
+		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug(propertySub);
 		}
 
 		String eventTimestamp = event.getTimestamp();
@@ -262,10 +386,9 @@ public class SecurityRatingUpdateImpl implements MetricRatingUpdate {
 
 		// TODO: should do some checking of validity of fields
 
-		String contractValue = config.getConfig().getString(
-				propertySub + "[@value]");
-		String type = config.getConfig().getString(propertySub + "[@type]");
-		String limit = config.getConfig().getString(propertySub + "[@limit]");
+		String contractValue = properties.get(propertySub + ".value");
+		String type = properties.get(propertySub + ".type");
+		String limit = properties.get(propertySub + ".limit");
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("property=" + propertySub + ", contractValue="
@@ -319,7 +442,6 @@ public class SecurityRatingUpdateImpl implements MetricRatingUpdate {
 		if (sec == null) {
 			sec = trustFactory.createSecPropertyRating(service);
 		}
-		
 
 		sec.setUpdateDescription(ruleEvent.getEventDescription());
 
@@ -363,8 +485,8 @@ public class SecurityRatingUpdateImpl implements MetricRatingUpdate {
 			props.put("service.id", serviceId);
 			props.put("score.id", sec.getId());
 
-			Event osgiEvent = new Event("eu/aniketos/trustworthiness/monitoring/security",
-					props);
+			Event osgiEvent = new Event(
+					"eu/aniketos/trustworthiness/monitoring/security", props);
 			eventAdmin.sendEvent(osgiEvent);
 
 			logger.debug("sent event to topic eu/aniketos/trustworthiness/monitoring/security ");
@@ -373,7 +495,6 @@ public class SecurityRatingUpdateImpl implements MetricRatingUpdate {
 			logger.warn("no score calculated from alert for " + serviceId);
 		}
 	}
-
 
 	/**
 	 * required for Spring dependency injection
