@@ -1,11 +1,11 @@
 #created on: 05-Feb-2010
-package eu.aniketos.wp2.components.trustworthiness.impl.rules
+package eu.aniketos.trustworthiness.impl.rules
 
 import java.util.Map
 
-import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.RuleMetricEventImpl
-import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.AlertEventImpl
-import eu.aniketos.wp2.components.trustworthiness.impl.rules.model.event.RuleConsumerRatingEventImpl
+import eu.aniketos.trustworthiness.impl.rules.model.event.RuleMetricEventImpl
+import eu.aniketos.trustworthiness.impl.rules.model.event.AlertEventImpl
+import eu.aniketos.trustworthiness.impl.rules.model.event.RuleConsumerRatingEventImpl
 
 
 

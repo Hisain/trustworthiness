@@ -10,7 +10,7 @@
 
 	
 	 <osgi:service ref="configService"
-		interface="eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement" />
+		interface="eu.aniketos.trustworthiness.configuration.ConfigurationManagement" />
 	
 
 </beans>

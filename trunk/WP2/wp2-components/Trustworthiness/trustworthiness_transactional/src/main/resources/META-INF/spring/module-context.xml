@@ -4,32 +4,32 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	<bean name="serviceEntityService"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.service.ServiceEntityServiceImpl">
+		class="eu.aniketos.trustworthiness.impl.trust.service.ServiceEntityServiceImpl">
 		<property name="serviceDao" ref="serviceDao"></property>
 	</bean>
 	
 	<bean name="ratingEntityService"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.service.RatingEntityServiceImpl">
+		class="eu.aniketos.trustworthiness.impl.trust.service.RatingEntityServiceImpl">
 		<property name="ratingDao" ref="ratingDao"></property>
 	</bean>
 	
 	<bean name="qosEntityService"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.service.QoSMetricEntityServiceImpl">
+		class="eu.aniketos.trustworthiness.impl.trust.service.QoSMetricEntityServiceImpl">
 		<property name="qosDao" ref="qosDao"></property>
 	</bean>
 	
 	<bean name="securityEntityService"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.service.SecurityEntityServiceImpl">
+		class="eu.aniketos.trustworthiness.impl.trust.service.SecurityEntityServiceImpl">
 		<property name="secPropertyDao" ref="secPropertyDao"></property>
 	</bean>
 	
 	<bean name="threatEntityService"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.service.ThreatEntityServiceImpl">
+		class="eu.aniketos.trustworthiness.impl.trust.service.ThreatEntityServiceImpl">
 		<property name="threatLevelDao" ref="threatLevelDao"></property>
 	</bean>
 	
 	<bean name="trustworthinessEntityService"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.service.TrustworthinessEntityServiceImpl">
+		class="eu.aniketos.trustworthiness.impl.trust.service.TrustworthinessEntityServiceImpl">
 		<constructor-arg><ref bean="trustworthinessDao"/></constructor-arg>
 	</bean>
 

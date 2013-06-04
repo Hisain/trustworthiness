@@ -6,14 +6,14 @@
 	<!-- author: Hisain Elshaafi (TSSG) -->
 	<persistence-unit name="trust" transaction-type="RESOURCE_LOCAL">
 		
-		<!-- <class>eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Service</class> -->
-		<class>eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Composite</class>
-		<class>eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Atomic</class>
-		<class>eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.Rating</class>
-		<class>eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.QoSMetric</class>
-		<class>eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.SecProperty</class>
-		<class>eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.ThreatLevel</class>
-		<class>eu.aniketos.wp2.components.trustworthiness.impl.trust.pojo.TrustworthinessEntity</class>
+		<!-- <class>eu.aniketos.trustworthiness.impl.trust.pojo.Service</class> -->
+		<class>eu.aniketos.trustworthiness.impl.trust.pojo.Composite</class>
+		<class>eu.aniketos.trustworthiness.impl.trust.pojo.Atomic</class>
+		<class>eu.aniketos.trustworthiness.impl.trust.pojo.Rating</class>
+		<class>eu.aniketos.trustworthiness.impl.trust.pojo.QoSMetric</class>
+		<class>eu.aniketos.trustworthiness.impl.trust.pojo.SecProperty</class>
+		<class>eu.aniketos.trustworthiness.impl.trust.pojo.ThreatLevel</class>
+		<class>eu.aniketos.trustworthiness.impl.trust.pojo.TrustworthinessEntity</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="hibernate.query.factory_class"
