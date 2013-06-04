@@ -21,7 +21,7 @@ public interface Message {
   /**
    * @return key of this message 
    */
-  String getMessageKey();
+  String getMessageKey(); 
   
   /**
    * objects in the context must be ordered from the least 
