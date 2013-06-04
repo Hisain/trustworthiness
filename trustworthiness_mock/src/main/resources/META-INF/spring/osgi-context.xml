@@ -5,22 +5,22 @@
                       http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd">
 
 	<osgi:reference id="trustworthinessPredictionService"
-		interface="eu.aniketos.wp2.components.trustworthiness.ext.messaging.ITrustworthinessPrediction" />
+		interface="eu.aniketos.trustworthiness.ext.messaging.ITrustworthinessPrediction" />
 
 	<osgi:reference id="reputationMetric"
-		interface="eu.aniketos.wp2.components.trustworthiness.ext.messaging.ReputationMetricsService" />
+		interface="eu.aniketos.trustworthiness.ext.messaging.ReputationMetricsService" />
 
 	<osgi:reference id="qosMetric"
-		interface="eu.aniketos.wp2.components.trustworthiness.ext.messaging.QosMetricsService" />	
+		interface="eu.aniketos.trustworthiness.ext.messaging.QosMetricsService" />	
 	
 	<osgi:reference id="securityMetric"
-		interface="eu.aniketos.wp2.components.trustworthiness.ext.messaging.SecurityMetricsService" />
+		interface="eu.aniketos.trustworthiness.ext.messaging.SecurityMetricsService" />
 
 	<osgi:reference id="serviceManagement"
-		interface="eu.aniketos.wp2.components.trustworthiness.ext.messaging.ServiceManagement" />
+		interface="eu.aniketos.trustworthiness.ext.messaging.ServiceManagement" />
 
 	<osgi:reference id="compositeTrustworthinessPredictionService"
-		interface="eu.aniketos.wp2.components.trustworthiness.ext.messaging.ICompositeTrustworthinessPrediction" />
+		interface="eu.aniketos.trustworthiness.ext.messaging.ICompositeTrustworthinessPrediction" />
 
 	<osgi:service ref="alertEventHandler" interface="org.osgi.service.event.EventHandler">
 		<osgi:service-properties>

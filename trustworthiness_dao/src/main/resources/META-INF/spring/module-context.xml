@@ -25,32 +25,32 @@
 	</bean>
 
 	<bean id="ratingDao"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.dao.RatingDaoImpl">
+		class="eu.aniketos.trustworthiness.impl.trust.dao.RatingDaoImpl">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 	
 	<bean id="qosDao"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.dao.QoSMetricDaoImpl">
+		class="eu.aniketos.trustworthiness.impl.trust.dao.QoSMetricDaoImpl">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 	
 	<bean id="secPropertyDao"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.dao.SecPropertyDaoImpl">
+		class="eu.aniketos.trustworthiness.impl.trust.dao.SecPropertyDaoImpl">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 	
 	<bean id="threatLevelDao"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.dao.ThreatLevelDaoImpl">
+		class="eu.aniketos.trustworthiness.impl.trust.dao.ThreatLevelDaoImpl">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
 	<bean id="serviceDao"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.dao.ServiceDaoImpl">
+		class="eu.aniketos.trustworthiness.impl.trust.dao.ServiceDaoImpl">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
 	<bean id="trustworthinessDao"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.trust.dao.TrustworthinessDaoImpl">
+		class="eu.aniketos.trustworthiness.impl.trust.dao.TrustworthinessDaoImpl">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 

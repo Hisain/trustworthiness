@@ -4,61 +4,61 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 		
 	<bean name="serviceManagement"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.ServiceManagementImpl">
+		class="eu.aniketos.trustworthiness.impl.messaging.ServiceManagementImpl">
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 		<property name="trustFactory" ref="trustFactory"></property>
 	</bean>
 	
 	<bean name="reputationMetric"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.ReputationRatingServiceImpl">
+		class="eu.aniketos.trustworthiness.impl.messaging.ReputationRatingServiceImpl">
 		<property name="config" ref="configService"></property>
 		<property name="ratingUpdate" ref="ratingUpdate"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 	</bean>
 	
 	<bean name="qosMetric"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.QoSMetricsServiceImpl">
+		class="eu.aniketos.trustworthiness.impl.messaging.QoSMetricsServiceImpl">
 		<property name="config" ref="configService"></property>
 		<property name="qosUpdate" ref="qosUpdate"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 	</bean>
 		
 	<bean name="securityMetric"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.SecurityMetricsServiceImpl">
+		class="eu.aniketos.trustworthiness.impl.messaging.SecurityMetricsServiceImpl">
 		<property name="config" ref="configService"></property>
 		<property name="secPropertyUpdate" ref="secPropertyUpdate"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 	</bean>
 	
 	<bean name="notification"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.NotificationServiceImpl">
+		class="eu.aniketos.trustworthiness.impl.messaging.NotificationServiceImpl">
 		<property name="trustFactory" ref="trustFactory"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 	</bean>
 
 	<bean name="reportFactory"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.rules.service.ReportFactoryImpl">
+		class="eu.aniketos.trustworthiness.impl.rules.service.ReportFactoryImpl">
 	</bean>
 
 	<bean name="knowledgeBaseFactory"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.rules.model.KnowledgeBaseFactoryService" init-method="create">
+		class="eu.aniketos.trustworthiness.impl.rules.model.KnowledgeBaseFactoryService" init-method="create">
 	</bean>
 
 	<bean name="sessionLookup"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.rules.persistence.JPAKnowledgeSessionLookup" init-method="init">
+		class="eu.aniketos.trustworthiness.impl.rules.persistence.JPAKnowledgeSessionLookup" init-method="init">
 		<constructor-arg>
 			<ref bean="knowledgeBaseFactory" />
 		</constructor-arg>
 	</bean>
 
 	<bean name="ruleExecutor"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.rules.service.RuleExecuterImpl">
+		class="eu.aniketos.trustworthiness.impl.rules.service.RuleExecuterImpl">
 		<property name="reportFactory" ref="reportFactory"></property>
 		<property name="sessionLookup" ref="sessionLookup"></property>
 	</bean>
 
 	<bean name="ratingUpdate"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.rules.service.ReputationRatingUpdateImpl"
+		class="eu.aniketos.trustworthiness.impl.rules.service.ReputationRatingUpdateImpl"
 		init-method="initialize">
 		<property name="config" ref="configService"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
@@ -69,7 +69,7 @@
 	</bean>
 	
 	<bean name="qosUpdate"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.rules.service.QosRatingUpdateImpl"
+		class="eu.aniketos.trustworthiness.impl.rules.service.QosRatingUpdateImpl"
 		init-method="initialize">
 		<property name="config" ref="configService"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
@@ -80,7 +80,7 @@
 	</bean>
 	
 	<bean name="secPropertyUpdate"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.rules.service.SecurityRatingUpdateImpl"
+		class="eu.aniketos.trustworthiness.impl.rules.service.SecurityRatingUpdateImpl"
 		init-method="initialize">
 		<property name="config" ref="configService"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
@@ -91,7 +91,7 @@
 	</bean>
 
 	<!-- <bean name="qosMetricJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-		<property name="jobClass" value="eu.aniketos.wp2.components.trustworthiness.impl.messaging.QoSMetricsScheduler" />
+		<property name="jobClass" value="eu.aniketos.trustworthiness.impl.messaging.QoSMetricsScheduler" />
 		<property name="jobDataAsMap">
 			<map>
 				<entry key="timeout" value="60" />
@@ -100,5 +100,5 @@
 	</bean> -->
 	
 	<bean id="dummy"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.service.StatusServiceImpl" init-method="initialize"/>
+		class="eu.aniketos.trustworthiness.impl.messaging.service.StatusServiceImpl" init-method="initialize"/>
 </beans>

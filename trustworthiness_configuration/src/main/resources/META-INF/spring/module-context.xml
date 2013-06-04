@@ -9,7 +9,7 @@
 	</bean>
 
 	<bean id="configService"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.configuration.ConfigurationService">
+		class="eu.aniketos.trustworthiness.impl.configuration.ConfigurationService">
 		<!-- <property name="logger" ref="log4jLogger"></property> -->
 		<property name="configBuilder" ref="configBuilder"></property>
 	</bean>

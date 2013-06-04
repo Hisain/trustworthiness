@@ -13,22 +13,22 @@
 		context-class-loader="service-provider"/>
 
 	<osgi:service ref="serviceDao"
-		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.ServiceDao" 
+		interface="eu.aniketos.trustworthiness.trust.dao.ServiceDao" 
 		context-class-loader="service-provider"/>
 
 	<osgi:service ref="ratingDao"
-		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.RatingDao" />
+		interface="eu.aniketos.trustworthiness.trust.dao.RatingDao" />
 		
 	<osgi:service ref="secPropertyDao"
-		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.SecPropertyDao" />
+		interface="eu.aniketos.trustworthiness.trust.dao.SecPropertyDao" />
 
 	<osgi:service ref="qosDao"
-		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.QoSMetricDao" />
+		interface="eu.aniketos.trustworthiness.trust.dao.QoSMetricDao" />
 		
 	<osgi:service ref="threatLevelDao"
-		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.ThreatLevelDao" />
+		interface="eu.aniketos.trustworthiness.trust.dao.ThreatLevelDao" />
 		
 	<osgi:service ref="trustworthinessDao"
-		interface="eu.aniketos.wp2.components.trustworthiness.trust.dao.TrustworthinessDao" />
+		interface="eu.aniketos.trustworthiness.trust.dao.TrustworthinessDao" />
 		
 </beans>
