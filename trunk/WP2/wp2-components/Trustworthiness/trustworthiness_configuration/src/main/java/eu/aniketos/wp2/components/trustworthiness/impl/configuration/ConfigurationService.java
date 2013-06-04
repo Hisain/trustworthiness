@@ -9,42 +9,53 @@ import eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationMan
 
 /**
  * @author Hisain Elshaafi (TSSG)
- *
+ * 
  */
 public class ConfigurationService implements ConfigurationManagement {
-	
+
 	private static Logger logger = Logger.getLogger(ConfigurationService.class);
-	
+
 	private ConfigurationBuilder configBuilder = null;
 
-	
-	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement#getConfig()
+	private static Configuration config = null;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.configuration.
+	 * ConfigurationManagement#getConfig()
 	 */
-	public Configuration getConfig(){
-		Configuration config = null;
-		try {
-			config = configBuilder.getConfiguration();
-		} catch (ConfigurationException e) {
-			logger.error(e.getMessage());
+	public Configuration getConfig() {
+		
+		if (config == null) {
+			try {
+				config = configBuilder.getConfiguration();
+			} catch (ConfigurationException e) {
+				logger.error(e.getMessage());
+			}
 		}
 		return config;
 	}
-	
-	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement#getConfigBuilder()
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.configuration.
+	 * ConfigurationManagement#getConfigBuilder()
 	 */
-	public ConfigurationBuilder getConfigBuilder(){
+	public ConfigurationBuilder getConfigBuilder() {
 		return configBuilder;
 	}
-	
-	/* (non-Javadoc)
-	 * @see eu.aniketos.wp2.components.trustworthiness.configuration.ConfigurationManagement#setConfigBuilder(org.apache.commons.configuration.ConfigurationBuilder)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.wp2.components.trustworthiness.configuration.
+	 * ConfigurationManagement
+	 * #setConfigBuilder(org.apache.commons.configuration.ConfigurationBuilder)
 	 */
 	public void setConfigBuilder(ConfigurationBuilder configBuilder) {
 		this.configBuilder = configBuilder;
 	}
-	
-	
-	
+
 }

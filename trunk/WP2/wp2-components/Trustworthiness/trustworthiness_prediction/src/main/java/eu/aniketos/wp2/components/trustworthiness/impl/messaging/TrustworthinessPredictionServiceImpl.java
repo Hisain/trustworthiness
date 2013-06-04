@@ -50,10 +50,10 @@ public class TrustworthinessPredictionServiceImpl implements
 				trustworthiness = csTrustUpdate
 						.aggregateTrustworthiness(serviceId);
 			} else {
-				logger.warn("Could not find service in " + serviceId
-						+ " the repository.");
-				throw new RuntimeException("Could not find service in "
-						+ serviceId + " the repository");
+				logger.warn("Could not find service " + serviceId
+						+ " in the repository.");
+				throw new RuntimeException("Could not find service "
+						+ serviceId + " in the repository");
 			}
 		} catch (Exception e) {
 			logger.error("Exception: " + e.getMessage());

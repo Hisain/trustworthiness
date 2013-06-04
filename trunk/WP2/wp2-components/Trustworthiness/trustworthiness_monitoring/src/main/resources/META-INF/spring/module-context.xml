@@ -9,13 +9,6 @@
 		<property name="trustFactory" ref="trustFactory"></property>
 	</bean>
 	
-	<bean name="qosMetric"
-		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.QoSMetricsServiceImpl">
-		<property name="config" ref="configService"></property>
-		<property name="qosUpdate" ref="qosUpdate"></property>
-		<property name="serviceEntityService" ref="serviceEntityService"></property>
-	</bean>
-	
 	<bean name="reputationMetric"
 		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.ReputationRatingServiceImpl">
 		<property name="config" ref="configService"></property>
@@ -23,6 +16,13 @@
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 	</bean>
 	
+	<bean name="qosMetric"
+		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.QoSMetricsServiceImpl">
+		<property name="config" ref="configService"></property>
+		<property name="qosUpdate" ref="qosUpdate"></property>
+		<property name="serviceEntityService" ref="serviceEntityService"></property>
+	</bean>
+		
 	<bean name="securityMetric"
 		class="eu.aniketos.wp2.components.trustworthiness.impl.messaging.SecurityMetricsServiceImpl">
 		<property name="config" ref="configService"></property>

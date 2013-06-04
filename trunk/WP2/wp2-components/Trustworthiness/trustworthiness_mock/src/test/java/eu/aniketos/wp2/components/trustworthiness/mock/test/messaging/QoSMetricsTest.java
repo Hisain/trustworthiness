@@ -1,4 +1,4 @@
-package eu.aniketos.wp2.components.trustworthiness.mock.messaging;
+package eu.aniketos.wp2.components.trustworthiness.mock.test.messaging;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import eu.aniketos.wp2.components.trustworthiness.ext.messaging.QosMetricsService;
 import eu.aniketos.wp2.components.trustworthiness.ext.rules.model.event.TrustEvent;
+import eu.aniketos.wp2.components.trustworthiness.mock.messaging.MetricEventImpl;
 
 /**
  * @author Hisain Elshaafi (TSSG)

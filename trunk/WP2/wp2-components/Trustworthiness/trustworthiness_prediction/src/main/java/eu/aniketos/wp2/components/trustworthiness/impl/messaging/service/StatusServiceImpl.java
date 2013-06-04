@@ -16,7 +16,7 @@ public class StatusServiceImpl implements StatusService {
 	 * displays a simple status message
 	 */
 	public StatusServiceImpl(){
-		System.out.println("TrustworthinessEntity Prediction started.");
+		System.out.println("Trustworthiness Prediction started.");
 	}
 	
 	/* (non-Javadoc)

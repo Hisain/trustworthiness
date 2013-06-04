@@ -1,6 +1,8 @@
 package eu.aniketos.wp2.components.trustworthiness.impl.trust.management.atomic;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -203,9 +205,28 @@ public class ServiceTrustUpdateRecursiveImpl implements
 		 * = 1; } }
 		 */
 
-		String[] properties = config.getConfig().getStringArray("properties");
+		Object properties = config.getConfig().getProperty("property.name");
+		String[] propsArray = {};
+		
+		if (properties == null) {
 
-		for (String property : properties) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("No properties found");
+			}
+
+		} else if (properties instanceof Collection) {
+
+			if (logger.isDebugEnabled()) {
+				logger.debug("Number of properties: "
+						+ ((Collection<?>) properties).size());
+			}
+
+			Object[] propsObjArray = ((Collection<String>) properties).toArray();
+			propsArray = Arrays.copyOf(propsObjArray,
+					propsObjArray.length, String[].class);
+		}
+
+		for (String property : propsArray) {
 
 			double propertyWt = config.getConfig().getDouble(property);
 			logger.info("property " + property + " weight=" + propertyWt);
@@ -480,7 +501,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 				scoreWt = serviceScore.getScoreWt() / repTotalScoreWt;
 
 			} else {
-				logger.error("total property weight=" + repTotalScoreWt);
+				logger.warn("total property weight=" + repTotalScoreWt);
 			}
 
 			/*
@@ -537,7 +558,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 			}
 
 		} else {
-			logger.error("total weight was 0 or less.");
+			logger.warn("total weight was 0 or less.");
 		}
 
 		repConfidence = dConfidence * nConfidence;
@@ -657,7 +678,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 				scoreWt = serviceScore.getScoreWt() / totalScoreWt;
 
 			} else {
-				logger.error("total property weight=" + totalScoreWt);
+				logger.warn("total property weight=" + totalScoreWt);
 			}
 
 			/*
@@ -713,7 +734,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 			}
 
 		} else {
-			logger.error("total weight was 0 or less.");
+			logger.warn("total weight was 0 or less.");
 		}
 
 		qosConfidence = dConfidence * nConfidence;

@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 
 import org.apache.log4j.Logger;
-import org.springframework.dao.DataAccessException;
 import org.springframework.orm.jpa.support.JpaDaoSupport;
 
 import eu.aniketos.wp2.components.trustworthiness.trust.dao.ServiceDao;
@@ -269,38 +268,67 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 
 	public boolean isComposite(String serviceId) {
 
+		Composite service = null;
+		boolean exists = false;
+		
 		try {
-
-			boolean exists = getJpaTemplate().contains(new Composite(serviceId));
 			
-			if (logger.isDebugEnabled()){
-				logger.debug("composite service " + serviceId + "  exists " + exists);
-			}
-			return exists;
+			logger.debug("getComposite: attempting to retrieve composite service "
+					+ serviceId);
+			
+			service = (Composite) getJpaTemplate().getReference(
+					Composite.class, serviceId);
+			getJpaTemplate().flush();
 
-		} catch (DataAccessException e) {
+		} catch (EntityNotFoundException enf) {
+			logger.warn("isComposite: " + enf.getMessage());
 
+		} catch (Exception e) {
 			logger.error("isComposite: " + e.getMessage());
-			return false;
 		}
+		if (service != null) {
+			
+			exists = true;
+			
+			if (logger.isDebugEnabled()) {
+				logger.debug("isComposite: found service: " + serviceId);
+			}
+		} else {
+			logger.debug("isComposite: service " + serviceId + " not found");
+		}
+		
+		return exists;
 	}
 
 	public boolean isAtomic(String serviceId) {
 
+		Atomic service = null;
+		boolean exists = false;
+		
 		try {
 
-			boolean exists = getJpaTemplate().contains(new Atomic(serviceId));
-			
-			if (logger.isDebugEnabled()){
-				logger.debug("atomic service " + serviceId + "  exists " + exists);
-			}
-			return exists;
+			// service = (Atomic)
+			// getJpaTemplate().find("Select a from Service a where a.id='"+id+"'");
+			service = (Atomic) getJpaTemplate().getReference(Atomic.class, serviceId);
+			getJpaTemplate().flush();
 
-		} catch (DataAccessException e) {
+		} catch (EntityNotFoundException enf) {
+			logger.warn("isAtomic: " + enf.getMessage());
+		} catch (Exception e) {
 
 			logger.error("isAtomic: " + e.getMessage());
-			return false;
 		}
+		if (service != null) {
+			
+			exists = true;
+			
+			if (logger.isDebugEnabled()) {
+				logger.debug("isAtomic: found service: " + serviceId);
+			}
+		} else {
+			logger.debug("isAtomic: service " + serviceId + " not found");
+		}
+		return exists;
 
 	}
 

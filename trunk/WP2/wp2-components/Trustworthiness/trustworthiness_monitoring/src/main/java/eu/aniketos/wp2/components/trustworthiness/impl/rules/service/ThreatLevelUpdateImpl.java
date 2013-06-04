@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
 //import java.util.Iterator;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -52,19 +55,13 @@ public class ThreatLevelUpdateImpl implements MetricRatingUpdate {
 
 	private EventAdmin eventAdmin;
 
+	Map <String, String> properties = new HashMap<String, String>();
+	
 	/**
 	 * 
 	 */
-	public void initialize() {
-		// replaced with osgi events *whiteboard*
-		// monitorHelperService.setupObservers(this);
-
-		/*
-		 * Map<String,Rating> props = new HashMap<String,Rating>();
-		 * props.put("test", new Rating()); logger.info(eventAdmin);
-		 * eventAdmin.sendEvent(new Event("trust-event/qos", props));
-		 */
-
+public void initialize() {
+		
 		if (config.getConfig().containsKey("max_event_description_size")) {
 			try {
 				maxDescriptionSize = config.getConfig().getInt(
@@ -74,6 +71,128 @@ public class ThreatLevelUpdateImpl implements MetricRatingUpdate {
 						+ ce.getMessage());
 			}
 		}
+
+		logger.debug("check number of properties");
+		Object props = config.getConfig().getProperty("property.name");
+
+		
+		if (props == null) {
+
+			if (logger.isDebugEnabled()) {
+				logger.debug("No properties found");
+			}
+
+		} else if (props instanceof Collection) {
+
+			if (logger.isDebugEnabled()) {
+				logger.debug("Number of properties: "
+						+ ((Collection<?>) props).size());
+			}
+
+			Object[] propsObjArray = ((Collection<String>) props).toArray();
+			String[] propsArray = Arrays.copyOf(propsObjArray,
+					propsObjArray.length, String[].class);
+
+			for (int i = 0; i < propsObjArray.length; i++) {
+
+				Object subprops = config.getConfig().getProperty(
+						"property(" + i + ").subproperties.subproperty.name");
+				Object subpropTypes = config.getConfig().getProperty(
+						"property(" + i + ").subproperties.subproperty.type");
+				Object subpropLimits = config.getConfig().getProperty(
+						"property(" + i + ").subproperties.subproperty.limit");
+				Object subpropValues = config.getConfig().getProperty(
+						"property(" + i + ").subproperties.subproperty.value");
+
+				if (logger.isDebugEnabled()) {
+					logger.debug("subproperties " + subprops);
+				}
+
+				
+				String[] subpropsArray = null;
+				if (subprops instanceof Collection) {
+
+					if (logger.isDebugEnabled()) {
+						logger.debug("Number of subproperties for "
+								+ propsArray[i] + "="
+								+ ((Collection<?>) subprops).size());
+					}
+
+					Object[] subpropsObjArray = ((Collection<String>) subprops)
+							.toArray();
+					subpropsArray = Arrays.copyOf(subpropsObjArray,
+							subpropsObjArray.length, String[].class);
+
+					String[] subpropTypesArray = null;
+					if (subpropTypes instanceof Collection) {
+						Object[] subpropTypesObjArray = ((Collection<String>) subpropTypes)
+								.toArray();
+						subpropTypesArray = Arrays.copyOf(subpropTypesObjArray,
+								subpropTypesObjArray.length, String[].class);
+					}
+
+					String[] subpropLimitsArray = null;
+					if (subpropLimits instanceof Collection) {
+						Object[] subpropLimitsObjArray = ((Collection<String>) subpropLimits)
+								.toArray();
+						subpropLimitsArray = Arrays.copyOf(
+								subpropLimitsObjArray,
+								subpropLimitsObjArray.length, String[].class);
+					}
+
+					String[] subpropValuesArray = null;
+					if (subprops instanceof Collection) {
+						Object[] subpropValuesObjArray = ((Collection<String>) subpropValues)
+								.toArray();
+						subpropValuesArray = Arrays.copyOf(
+								subpropValuesObjArray,
+								subpropValuesObjArray.length, String[].class);
+					}
+
+					//
+
+					int j = 0;
+					for (String subprop : subpropsArray) {
+
+						if (logger.isDebugEnabled()) {
+							logger.debug(subprop);
+						}
+
+						properties.put(propsArray[i] + "." + subprop + ".type",
+								subpropTypesArray[j]);
+						properties.put(
+								propsArray[i] + "." + subprop + ".limit",
+								subpropLimitsArray[j]);
+						properties.put(
+								propsArray[i] + "." + subprop + ".value",
+								subpropValuesArray[j]);
+
+						if (logger.isDebugEnabled()) {
+							logger.debug("added subproperty: " + propsArray[i]
+									+ "." + subprop);
+						}
+
+						j++;
+					}
+
+				} else if (subprops != null
+						&& !(subprops instanceof Collection)) {
+
+					properties.put(propsArray[i] + "." + subprops + ".type",
+							(String) subpropTypes);
+					properties.put(propsArray[i] + "." + subprops + ".limit",
+							(String) subpropLimits);
+					properties.put(propsArray[i] + "." + subprops + ".value",
+							(String) subpropValues);
+
+					if (logger.isDebugEnabled()) {
+						logger.debug("added subproperty: " + propsArray[i]
+								+ "." + subprops);
+					}
+				}
+			}
+		}
+
 	}
 
 	/*
@@ -117,9 +236,13 @@ public class ThreatLevelUpdateImpl implements MetricRatingUpdate {
 		if (event.containsKey("subproperty")) {
 			subproperty = event.get("subproperty");
 			propertySub = property + "." + subproperty;
-			if (logger.isDebugEnabled()) {
-				logger.debug(property);
-			}
+
+		} else {
+			propertySub = property + "." + property;
+		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug(propertySub);
 		}
 
 		String metricValue = event.get("value");
@@ -129,10 +252,10 @@ public class ThreatLevelUpdateImpl implements MetricRatingUpdate {
 					"metric did not contain required event elements. message will be ignored.");
 		}
 
-		String contractValue = config.getConfig().getString(
-				propertySub + "[@value]");
-		String type = config.getConfig().getString(propertySub + "[@type]");
-		String limit = config.getConfig().getString(propertySub + "[@limit]");
+		String contractValue = properties.get(
+				propertySub + ".value");
+		String type = properties.get(propertySub + ".type");
+		String limit = properties.get(propertySub + ".limit");
 
 		String eventTimestamp = event.get("timestamp");
 		String timestamp = null;
@@ -227,9 +350,13 @@ public class ThreatLevelUpdateImpl implements MetricRatingUpdate {
 		String subproperty = null;
 		if ((subproperty = event.getSubproperty()) != null) {
 			propertySub = property + "." + subproperty;
-			if (logger.isDebugEnabled()) {
-				logger.debug(property);
-			}
+
+		} else {
+			propertySub = property + "." + property;
+		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug(propertySub);
 		}
 
 		String eventTimestamp = event.getTimestamp();
@@ -262,10 +389,10 @@ public class ThreatLevelUpdateImpl implements MetricRatingUpdate {
 
 		// TODO: should do some checking of validity of fields
 
-		String contractValue = config.getConfig().getString(
-				propertySub + "[@value]");
-		String type = config.getConfig().getString(propertySub + "[@type]");
-		String limit = config.getConfig().getString(propertySub + "[@limit]");
+		String contractValue = properties.get(
+				propertySub + ".value");
+		String type = properties.get(propertySub + ".type");
+		String limit = properties.get(propertySub + ".limit");
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("property=" + propertySub + ", contractValue="
