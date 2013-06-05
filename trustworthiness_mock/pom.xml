@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>eu.aniketos.wp2.components.trustworthiness</groupId>
+	<groupId>eu.aniketos.trustworthiness</groupId>
 	<artifactId>trustworthiness-mock</artifactId>
 	<packaging>bundle</packaging>
 	<name>Aniketos Mock Bundle</name>
@@ -21,7 +21,7 @@
 			org.osgi.framework;version="1.3.0",*
 		</bundle.import.package>
 		<bundle.private.package>
-			eu.aniketos.wp2.components.trustworthiness.mock.*
+			eu.aniketos.trustworthiness.mock.*
 		</bundle.private.package>
 		<bundle.export.package>
 		</bundle.export.package>
@@ -110,19 +110,19 @@
 			<version>1.6.0</version>
 		</dependency>
 		<dependency>
-			<groupId>eu.aniketos.wp2.components.trustworthiness</groupId>
+			<groupId>eu.aniketos.trustworthiness</groupId>
 			<artifactId>trustworthiness-api</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>eu.aniketos.wp2.components.trustworthiness</groupId>
+			<groupId>eu.aniketos.trustworthiness</groupId>
 			<artifactId>trustworthiness-domain</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 
 
 		<dependency>
-			<groupId>eu.aniketos.wp2.components.trustworthiness</groupId>
+			<groupId>eu.aniketos.trustworthiness</groupId>
 			<artifactId>trustworthiness-ext-api</artifactId>
 			<version>1.0.0</version>
 			<type>bundle</type>
