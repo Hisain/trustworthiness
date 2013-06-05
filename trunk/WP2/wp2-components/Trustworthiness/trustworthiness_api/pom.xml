@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>eu.aniketos.wp2.components.trustworthiness</groupId>
+	<groupId>eu.aniketos.trustworthiness</groupId>
 	<artifactId>trustworthiness-api</artifactId>
 	<packaging>bundle</packaging>
 	<name>Aniketos Trustworthiness API Bundle</name>
@@ -24,7 +24,7 @@
 		<bundle.private.package>
 		</bundle.private.package>
 		<bundle.export.package>
-			eu.aniketos.wp2.components.trustworthiness.*
+			eu.aniketos.trustworthiness.*
 		</bundle.export.package>
 	</properties>
 
@@ -47,13 +47,13 @@
 		</dependency>	
 		
 		<dependency>
-			<groupId>eu.aniketos.wp2.components.trustworthiness</groupId>
+			<groupId>eu.aniketos.trustworthiness</groupId>
 			<artifactId>trustworthiness-domain</artifactId>
 			<version>1.0.0</version>
 		</dependency>	
 		
 		<dependency>
-			<groupId>eu.aniketos.wp2.components.trustworthiness</groupId>
+			<groupId>eu.aniketos.trustworthiness</groupId>
 			<artifactId>trustworthiness-ext-api</artifactId>
 			<version>1.0.0</version>
 		</dependency>	
