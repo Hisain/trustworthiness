@@ -17,7 +17,6 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 
 import org.apache.commons.configuration.ConversionException;
-import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.log4j.Logger;
 
 import eu.aniketos.trustworthiness.configuration.ConfigurationManagement;

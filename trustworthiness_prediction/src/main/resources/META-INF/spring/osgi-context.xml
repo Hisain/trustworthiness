@@ -34,19 +34,19 @@
 		interface="eu.aniketos.trustworthiness.trust.management.TrustFactory" />
 
 	<osgi:service ref="trustworthinessPredictionService"
-		interface="eu.aniketos.trustworthiness.ext.messaging.ITrustworthinessPrediction">
-        <osgi:service-properties>
-            <entry key="service.exported.interfaces" value="*" />
-        </osgi:service-properties>
+			interface="eu.aniketos.trustworthiness.ext.messaging.ITrustworthinessPrediction">
+	        <osgi:service-properties>
+	            <entry key="service.exported.interfaces" value="*" />
+	        </osgi:service-properties>
+	    </osgi:service>
+	
+		<osgi:service ref="compositeTrustworthinessPredictionService"
+			interface="eu.aniketos.trustworthiness.ext.messaging.ICompositeTrustworthinessPrediction">
+	        <osgi:service-properties>
+	            <entry key="service.exported.interfaces" value="*" />
+	        </osgi:service-properties>        
     </osgi:service>
-
-	<osgi:service ref="compositeTrustworthinessPredictionService"
-		interface="eu.aniketos.trustworthiness.ext.messaging.ICompositeTrustworthinessPrediction">
-        <osgi:service-properties>
-            <entry key="service.exported.interfaces" value="*" />
-        </osgi:service-properties>        
-    </osgi:service>
-
+    
 	<osgi:reference id="transactionManager"
 		interface="org.springframework.transaction.PlatformTransactionManager" />
 	<tx:annotation-driven transaction-manager="transactionManager" />

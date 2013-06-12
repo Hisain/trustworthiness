@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="serviceRegistration"
+	<bean id="serviceRegistrationMock"
 		class="eu.aniketos.trustworthiness.mock.messaging.ServiceRegistration"
 		init-method="initialize">
 		<constructor-arg>
@@ -11,7 +11,7 @@
 		</constructor-arg>
 	</bean>
 	
-	<bean id="repTest"
+	<bean id="repMock"
 		class="eu.aniketos.trustworthiness.mock.messaging.ReputationRatings"
 		init-method="initialize">
 		<constructor-arg>
@@ -19,7 +19,7 @@
 		</constructor-arg>
 	</bean>
 	
-	<bean id="securityTest"
+	<bean id="securityMock"
 		class="eu.aniketos.trustworthiness.mock.messaging.SecurityProperties"
 		init-method="initialize">
 		<constructor-arg>
@@ -36,8 +36,8 @@
 	</bean>
 	
 	
-	<bean id="twRequestTest"
-		class="eu.aniketos.trustworthiness.mock.trust.management.atomic.TrustworthinessRequest"
+	<bean id="twRequestMock"
+		class="eu.aniketos.trustworthiness.mock.trust.management.TrustworthinessRequest"
 		init-method="requestTrustworthiness">
 		<constructor-arg>
 			<ref bean="trustworthinessPredictionService" />

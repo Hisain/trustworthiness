@@ -28,6 +28,13 @@ public interface TrustFactory {
 	 * @return
 	 */
 	public abstract Composite createComposite(String serviceId);
+	
+	/**
+	 * @param serviceId
+	 *            String service id
+	 * @return
+	 */
+	public abstract Composite createTransientComposite();
 
 	/**
 	 * @param service

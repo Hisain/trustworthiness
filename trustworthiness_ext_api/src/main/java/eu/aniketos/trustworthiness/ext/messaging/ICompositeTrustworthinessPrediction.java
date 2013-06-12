@@ -2,7 +2,7 @@ package eu.aniketos.trustworthiness.ext.messaging;
 
 import java.util.Set;
 
-
+import eu.aniketos.data.ICompositionPlan;
 
 
 /**
@@ -18,4 +18,6 @@ public interface ICompositeTrustworthinessPrediction {
 	 * @throws Exception
 	 */
 	abstract public Trustworthiness getCompositeTrustworthiness(String serviceId, Set<String> componentServices);
+	
+	abstract public Trustworthiness getCompositeTrustworthiness(ICompositionPlan plan);
 }

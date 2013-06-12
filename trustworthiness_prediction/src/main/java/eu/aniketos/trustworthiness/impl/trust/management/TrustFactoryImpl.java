@@ -21,8 +21,7 @@ public class TrustFactoryImpl implements TrustFactory {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * eu.aniketos.trustworthiness.trust.management.TrustFactory
+	 * @see eu.aniketos.trustworthiness.trust.management.TrustFactory
 	 * #createService(java.lang.String)
 	 */
 	public Atomic createService(String serviceId) {
@@ -34,10 +33,8 @@ public class TrustFactoryImpl implements TrustFactory {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * eu.aniketos.trustworthiness.trust.management.TrustFactory
-	 * #createRating
-	 * (eu.aniketos.trustworthiness.impl.trust.pojo.Service)
+	 * @see eu.aniketos.trustworthiness.trust.management.TrustFactory
+	 * #createRating (eu.aniketos.trustworthiness.impl.trust.pojo.Service)
 	 */
 	public Rating createReputationRating(Service service) {
 		Rating rating = new Rating();
@@ -51,17 +48,25 @@ public class TrustFactoryImpl implements TrustFactory {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * eu.aniketos.trustworthiness.trust.management.TrustFactory
+	 * @see eu.aniketos.trustworthiness.trust.management.TrustFactory
 	 * #createComposite(java.lang.String)
 	 */
 	public Composite createComposite(String serviceId) {
+		
 		Composite service = new Composite(serviceId);
 
 		return service;
 	}
 
+	public Composite createTransientComposite() {
+
+		Composite service = new Composite();
+		service.setId(UUID.randomUUID().toString());
+		return service;
+	}
+
 	public SecProperty createSecPropertyRating(Service service) {
+		
 		SecProperty sec = new SecProperty();
 		sec.setService(service);
 		sec.setId(UUID.randomUUID().toString());
@@ -69,6 +74,7 @@ public class TrustFactoryImpl implements TrustFactory {
 	}
 
 	public QoSMetric createQoSRating(Service service) {
+		
 		QoSMetric metric = new QoSMetric();
 		metric.setService(service);
 		// id should be shared with member table
@@ -85,8 +91,9 @@ public class TrustFactoryImpl implements TrustFactory {
 
 		return threatLevel;
 	}
-	
+
 	public TrustworthinessEntity createTrustworthiness(String serviceId) {
+		
 		TrustworthinessEntity trustworthinessEntity = new TrustworthinessEntity();
 		trustworthinessEntity.setId(serviceId);
 
