@@ -1,4 +1,4 @@
-package eu.aniketos.trustworthiness.mock.trust.management.atomic;
+package eu.aniketos.trustworthiness.mock.trust.management;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
+import eu.aniketos.data.ICompositionPlan;
 import eu.aniketos.trustworthiness.ext.messaging.ICompositeTrustworthinessPrediction;
 import eu.aniketos.trustworthiness.ext.messaging.ITrustworthinessPrediction;
 import eu.aniketos.trustworthiness.ext.messaging.Trustworthiness;
@@ -56,8 +57,36 @@ public class TrustworthinessRequest {
 			Trustworthiness trustworthiness = twPrediction.getTrustworthiness(line);
 
 			if (logger.isDebugEnabled()) {
-				logger.debug("recevied trustworthiness for service: " + serviceId + "=" + trustworthiness);
+				logger.debug("received trustworthiness for service: " + serviceId + "=" + trustworthiness);
 			}
+		}
+		
+		//////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\
+		
+		Scanner scanner2 = null;
+		try {
+			scanner2 = new Scanner(new File("data\\cs_example.xml"));
+
+		} catch (FileNotFoundException e) {
+			logger.error(e.getMessage());
+		}
+		
+		String xml = "";
+		
+		while (scanner2 != null && scanner2.hasNext()) {
+			
+			String line = scanner2.nextLine();
+
+			xml = xml.concat(line + "\n");
+		
+		}
+		
+		ICompositionPlan plan = new CompositionPlan(xml);
+		
+		Trustworthiness trustworthiness = ctwPrediction.getCompositeTrustworthiness(plan);
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("received trustworthiness for composite service =" + trustworthiness);
 		}
 	}
 }

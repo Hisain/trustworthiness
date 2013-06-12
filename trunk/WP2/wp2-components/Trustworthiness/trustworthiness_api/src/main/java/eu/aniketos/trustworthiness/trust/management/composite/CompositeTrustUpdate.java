@@ -1,5 +1,6 @@
 package eu.aniketos.trustworthiness.trust.management.composite;
 
+import eu.aniketos.trustworthiness.impl.trust.pojo.Composite;
 import eu.aniketos.trustworthiness.impl.trust.pojo.TrustworthinessEntity;
 
 
@@ -15,5 +16,7 @@ public interface CompositeTrustUpdate {
 	 * @return trustworthiness object
 	 * @throws Exception
 	 */
-	abstract public TrustworthinessEntity aggregateTrustworthiness(String serviceId) throws Exception;
+	public abstract TrustworthinessEntity aggregateTrustworthiness(String serviceId) throws Exception;
+
+	public abstract TrustworthinessEntity aggregateTrustworthiness(Composite cs) throws Exception;
 }

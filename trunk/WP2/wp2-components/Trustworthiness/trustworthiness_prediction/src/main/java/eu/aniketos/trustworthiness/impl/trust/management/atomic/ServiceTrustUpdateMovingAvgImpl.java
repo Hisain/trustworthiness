@@ -215,6 +215,7 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 						+ ((Collection<?>) properties).size());
 			}
 
+			@SuppressWarnings("unchecked")
 			Object[] propsObjArray = ((Collection<String>) properties).toArray();
 			propsArray = Arrays.copyOf(propsObjArray,
 					propsObjArray.length, String[].class);

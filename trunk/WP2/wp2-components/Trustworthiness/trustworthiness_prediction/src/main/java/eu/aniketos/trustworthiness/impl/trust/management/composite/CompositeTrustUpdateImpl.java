@@ -42,18 +42,10 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 
 	private EventAdmin eventAdmin;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * eu.aniketos.trustworthiness.trust.management.composite
-	 * .CompositeTrustUpdate#aggregateTrustworthiness(java.lang.String)
-	 */
-	public TrustworthinessEntity aggregateTrustworthiness(String serviceId)
-			throws Exception {
+	public TrustworthinessEntity aggregateTrustworthiness(
+			Composite compositeService) throws Exception {
 
-		Composite compositeService = serviceEntityService
-				.getComposite(serviceId);
+		String serviceId = compositeService.getId();
 
 		double trustworthinessScore = 1;
 
@@ -69,7 +61,7 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 
 		double repConfidence = 1;
 
-		double securityScore = 0;
+		double securityScore = 1;
 
 		double i = 0;
 
@@ -89,41 +81,58 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 		for (Atomic service : componentServices) {
 			++i;
 
-			logger.debug("component service " + service.getId());
+			if (logger.isDebugEnabled()) {
+				logger.debug("component service " + service.getId());
+			}
+
 			TrustworthinessEntity componentTrustworthiness = trustUpdate
 					.updateTrust(service.getId());
 
 			double componentTrustworthinessScore = componentTrustworthiness
 					.getTrustworthinessScore();
+
 			double componentQosScore = componentTrustworthiness.getQosScore();
+
 			double componentQosConfidence = componentTrustworthiness
 					.getQosConfidence();
+
 			double componentRepScore = componentTrustworthiness
 					.getReputationScore();
+
 			double componentRepConfidence = componentTrustworthiness
 					.getReputationConfidence();
+
 			double componentSecurityScore = componentTrustworthiness
 					.getSecurityScore();
 
 			if (logger.isDebugEnabled()) {
-				logger.debug(service + " trustworthiness "
+
+				logger.debug(service + " trustworthiness: "
 						+ componentTrustworthinessScore + ","
-						+ componentQosConfidence);
+						+ componentQosScore + "," + componentQosConfidence
+						+ "," + componentRepScore + ","
+						+ componentRepConfidence + "," + componentSecurityScore);
 			}
 
 			//
 			averageComponentTrustworthinessScore = (averageComponentTrustworthinessScore
 					* (i - 1) + componentTrustworthinessScore)
 					/ i;
+
 			lowestComponentTrustworthinessScore = Math.min(
 					lowestComponentTrustworthinessScore,
 					componentTrustworthinessScore);
 
 			qosScore *= (qosScore * (i - 1) + componentQosScore) / i;
+			if (logger.isDebugEnabled()) {
+				logger.debug("updated CS qosScore " + qosScore);
+			}
+
 			qosConfidence *= (qosConfidence * (i - 1) + componentQosConfidence)
 					/ i;
 
 			repScore *= (repScore * (i - 1) + componentRepScore) / i;
+
 			repConfidence *= (repConfidence * (i - 1) + componentRepConfidence)
 					/ i;
 
@@ -131,6 +140,7 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 		}
 
 		double qosWeight = config.getConfig().getFloat("qos_weight");
+
 		double reputationWeight = config.getConfig().getFloat(
 				"reputation_weight");
 
@@ -140,6 +150,7 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 
 		TrustworthinessEntity csTw = trustworthinessEntityService
 				.getTrustworthiness(serviceId);
+
 		if (csTw == null) {
 			csTw = trustFactory.createTrustworthiness(serviceId);
 		}
@@ -147,15 +158,13 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 		BigDecimal trustworthinessScoreBD = new BigDecimal(
 				String.valueOf(trustworthinessScore)).setScale(3,
 				BigDecimal.ROUND_HALF_UP);
-		BigDecimal qosScoreBD = new BigDecimal(
-				String.valueOf(trustworthinessScore)).setScale(3,
-				BigDecimal.ROUND_HALF_UP);
+		BigDecimal qosScoreBD = new BigDecimal(String.valueOf(qosScore))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
 		BigDecimal qosConfidenceBD = new BigDecimal(
 				String.valueOf(qosConfidence)).setScale(3,
 				BigDecimal.ROUND_HALF_UP);
-		BigDecimal repScoreBD = new BigDecimal(
-				String.valueOf(trustworthinessScore)).setScale(3,
-				BigDecimal.ROUND_HALF_UP);
+		BigDecimal repScoreBD = new BigDecimal(String.valueOf(repScore))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
 		BigDecimal repConfidenceBD = new BigDecimal(
 				String.valueOf(repConfidence)).setScale(3,
 				BigDecimal.ROUND_HALF_UP);
@@ -194,6 +203,7 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 		// send alert if trustworthiness > allowed change before alert
 		double scoreChange = Math.abs(trustworthinessScore
 				- csTw.getLastAlertScore());
+
 		if (scoreChange > config.getConfig().getDouble("trust_change_alert")) {
 
 			csTw.setLastAlertScore(trustworthinessScore);
@@ -215,6 +225,7 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 				logger.debug("trustworthiness below threshold.");
 
 			} else {
+
 				logger.debug("trustworthiness above threshold.");
 
 			}
@@ -223,16 +234,39 @@ public class CompositeTrustUpdateImpl implements CompositeTrustUpdate {
 					"eu/aniketos/trustworthiness/prediction/alert", props);
 			eventAdmin.sendEvent(osgiEvent);
 
-			logger.debug("trustworthiness change above alert level: "
-					+ scoreChange + ", sent an alert. ");
+			if (logger.isDebugEnabled()) {
+				logger.debug("trustworthiness change above alert level: "
+						+ scoreChange + ", sent an alert. ");
+			}
 
 		} else {
-			logger.debug("trustworthiness change below alert level: "
-					+ scoreChange);
+
+			if (logger.isDebugEnabled()) {
+				logger.debug("trustworthiness change below alert level: "
+						+ scoreChange);
+			}
 
 		}
 
 		trustworthinessEntityService.updateTrustworthiness(csTw);
+
+		return csTw;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.aniketos.trustworthiness.trust.management.composite
+	 * .CompositeTrustUpdate#aggregateTrustworthiness(java.lang.String)
+	 */
+	public TrustworthinessEntity aggregateTrustworthiness(String serviceId)
+			throws Exception {
+
+		Composite compositeService = serviceEntityService
+				.getComposite(serviceId);
+
+		logger.debug("call aggregateTrustworthiness method with service as parameter");
+		TrustworthinessEntity csTw = aggregateTrustworthiness(compositeService);
 
 		return csTw;
 

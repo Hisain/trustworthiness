@@ -1,12 +1,22 @@
 package eu.aniketos.trustworthiness.impl.messaging;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.jdom.Document;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
 
 import eu.aniketos.trustworthiness.ext.messaging.ICompositeTrustworthinessPrediction;
+import eu.aniketos.data.ICompositionPlan;
 import eu.aniketos.trustworthiness.ext.messaging.Trustworthiness;
+import eu.aniketos.trustworthiness.impl.messaging.util.BPMNParser;
 import eu.aniketos.trustworthiness.impl.trust.pojo.Atomic;
 import eu.aniketos.trustworthiness.impl.trust.pojo.Composite;
 import eu.aniketos.trustworthiness.trust.management.TrustFactory;
@@ -65,8 +75,8 @@ public class CompositeTrustworthinessPredictionServiceImpl implements
 
 					// return an exception if component service is unknown
 					if (service == null)
-						throw new RuntimeException("Could not find service " + s
-								+ " in the repository");
+						throw new RuntimeException("Could not find service "
+								+ s + " in the repository");
 
 					logger.debug("adding component " + service.getId());
 					services.add(service);
@@ -75,21 +85,101 @@ public class CompositeTrustworthinessPredictionServiceImpl implements
 
 				serviceEntityService.addComposite(cs);
 
-				trustworthiness = csTrustUpdate.aggregateTrustworthiness(serviceId);
+				trustworthiness = csTrustUpdate
+						.aggregateTrustworthiness(serviceId);
 
 			} else {
 
 				logger.debug("aggregating trustworthiness");
-				trustworthiness = csTrustUpdate.aggregateTrustworthiness(serviceId);
+				trustworthiness = csTrustUpdate
+						.aggregateTrustworthiness(serviceId);
 
 			}
 		} catch (Exception e) {
-			
+
 			logger.error("Exception: " + e.getMessage());
 		}
 
 		return trustworthiness;
 
+	}
+
+	public Trustworthiness getCompositeTrustworthiness(ICompositionPlan plan) {
+
+		SAXBuilder builder = new SAXBuilder();
+
+		Document doc = null;
+
+		try {
+
+			InputStream is = new ByteArrayInputStream(plan.getBPMNXML()
+					.getBytes("UTF-8"));
+			doc = (Document) builder.build(is);
+
+		} catch (UnsupportedEncodingException e) {
+			logger.error(e);
+		} catch (JDOMException e) {
+			logger.error(e);
+		} catch (IOException e) {
+			logger.error(e);
+		}
+
+		String csId = BPMNParser.getProcessId(doc);
+
+		Composite cs = serviceEntityService.getComposite(csId);
+
+		if (cs == null) {
+
+			logger.info("Could not find service in the repository. New composite service will be created");
+
+			cs = tFactory.createComposite(csId);
+
+			serviceEntityService.addComposite(cs);
+		}
+
+		List<String> componentServices = BPMNParser.getServices(plan
+				.getBPMNXML());
+		
+		if (logger.isDebugEnabled()) {
+			logger.debug("composition plan contains "
+					+ componentServices.size() + " components.");
+		}
+
+		Set<Atomic> services = new HashSet<Atomic>();
+
+		for (String s : componentServices) {
+
+			Atomic service = serviceEntityService.getAtomic(s);
+
+			// return an exception if component service is unknown
+			if (service == null) {
+				throw new RuntimeException("Could not find service " + s
+						+ " in the repository");
+			}
+
+			if (logger.isDebugEnabled()) {
+				logger.debug("adding component " + service.getId());
+			}
+
+			services.add(service);
+		}
+
+		cs.setComponentServices(services);
+
+		serviceEntityService.updateComposite(cs);
+
+		Trustworthiness trustworthiness = null;
+
+		try {
+
+			trustworthiness = csTrustUpdate.aggregateTrustworthiness(cs);
+
+		} catch (Exception e) {
+
+			logger.error("Exception: " + e.getMessage());
+		}
+
+		return trustworthiness;
 	}
 
 	/**

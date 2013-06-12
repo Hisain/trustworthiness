@@ -31,8 +31,7 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * eu.aniketos.trustworthiness.trust.dao.ServiceDao#addAtomic
+	 * @see eu.aniketos.trustworthiness.trust.dao.ServiceDao#addAtomic
 	 * (eu.aniketos.trustworthiness.impl.trust.pojo.Atomic)
 	 */
 	public void addAtomic(Atomic service) {
@@ -51,8 +50,7 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * eu.aniketos.trustworthiness.trust.dao.ServiceDao#addComposite
+	 * @see eu.aniketos.trustworthiness.trust.dao.ServiceDao#addComposite
 	 * (eu.aniketos.trustworthiness.impl.trust.pojo.Composite)
 	 */
 	public void addComposite(Composite service) {
@@ -71,8 +69,7 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * eu.aniketos.trustworthiness.trust.dao.ServiceDao#updateAtomic
+	 * @see eu.aniketos.trustworthiness.trust.dao.ServiceDao#updateAtomic
 	 * (eu.aniketos.trustworthiness.impl.trust.pojo.Atomic)
 	 */
 	public void updateAtomic(Atomic service) {
@@ -91,8 +88,7 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see eu.aniketos.trustworthiness.trust.dao.ServiceDao#
-	 * updateComposite
+	 * @see eu.aniketos.trustworthiness.trust.dao.ServiceDao# updateComposite
 	 * (eu.aniketos.trustworthiness.impl.trust.pojo.Composite)
 	 */
 	public void updateComposite(Composite service) {
@@ -111,9 +107,7 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * eu.aniketos.trustworthiness.trust.dao.ServiceDao#getAllAtomics
-	 * ()
+	 * @see eu.aniketos.trustworthiness.trust.dao.ServiceDao#getAllAtomics ()
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Atomic> getAllAtomics() {
@@ -149,8 +143,7 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * eu.aniketos.trustworthiness.trust.dao.ServiceDao#getAtomic
+	 * @see eu.aniketos.trustworthiness.trust.dao.ServiceDao#getAtomic
 	 * (java.lang.String)
 	 */
 	public Atomic getAtomic(final String id) {
@@ -181,8 +174,7 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * eu.aniketos.trustworthiness.trust.dao.ServiceDao#getComposite
+	 * @see eu.aniketos.trustworthiness.trust.dao.ServiceDao#getComposite
 	 * (java.lang.String)
 	 */
 	public Composite getComposite(final String id) {
@@ -202,21 +194,24 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 		} catch (Exception e) {
 			logger.error("getComposite: " + e.getMessage());
 		}
+
 		if (service != null) {
+			
 			if (logger.isDebugEnabled()) {
 				logger.debug("getComposite: found service: " + id);
 			}
+			
 		} else {
 			logger.debug("getComposite: service " + id + " not found");
 		}
+
 		return service;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * eu.aniketos.trustworthiness.trust.dao.ServiceDao#deleteAtomic
+	 * @see eu.aniketos.trustworthiness.trust.dao.ServiceDao#deleteAtomic
 	 * (eu.aniketos.trustworthiness.impl.trust.pojo.Atomic)
 	 */
 	public void deleteAtomic(Atomic service) {
@@ -235,16 +230,15 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 		} catch (Exception e) {
 			logger.error("deleteAtomic: " + e.getMessage());
 		}
-		
-		//TODO; delete cascading records
+
+		// TODO; delete cascading records
 
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see eu.aniketos.trustworthiness.trust.dao.ServiceDao#
-	 * deleteComposite
+	 * @see eu.aniketos.trustworthiness.trust.dao.ServiceDao# deleteComposite
 	 * (eu.aniketos.trustworthiness.impl.trust.pojo.Composite)
 	 */
 	public void deleteComposite(Composite service) {
@@ -270,12 +264,12 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 
 		Composite service = null;
 		boolean exists = false;
-		
+
 		try {
-			
+
 			logger.debug("getComposite: attempting to retrieve composite service "
 					+ serviceId);
-			
+
 			service = (Composite) getJpaTemplate().getReference(
 					Composite.class, serviceId);
 			getJpaTemplate().flush();
@@ -287,16 +281,16 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 			logger.error("isComposite: " + e.getMessage());
 		}
 		if (service != null) {
-			
+
 			exists = true;
-			
+
 			if (logger.isDebugEnabled()) {
 				logger.debug("isComposite: found service: " + serviceId);
 			}
 		} else {
 			logger.debug("isComposite: service " + serviceId + " not found");
 		}
-		
+
 		return exists;
 	}
 
@@ -304,12 +298,13 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 
 		Atomic service = null;
 		boolean exists = false;
-		
+
 		try {
 
 			// service = (Atomic)
 			// getJpaTemplate().find("Select a from Service a where a.id='"+id+"'");
-			service = (Atomic) getJpaTemplate().getReference(Atomic.class, serviceId);
+			service = (Atomic) getJpaTemplate().getReference(Atomic.class,
+					serviceId);
 			getJpaTemplate().flush();
 
 		} catch (EntityNotFoundException enf) {
@@ -319,9 +314,9 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 			logger.error("isAtomic: " + e.getMessage());
 		}
 		if (service != null) {
-			
+
 			exists = true;
-			
+
 			if (logger.isDebugEnabled()) {
 				logger.debug("isAtomic: found service: " + serviceId);
 			}

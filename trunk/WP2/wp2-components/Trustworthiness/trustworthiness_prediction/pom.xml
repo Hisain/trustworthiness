@@ -15,10 +15,10 @@
 	<!-- -->
 	<properties>
 		<bundle.require.bundle>
-			trustworthiness-ext-api;bundle-version="1.0.0",trustworthiness-api;bundle-version="1.0.0",trustworthiness-domain;bundle-version="1.0.0",com.springsource.org.aopalliance;bundle-version="1.0.0",org.springframework.aop;bundle-version="${spring.version}",org.springframework.beans;bundle-version="${spring.version}",org.springframework.context;bundle-version="${spring.version}",org.springframework.core;bundle-version="${spring.version}",org.springframework.jms;bundle-version="${spring.version}",org.springframework.transaction;bundle-version="${spring.version}",org.springframework.jdbc;bundle-version="${spring.version}",org.springframework.osgi.core;bundle-version="${spring.osgi.version}",org.springframework.osgi.extender;bundle-version="${spring.osgi.version}",org.springframework.osgi.io;bundle-version="${spring.osgi.version}",com.springsource.javax.jms;bundle-version="1.1.0",com.springsource.org.apache.log4j;bundle-version="1.2.15"
+			trustworthiness-ext-api;bundle-version="1.0.0",trustworthiness-api;bundle-version="1.0.0",trustworthiness-domain;bundle-version="1.0.0",com.springsource.org.jdom;bundle-version="1.0.0",com.springsource.org.aopalliance;bundle-version="1.0.0",org.springframework.aop;bundle-version="${spring.version}",org.springframework.beans;bundle-version="${spring.version}",org.springframework.context;bundle-version="${spring.version}",org.springframework.core;bundle-version="${spring.version}",org.springframework.jms;bundle-version="${spring.version}",org.springframework.transaction;bundle-version="${spring.version}",org.springframework.jdbc;bundle-version="${spring.version}",org.springframework.osgi.core;bundle-version="${spring.osgi.version}",org.springframework.osgi.extender;bundle-version="${spring.osgi.version}",org.springframework.osgi.io;bundle-version="${spring.osgi.version}",com.springsource.javax.jms;bundle-version="1.1.0",com.springsource.org.apache.log4j;bundle-version="1.2.15"
 		</bundle.require.bundle>
 		<bundle.import.package>
-			org.osgi.framework;version="1.3.0",javax.sql,*
+			org.osgi.framework;version="1.3.0",javax.sql,eu.aniketos.data,*
 		</bundle.import.package>
 		<bundle.private.package>
 			eu.aniketos.trustworthiness.impl.*
@@ -26,7 +26,7 @@
 		<bundle.export.package>
 		</bundle.export.package>
 	</properties>
-<!-- com.springsource.org.hibernate;version="[3.3.2.GA,3.3.2.GA]",com.springsource.org.hibernate.annotations;version="[3.4.0.GA-A,3.4.0.GA-A]", -->
+	<!-- com.springsource.org.hibernate;version="[3.3.2.GA,3.3.2.GA]",com.springsource.org.hibernate.annotations;version="[3.4.0.GA-A,3.4.0.GA-A]", -->
 	<dependencies>
 		<!-- <dependency> <groupId>org.apache.felix</groupId> <artifactId>org.apache.felix.framework</artifactId> 
 			<version>${felix.version}</version> <exclusions> <exclusion> <groupId>org.apache.felix</groupId> 
@@ -62,7 +62,7 @@
 			<artifactId>spring-beans</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.osgi</groupId>
 			<artifactId>spring-osgi-core</artifactId>
@@ -79,18 +79,12 @@
 			<artifactId>spring-osgi-extender</artifactId>
 			<version>${spring.osgi.version}</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>com.springsource.org.hibernate.annotations</artifactId>
-			<version>3.4.0.GA-A</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>com.springsource.org.hibernate</artifactId>
-			<version>3.3.2.GA</version>
-		</dependency> -->
-	
-		
+		<!-- <dependency> <groupId>org.hibernate</groupId> <artifactId>com.springsource.org.hibernate.annotations</artifactId> 
+			<version>3.4.0.GA-A</version> </dependency> <dependency> <groupId>org.hibernate</groupId> 
+			<artifactId>com.springsource.org.hibernate</artifactId> <version>3.3.2.GA</version> 
+			</dependency> -->
+
+
 		<!-- <dependency> <groupId>org.aopalliance</groupId> <artifactId>com.springsource.org.aopalliance</artifactId> 
 			<version>1.0.0</version> </dependency> -->
 		<dependency>
@@ -106,7 +100,11 @@
 			<artifactId>com.springsource.javax.jms</artifactId>
 			<version>1.1.0</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.jdom</groupId>
+			<artifactId>com.springsource.org.jdom</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
@@ -127,7 +125,11 @@
 			<artifactId>trustworthiness-domain</artifactId>
 			<version>1.0.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>eu.aniketos.data</groupId>
+			<artifactId>common-datatypes</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>

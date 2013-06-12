@@ -45,7 +45,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 	private TrustworthinessEntityService trustworthinessEntityService;
 
 	private TrustFactory trustFactory;
-	
+
 	private RatingEntityService ratingEntityService;
 
 	private QoSMetricEntityService qosEntityService;
@@ -207,7 +207,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 
 		Object properties = config.getConfig().getProperty("property.name");
 		String[] propsArray = {};
-		
+
 		if (properties == null) {
 
 			if (logger.isDebugEnabled()) {
@@ -221,9 +221,11 @@ public class ServiceTrustUpdateRecursiveImpl implements
 						+ ((Collection<?>) properties).size());
 			}
 
-			Object[] propsObjArray = ((Collection<String>) properties).toArray();
-			propsArray = Arrays.copyOf(propsObjArray,
-					propsObjArray.length, String[].class);
+			@SuppressWarnings("unchecked")
+			Object[] propsObjArray = ((Collection<String>) properties)
+					.toArray();
+			propsArray = Arrays.copyOf(propsObjArray, propsObjArray.length,
+					String[].class);
 		}
 
 		for (String property : propsArray) {
@@ -351,9 +353,11 @@ public class ServiceTrustUpdateRecursiveImpl implements
 		securityScore = Double.parseDouble(securityBD.toString());
 		trustworthinessScore = Double.parseDouble(trustworthinessBD.toString());
 
-		TrustworthinessEntity trustworthinessEntity = trustworthinessEntityService.getTrustworthiness(serviceId);
+		TrustworthinessEntity trustworthinessEntity = trustworthinessEntityService
+				.getTrustworthiness(serviceId);
 		if (trustworthinessEntity == null) {
-			trustworthinessEntity = trustFactory.createTrustworthiness(serviceId);
+			trustworthinessEntity = trustFactory
+					.createTrustworthiness(serviceId);
 		}
 
 		trustworthinessEntity.setId(serviceId);
@@ -370,9 +374,9 @@ public class ServiceTrustUpdateRecursiveImpl implements
 		trustworthinessEntity.setTrustworthinessScore(trustworthinessScore);
 
 		// send alert if trustworthiness > allowed change before alert
-		double scoreChange = Math.abs(trustworthinessScore - trustworthinessEntity.getLastAlertScore());
-		if (scoreChange > config
-				.getConfig().getDouble("trust_change_alert")) {
+		double scoreChange = Math.abs(trustworthinessScore
+				- trustworthinessEntity.getLastAlertScore());
+		if (scoreChange > config.getConfig().getDouble("trust_change_alert")) {
 
 			trustworthinessEntity.setLastAlertScore(trustworthinessScore);
 
@@ -385,7 +389,8 @@ public class ServiceTrustUpdateRecursiveImpl implements
 			props.put("alert.type", "TRUST_LEVEL_CHANGE");
 
 			// send alert if trustworthiness < threshold
-			if (trustworthinessScore < config.getConfig().getDouble("trust_threshold")) {
+			if (trustworthinessScore < config.getConfig().getDouble(
+					"trust_threshold")) {
 
 				props.put("alert.description", "UNTRUSTED_ATOMIC_SERVICE");
 
@@ -396,19 +401,22 @@ public class ServiceTrustUpdateRecursiveImpl implements
 
 			}
 
-			Event osgiEvent = new Event("eu/aniketos/trustworthiness/prediction/alert",
-					props);
+			Event osgiEvent = new Event(
+					"eu/aniketos/trustworthiness/prediction/alert", props);
 			eventAdmin.sendEvent(osgiEvent);
 
-			logger.debug("trustworthiness change above alert level: " + scoreChange + ", sent an alert. ");
+			logger.debug("trustworthiness change above alert level: "
+					+ scoreChange + ", sent an alert. ");
 
 		} else {
-			logger.debug("trustworthiness change below alert level: " + scoreChange);
+			logger.debug("trustworthiness change below alert level: "
+					+ scoreChange);
 
 		}
 
 		logger.debug("updating service with results..");
-		trustworthinessEntityService.updateTrustworthiness(trustworthinessEntity);
+		trustworthinessEntityService
+				.updateTrustworthiness(trustworthinessEntity);
 
 		return trustworthinessEntity;
 	}
@@ -766,19 +774,34 @@ public class ServiceTrustUpdateRecursiveImpl implements
 	}
 
 	private double calcSecurityScore(List<SecProperty> serviceSecProps) {
+
 		double securityScore = 0;
 		double totSecurity = 0;
 		double propertyWeight = 0;
 
 		for (SecProperty secProp : serviceSecProps) {
+
 			if (secProp.getProperty().equals("confidentiality")) {
 				propertyWeight = confidentialityWeight;
+
 			} else if (secProp.getProperty().equals("integrity")) {
 				propertyWeight = integrityWeight;
 			}
+
+			if (logger.isDebugEnabled()) {
+				logger.debug("security property: " + secProp.getProperty() + " weight: "
+						+ propertyWeight);
+			}
+
 			totSecurity += secProp.getScore() * propertyWeight;
 		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("security score: " + securityScore);
+		}
+
 		securityScore = 1 - Math.exp(-totSecurity);
+
 		return securityScore;
 	}
 
@@ -816,7 +839,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 			TrustworthinessEntityService trustworthinessEntityService) {
 		this.trustworthinessEntityService = trustworthinessEntityService;
 	}
-	
+
 	/**
 	 * required for Spring dependency injection
 	 * 
@@ -834,7 +857,7 @@ public class ServiceTrustUpdateRecursiveImpl implements
 	public void setTrustFactory(TrustFactory trustFactory) {
 		this.trustFactory = trustFactory;
 	}
-	
+
 	/**
 	 * required for Spring dependency injection
 	 * 
