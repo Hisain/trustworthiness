@@ -27,16 +27,28 @@
 		interface="eu.aniketos.trustworthiness.trust.management.TrustFactory" />
 		
 	<osgi:service ref="serviceManagement"
-		interface="eu.aniketos.trustworthiness.ext.messaging.ServiceManagement" />
+		interface="eu.aniketos.trustworthiness.ext.messaging.ServiceManagement">
+		<osgi:service-properties>
+			<entry key="service.exported.interfaces" value="*" />
+		</osgi:service-properties>
+	</osgi:service>
 
 	<osgi:service ref="qosMetric"
 		interface="eu.aniketos.trustworthiness.ext.messaging.QosMetricsService" />
 
 	<osgi:service ref="reputationMetric"
-		interface="eu.aniketos.trustworthiness.ext.messaging.ReputationMetricsService" />
+		interface="eu.aniketos.trustworthiness.ext.messaging.ReputationMetricsService">
+		<osgi:service-properties>
+			<entry key="service.exported.interfaces" value="*" />
+		</osgi:service-properties>
+	</osgi:service>
 
 	<osgi:service ref="securityMetric"
-		interface="eu.aniketos.trustworthiness.ext.messaging.SecurityMetricsService" />
+		interface="eu.aniketos.trustworthiness.ext.messaging.SecurityMetricsService">
+		<osgi:service-properties>
+			<entry key="service.exported.interfaces" value="*" />
+		</osgi:service-properties>
+	</osgi:service>
 		
 	<osgi:service ref="notification"
 		interface="eu.aniketos.notification.INotification" />	
