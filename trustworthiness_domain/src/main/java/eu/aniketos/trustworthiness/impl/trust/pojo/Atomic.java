@@ -15,7 +15,6 @@ public class Atomic extends Service {
 	 */
 	public Atomic() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

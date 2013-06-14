@@ -6,8 +6,8 @@ import eu.aniketos.trustworthiness.impl.rules.model.event.AlertEventImpl;
 import eu.aniketos.trustworthiness.rules.model.event.RuleAlertEvent;
 import eu.aniketos.trustworthiness.trust.management.TrustFactory;
 import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
-import eu.aniketos.wp4.components.notification.INotification;
-import eu.aniketos.wp4.components.notification.Notification;
+import eu.aniketos.notification.INotification;
+import eu.aniketos.notification.Notification;
 
 public class NotificationServiceImpl implements INotification {
 

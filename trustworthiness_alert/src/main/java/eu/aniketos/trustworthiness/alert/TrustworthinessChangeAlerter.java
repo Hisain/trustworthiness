@@ -5,7 +5,6 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
 import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
-import eu.aniketos.wp4.components.notification.AlertDescription;
 import eu.aniketos.wp4.components.notification.IAlert;
 import eu.aniketos.wp4.components.notification.Notification;
 

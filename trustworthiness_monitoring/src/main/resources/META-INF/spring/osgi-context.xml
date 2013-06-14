@@ -39,7 +39,7 @@
 		interface="eu.aniketos.trustworthiness.ext.messaging.SecurityMetricsService" />
 		
 	<osgi:service ref="notification"
-		interface="eu.aniketos.wp4.components.notification.INotification" />	
+		interface="eu.aniketos.notification.INotification" />	
 
 	<osgi:reference id="eventAdminService" interface="org.osgi.service.event.EventAdmin" />
 
