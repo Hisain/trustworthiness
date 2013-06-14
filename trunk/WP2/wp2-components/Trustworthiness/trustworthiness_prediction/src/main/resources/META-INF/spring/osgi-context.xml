@@ -11,19 +11,19 @@
 
 	<osgi:reference id="serviceEntityService"
 		interface="eu.aniketos.trustworthiness.trust.service.ServiceEntityService" />
-		
+
 	<osgi:reference id="ratingEntityService"
 		interface="eu.aniketos.trustworthiness.trust.service.RatingEntityService" />
-		
+
 	<osgi:reference id="qosEntityService"
 		interface="eu.aniketos.trustworthiness.trust.service.QoSMetricEntityService" />
-		
+
 	<osgi:reference id="securityEntityService"
 		interface="eu.aniketos.trustworthiness.trust.service.SecurityEntityService" />
-	
+
 	<osgi:reference id="trustworthinessEntityService"
 		interface="eu.aniketos.trustworthiness.trust.service.TrustworthinessEntityService" />
-		
+
 	<osgi:reference id="configService"
 		interface="eu.aniketos.trustworthiness.configuration.ConfigurationManagement" />
 
@@ -34,28 +34,28 @@
 		interface="eu.aniketos.trustworthiness.trust.management.TrustFactory" />
 
 	<osgi:service ref="trustworthinessPredictionService"
-			interface="eu.aniketos.trustworthiness.ext.messaging.ITrustworthinessPrediction">
-	        <osgi:service-properties>
-	            <entry key="service.exported.interfaces" value="*" />
-	        </osgi:service-properties>
-	    </osgi:service>
-	
-		<osgi:service ref="compositeTrustworthinessPredictionService"
-			interface="eu.aniketos.trustworthiness.ext.messaging.ICompositeTrustworthinessPrediction">
-	        <osgi:service-properties>
-	            <entry key="service.exported.interfaces" value="*" />
-	        </osgi:service-properties>        
-    </osgi:service>
-    
+		interface="eu.aniketos.trustworthiness.ext.messaging.ITrustworthinessPrediction">
+		<osgi:service-properties>
+			<entry key="service.exported.interfaces" value="*" />
+		</osgi:service-properties>
+	</osgi:service>
+
+	<osgi:service ref="compositeTrustworthinessPredictionService"
+		interface="eu.aniketos.trustworthiness.ext.messaging.ICompositeTrustworthinessPrediction">
+		<osgi:service-properties>
+			<entry key="service.exported.interfaces" value="*" />
+		</osgi:service-properties>
+	</osgi:service>
+
 	<osgi:reference id="transactionManager"
 		interface="org.springframework.transaction.PlatformTransactionManager" />
 	<tx:annotation-driven transaction-manager="transactionManager" />
-	
+
 	<osgi:service ref="eventHandler" interface="org.osgi.service.event.EventHandler">
 		<osgi:service-properties>
-			<entry key="event.topics" value="eu/aniketos/trustworthiness/monitoring/*"/>
+			<entry key="event.topics" value="eu/aniketos/trustworthiness/monitoring/*" />
 		</osgi:service-properties>
 	</osgi:service>
-	
-	<osgi:reference id="eventAdminService" interface="org.osgi.service.event.EventAdmin"/>
+
+	<osgi:reference id="eventAdminService" interface="org.osgi.service.event.EventAdmin" />
 </beans>
