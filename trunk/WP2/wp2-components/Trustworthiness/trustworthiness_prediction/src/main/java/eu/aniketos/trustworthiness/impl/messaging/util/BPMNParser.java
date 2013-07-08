@@ -422,42 +422,7 @@ public class BPMNParser {
 		return serviceType;
 	}
 
-	// extract Services from the BPMN
-	public static List<String> getServices(String file) {
-
-		SAXBuilder builder = new SAXBuilder();
-
-		Document doc = null;
-
-		try {
-			InputStream is = new ByteArrayInputStream(file.getBytes("UTF-8"));
-			doc = (Document) builder.build(is);
-
-		} catch (UnsupportedEncodingException e) {
-			logger.error(e);
-		} catch (JDOMException e) {
-			logger.error(e);
-		} catch (IOException e) {
-			logger.error(e);
-		}
-
-		Element definitions = doc.getRootElement();
-
-		Namespace n = definitions.getNamespace();
-		Element process = definitions.getChild("process", n);
-
-		@SuppressWarnings("unchecked")
-		List<Element> list = process.getChildren("serviceTask", n);
-
-		List<String> serviceList = new Vector<String>();
-
-		for (Element serviceTask : list) {
-			String serviceId = serviceTask.getAttributeValue("id");
-			serviceList.add(serviceId);
-		}
-
-		return serviceList;
-	}
+	
 
 	// extract Service from the BPMN based on serviceTask
 	public static String getService(String file, String serviceTaskID) {

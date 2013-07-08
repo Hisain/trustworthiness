@@ -42,7 +42,7 @@ public class ReputationRatings {
 		
 		try {
 		
-			scanner = new Scanner(new File("data\\reputation_data.txt"));
+			scanner = new Scanner(new File("data/reputation_data.txt"));
 		
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage());

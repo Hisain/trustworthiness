@@ -40,7 +40,7 @@ public class SecurityProperties {
 
 		Scanner scanner = null;
 		try {
-			scanner = new Scanner(new File("data\\security_data.txt"));
+			scanner = new Scanner(new File("data/security_data.txt"));
 
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage());

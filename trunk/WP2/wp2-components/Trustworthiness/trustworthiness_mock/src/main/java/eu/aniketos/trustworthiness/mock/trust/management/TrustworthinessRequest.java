@@ -41,7 +41,7 @@ public class TrustworthinessRequest {
 		
 		Scanner scanner = null;
 		try {
-			scanner = new Scanner(new File("data\\services_data.txt"));
+			scanner = new Scanner(new File("data/services_data.txt"));
 
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage());
@@ -65,7 +65,7 @@ public class TrustworthinessRequest {
 		
 		Scanner scanner2 = null;
 		try {
-			scanner2 = new Scanner(new File("data\\cs_example.xml"));
+			scanner2 = new Scanner(new File("data/cs_example.xml"));
 
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage());
@@ -86,7 +86,40 @@ public class TrustworthinessRequest {
 		Trustworthiness trustworthiness = ctwPrediction.getCompositeTrustworthiness(plan);
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("received trustworthiness for composite service =" + trustworthiness);
+			logger.debug("received trustworthiness for composite service " + trustworthiness.getServiceId()+ " = " + trustworthiness.getTrustworthinessScore());
+		}
+		
+
+		//////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\
+		
+		Scanner scanner3 = null;
+		try {
+			scanner3 = new Scanner(new File("data/composition_plan1.xml"));
+
+		} catch (FileNotFoundException e) {
+			logger.error(e.getMessage());
+		}
+		
+		String xml2 = "";
+		
+		while (scanner3 != null && scanner3.hasNext()) {
+			
+			String line = scanner3.nextLine();
+
+			xml2 = xml2.concat(line + "\n");
+		
+		}
+		
+		ICompositionPlan plan1 = new CompositionPlan(xml2);
+		
+		if (logger.isDebugEnabled()) {
+			logger.debug("XML file length " + plan1.getBPMNXML().length());
+		}
+		
+		Trustworthiness trustworthiness2 = ctwPrediction.getCompositeTrustworthiness(plan1);
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("received trustworthiness for composite service " + trustworthiness2.getServiceId()+ " = " + trustworthiness2.getTrustworthinessScore());
 		}
 	}
 }
