@@ -37,7 +37,7 @@ public class QoSMetrics {
 		
 		Scanner scanner = null;
 		try {
-			scanner = new Scanner(new File("data\\qos_data.txt"));
+			scanner = new Scanner(new File("data/qos_data.txt"));
 
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage());

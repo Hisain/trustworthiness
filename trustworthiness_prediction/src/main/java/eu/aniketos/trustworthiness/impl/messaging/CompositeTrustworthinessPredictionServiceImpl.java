@@ -117,13 +117,16 @@ public class CompositeTrustworthinessPredictionServiceImpl implements
 			doc = (Document) builder.build(is);
 
 		} catch (UnsupportedEncodingException e) {
-			logger.error(e);
+			logger.error("UnsupportedEncodingException:" + e);
 		} catch (JDOMException e) {
-			logger.error(e);
+			logger.error("JDOMException:" + e);
 		} catch (IOException e) {
-			logger.error(e);
+			logger.error("IOException:" + e);
 		}
-
+		
+		if (logger.isDebugEnabled()) {
+			logger.debug("document " + doc);
+		}
 		String csId = BPMNParser.getProcessId(doc);
 
 		Composite cs = serviceEntityService.getComposite(csId);
@@ -137,9 +140,9 @@ public class CompositeTrustworthinessPredictionServiceImpl implements
 			serviceEntityService.addComposite(cs);
 		}
 
-		List<String> componentServices = BPMNParser.getServices(plan
+		List<String> componentServices = BPMNParser.getServicesList(plan
 				.getBPMNXML());
-		
+
 		if (logger.isDebugEnabled()) {
 			logger.debug("composition plan contains "
 					+ componentServices.size() + " components.");
