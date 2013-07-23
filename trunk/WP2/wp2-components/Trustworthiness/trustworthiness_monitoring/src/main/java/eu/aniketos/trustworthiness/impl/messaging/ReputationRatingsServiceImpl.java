@@ -5,7 +5,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import eu.aniketos.trustworthiness.configuration.ConfigurationManagement;
-import eu.aniketos.trustworthiness.ext.messaging.ReputationRatingsService;
+import eu.aniketos.trustworthiness.ext.messaging.IReputationRatingsService;
 import eu.aniketos.trustworthiness.ext.rules.model.event.ConsumerRatingEvent;
 import eu.aniketos.trustworthiness.rules.service.ReputationRatingUpdate;
 import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
@@ -14,10 +14,10 @@ import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
  * @author Hisain Elshaafi (TSSG)
  * 
  */
-public class ReputationRatingsServiceImpl implements ReputationRatingsService {
+public class ReputationRatingsServiceImpl implements IReputationRatingsService {
 
 	private static Logger logger = Logger
-			.getLogger(ReputationRatingsService.class);
+			.getLogger(IReputationRatingsService.class);
 
 	private ConfigurationManagement config;
 

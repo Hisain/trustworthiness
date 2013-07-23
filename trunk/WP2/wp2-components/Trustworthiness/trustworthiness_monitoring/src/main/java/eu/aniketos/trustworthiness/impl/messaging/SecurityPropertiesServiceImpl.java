@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 //import eu.aniketos.data.ISecurityProperty;
 import eu.aniketos.trustworthiness.configuration.ConfigurationManagement;
-import eu.aniketos.trustworthiness.ext.messaging.SecurityPropertiesService;
+import eu.aniketos.trustworthiness.ext.messaging.ISecurityPropertiesService;
 import eu.aniketos.trustworthiness.rules.service.MetricRatingUpdate;
 import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
 
@@ -14,10 +14,10 @@ import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
  * @author Hisain Elshaafi (TSSG)
  * 
  */
-public class SecurityPropertiesServiceImpl implements SecurityPropertiesService {
+public class SecurityPropertiesServiceImpl implements ISecurityPropertiesService {
 
 	private static Logger logger = Logger
-			.getLogger(SecurityPropertiesService.class);
+			.getLogger(ISecurityPropertiesService.class);
 
 	private ConfigurationManagement config;
 

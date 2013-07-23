@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import eu.aniketos.trustworthiness.ext.messaging.SecurityPropertiesService;
+import eu.aniketos.trustworthiness.ext.messaging.ISecurityPropertiesService;
 
 /**
  * @author Hisain Elshaafi (TSSG)
@@ -15,12 +15,12 @@ public class SecurityMetricsTest {
 
 	private static Logger logger = Logger.getLogger(SecurityMetricsTest.class);
 
-	private SecurityPropertiesService securityMetrics;
+	private ISecurityPropertiesService securityMetrics;
 
 	/**
 	 * @param securityMetics
 	 */
-	public SecurityMetricsTest(SecurityPropertiesService securityMetics) {
+	public SecurityMetricsTest(ISecurityPropertiesService securityMetics) {
 		super();
 		this.securityMetrics = securityMetics;
 	}

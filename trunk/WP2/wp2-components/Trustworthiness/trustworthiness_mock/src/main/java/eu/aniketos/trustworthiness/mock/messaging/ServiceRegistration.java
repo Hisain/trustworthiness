@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
-import eu.aniketos.trustworthiness.ext.messaging.ServiceManagement;
+import eu.aniketos.trustworthiness.ext.messaging.IServiceManagement;
 
 /**
  * @author Hisain Elshaafi (TSSG)
@@ -17,14 +17,14 @@ public class ServiceRegistration {
 
 	private static Logger logger = Logger.getLogger(ServiceRegistration.class);
 
-	private ServiceManagement serviceManagement;
+	private IServiceManagement iServiceManagement;
 
 	/**
 	 * @param qosMetics
 	 */
-	public ServiceRegistration(ServiceManagement serviceManagement) {
+	public ServiceRegistration(IServiceManagement iServiceManagement) {
 		super();
-		this.serviceManagement = serviceManagement;
+		this.iServiceManagement = iServiceManagement;
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class ServiceRegistration {
 
 			String serviceId = line;
 
-			serviceManagement.addService(serviceId);
+			iServiceManagement.addService(serviceId);
 
 			if (logger.isDebugEnabled()) {
 				logger.debug("added service: " + serviceId);
@@ -55,11 +55,11 @@ public class ServiceRegistration {
 		}
 	}
 
-	public ServiceManagement getServiceManagement() {
-		return serviceManagement;
+	public IServiceManagement getServiceManagement() {
+		return iServiceManagement;
 	}
 
-	public void setServiceManagement(ServiceManagement serviceManagement) {
-		this.serviceManagement = serviceManagement;
+	public void setServiceManagement(IServiceManagement iServiceManagement) {
+		this.iServiceManagement = iServiceManagement;
 	}
 }

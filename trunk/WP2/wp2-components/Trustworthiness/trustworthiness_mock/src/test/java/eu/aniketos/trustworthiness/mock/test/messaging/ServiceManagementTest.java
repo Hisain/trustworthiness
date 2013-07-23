@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import eu.aniketos.trustworthiness.ext.messaging.ServiceManagement;
+import eu.aniketos.trustworthiness.ext.messaging.IServiceManagement;
 
 /**
  * @author Hisain Elshaafi (TSSG)
@@ -15,14 +15,14 @@ public class ServiceManagementTest {
 
 	private static Logger logger = Logger.getLogger(ServiceManagementTest.class);
 
-	private ServiceManagement serviceManagement;
+	private IServiceManagement iServiceManagement;
 
 	/**
 	 * @param qosMetics
 	 */
-	public ServiceManagementTest(ServiceManagement serviceManagement) {
+	public ServiceManagementTest(IServiceManagement iServiceManagement) {
 		super();
-		this.serviceManagement = serviceManagement;
+		this.iServiceManagement = iServiceManagement;
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class ServiceManagementTest {
 			serviceData.put("serviceName", "testName1");
 			serviceData.put("serviceDescription", "");
 			try {
-				serviceManagement.addService(serviceData);
+				iServiceManagement.addService(serviceData);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
@@ -57,7 +57,7 @@ public class ServiceManagementTest {
 			serviceData.put("serviceName", "testName1");
 			serviceData.put("serviceDescription", "");
 			try {
-				serviceManagement.addService(serviceData);
+				iServiceManagement.addService(serviceData);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
@@ -76,7 +76,7 @@ public class ServiceManagementTest {
 			serviceData.put("serviceName", "testName1");
 			serviceData.put("serviceDescription", "");
 			try {
-				serviceManagement.addService(serviceData);
+				iServiceManagement.addService(serviceData);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
@@ -92,7 +92,7 @@ public class ServiceManagementTest {
 		for (int i = 0; i < 1; i++) {
 			String serviceId = null;
 			try {
-				serviceManagement.addService(serviceId);
+				iServiceManagement.addService(serviceId);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
@@ -108,7 +108,7 @@ public class ServiceManagementTest {
 		for (int i = 0; i < 1; i++) {
 			String serviceId = "";
 			try {
-				serviceManagement.addService(serviceId);
+				iServiceManagement.addService(serviceId);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
@@ -124,7 +124,7 @@ public class ServiceManagementTest {
 		for (int i = 0; i < 1; i++) {
 			String serviceId = "testId02";
 			try {
-				serviceManagement.addService(serviceId);
+				iServiceManagement.addService(serviceId);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
@@ -140,7 +140,7 @@ public class ServiceManagementTest {
 		for (int i = 0; i < 1; i++) {
 			String serviceId = "testId01";
 			try {
-				serviceManagement.removeService(serviceId);
+				iServiceManagement.removeService(serviceId);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
@@ -155,11 +155,11 @@ public class ServiceManagementTest {
 		
 	}
 
-	public ServiceManagement getServiceManagement() {
-		return serviceManagement;
+	public IServiceManagement getServiceManagement() {
+		return iServiceManagement;
 	}
 
-	public void setServiceManagement(ServiceManagement serviceManagement) {
-		this.serviceManagement = serviceManagement;
+	public void setServiceManagement(IServiceManagement iServiceManagement) {
+		this.iServiceManagement = iServiceManagement;
 	}
 }

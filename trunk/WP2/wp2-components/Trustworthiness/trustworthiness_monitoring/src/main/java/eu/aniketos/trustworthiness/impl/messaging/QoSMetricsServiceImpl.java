@@ -5,7 +5,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import eu.aniketos.trustworthiness.configuration.ConfigurationManagement;
-import eu.aniketos.trustworthiness.ext.messaging.QosMetricsService;
+import eu.aniketos.trustworthiness.ext.messaging.IQosMetricsService;
 import eu.aniketos.trustworthiness.ext.rules.model.event.TrustEvent;
 import eu.aniketos.trustworthiness.rules.service.MetricRatingUpdate;
 import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
@@ -14,9 +14,9 @@ import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
  * @author Hisain Elshaafi (TSSG)
  * 
  */
-public class QoSMetricsServiceImpl implements QosMetricsService {
+public class QoSMetricsServiceImpl implements IQosMetricsService {
 
-	private static Logger logger = Logger.getLogger(QosMetricsService.class);
+	private static Logger logger = Logger.getLogger(IQosMetricsService.class);
 
 	private ConfigurationManagement config;
 
