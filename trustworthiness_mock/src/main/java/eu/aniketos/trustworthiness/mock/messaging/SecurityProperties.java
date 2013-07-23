@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
-import eu.aniketos.trustworthiness.ext.messaging.SecurityPropertiesService;
+import eu.aniketos.trustworthiness.ext.messaging.ISecurityPropertiesService;
 
 /**
  * @author Hisain Elshaafi (TSSG)
@@ -18,12 +18,12 @@ public class SecurityProperties {
 
 	private static Logger logger = Logger.getLogger(SecurityProperties.class);
 
-	private SecurityPropertiesService securityMetrics;
+	private ISecurityPropertiesService securityMetrics;
 
 	/**
 	 * @param securityMetics
 	 */
-	public SecurityProperties(SecurityPropertiesService securityMetics) {
+	public SecurityProperties(ISecurityPropertiesService securityMetics) {
 		super();
 		this.securityMetrics = securityMetics;
 	}

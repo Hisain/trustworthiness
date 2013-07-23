@@ -4,12 +4,12 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import eu.aniketos.trustworthiness.ext.messaging.ServiceManagement;
+import eu.aniketos.trustworthiness.ext.messaging.IServiceManagement;
 import eu.aniketos.trustworthiness.impl.trust.pojo.Atomic;
 import eu.aniketos.trustworthiness.trust.management.TrustFactory;
 import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
 
-public class ServiceManagementImpl implements ServiceManagement {
+public class ServiceManagementImpl implements IServiceManagement {
 
 	private static Logger logger = Logger.getLogger(ServiceManagementImpl.class);
 			

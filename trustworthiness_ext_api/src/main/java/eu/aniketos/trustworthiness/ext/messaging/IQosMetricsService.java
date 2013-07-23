@@ -9,7 +9,7 @@ import eu.aniketos.trustworthiness.ext.rules.model.event.TrustEvent;
  * @author Hisain Elshaafi (TSSG)
  *
  */
-public interface QosMetricsService {
+public interface IQosMetricsService {
 
 	/**
 	 * @param metric Map containing an evaluation of a trustworthiness property

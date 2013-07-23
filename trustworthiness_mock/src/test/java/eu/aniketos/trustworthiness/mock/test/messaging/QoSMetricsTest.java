@@ -6,7 +6,7 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
-import eu.aniketos.trustworthiness.ext.messaging.QosMetricsService;
+import eu.aniketos.trustworthiness.ext.messaging.IQosMetricsService;
 import eu.aniketos.trustworthiness.ext.rules.model.event.TrustEvent;
 import eu.aniketos.trustworthiness.mock.messaging.MetricEventImpl;
 
@@ -18,12 +18,12 @@ public class QoSMetricsTest {
 
 	private static Logger logger = Logger.getLogger(QoSMetricsTest.class);
 
-	private QosMetricsService qosMetrics;
+	private IQosMetricsService qosMetrics;
 
 	/**
 	 * @param qosMetics
 	 */
-	public QoSMetricsTest(QosMetricsService qosMetics) {
+	public QoSMetricsTest(IQosMetricsService qosMetics) {
 		super();
 		this.qosMetrics = qosMetics;
 	}

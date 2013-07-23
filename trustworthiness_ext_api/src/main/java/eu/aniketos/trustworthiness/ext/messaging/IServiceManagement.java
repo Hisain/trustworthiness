@@ -2,7 +2,7 @@ package eu.aniketos.trustworthiness.ext.messaging;
 
 import java.util.Map;
 
-public interface ServiceManagement {
+public interface IServiceManagement {
 
 	abstract public void addService(Map<String, String> serviceData);
 	
