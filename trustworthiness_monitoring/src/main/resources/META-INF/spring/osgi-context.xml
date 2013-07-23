@@ -37,14 +37,14 @@
 		interface="eu.aniketos.trustworthiness.ext.messaging.QosMetricsService" />
 
 	<osgi:service ref="reputationMetric"
-		interface="eu.aniketos.trustworthiness.ext.messaging.ReputationMetricsService">
+		interface="eu.aniketos.trustworthiness.ext.messaging.ReputationRatingsService">
 		<osgi:service-properties>
 			<entry key="service.exported.interfaces" value="*" />
 		</osgi:service-properties>
 	</osgi:service>
 
 	<osgi:service ref="securityMetric"
-		interface="eu.aniketos.trustworthiness.ext.messaging.SecurityMetricsService">
+		interface="eu.aniketos.trustworthiness.ext.messaging.SecurityPropertiesService">
 		<osgi:service-properties>
 			<entry key="service.exported.interfaces" value="*" />
 		</osgi:service-properties>

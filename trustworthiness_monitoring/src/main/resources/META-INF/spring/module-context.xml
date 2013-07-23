@@ -2,16 +2,103 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-	<bean name="configBuilder"
-		class="org.apache.commons.configuration.DefaultConfigurationBuilder">
-		<constructor-arg value="configuration/config.xml" />
-	</bean>
-
-	<bean id="configService"
-		class="eu.aniketos.trustworthiness.impl.configuration.ConfigurationService">
-		<!-- <property name="logger" ref="log4jLogger"></property> -->
-		<property name="configBuilder" ref="configBuilder"></property>
+		
+	<bean name="serviceManagement"
+		class="eu.aniketos.trustworthiness.impl.messaging.ServiceManagementImpl">
+		<property name="serviceEntityService" ref="serviceEntityService"></property>
+		<property name="trustFactory" ref="trustFactory"></property>
 	</bean>
 	
+	<bean name="reputationMetric"
+		class="eu.aniketos.trustworthiness.impl.messaging.ReputationRatingsServiceImpl">
+		<property name="config" ref="configService"></property>
+		<property name="ratingUpdate" ref="ratingUpdate"></property>
+		<property name="serviceEntityService" ref="serviceEntityService"></property>
+	</bean>
+	
+	<bean name="qosMetric"
+		class="eu.aniketos.trustworthiness.impl.messaging.QoSMetricsServiceImpl">
+		<property name="config" ref="configService"></property>
+		<property name="qosUpdate" ref="qosUpdate"></property>
+		<property name="serviceEntityService" ref="serviceEntityService"></property>
+	</bean>
+		
+	<bean name="securityMetric"
+		class="eu.aniketos.trustworthiness.impl.messaging.SecurityPropertiesServiceImpl">
+		<property name="config" ref="configService"></property>
+		<property name="secPropertyUpdate" ref="secPropertyUpdate"></property>
+		<property name="serviceEntityService" ref="serviceEntityService"></property>
+	</bean>
+	
+	<bean name="notification"
+		class="eu.aniketos.trustworthiness.impl.messaging.NotificationServiceImpl">
+		<property name="trustFactory" ref="trustFactory"></property>
+		<property name="serviceEntityService" ref="serviceEntityService"></property>
+	</bean>
+
+	<bean name="reportFactory"
+		class="eu.aniketos.trustworthiness.impl.rules.service.ReportFactoryImpl">
+	</bean>
+
+	<bean name="knowledgeBaseFactory"
+		class="eu.aniketos.trustworthiness.impl.rules.model.KnowledgeBaseFactoryService" init-method="create">
+	</bean>
+
+	<bean name="sessionLookup"
+		class="eu.aniketos.trustworthiness.impl.rules.persistence.JPAKnowledgeSessionLookup" init-method="init">
+		<constructor-arg>
+			<ref bean="knowledgeBaseFactory" />
+		</constructor-arg>
+	</bean>
+
+	<bean name="ruleExecutor"
+		class="eu.aniketos.trustworthiness.impl.rules.service.RuleExecuterImpl">
+		<property name="reportFactory" ref="reportFactory"></property>
+		<property name="sessionLookup" ref="sessionLookup"></property>
+	</bean>
+
+	<bean name="ratingUpdate"
+		class="eu.aniketos.trustworthiness.impl.rules.service.ReputationRatingUpdateImpl"
+		init-method="initialize">
+		<property name="config" ref="configService"></property>
+		<property name="serviceEntityService" ref="serviceEntityService"></property>
+		<property name="ratingEntityService" ref="ratingEntityService"></property>
+		<property name="trustFactory" ref="trustFactory"></property>
+		<property name="ruleExecuter" ref="ruleExecutor"></property>
+		<property name="eventAdmin" ref="eventAdminService"/>
+	</bean>
+	
+	<bean name="qosUpdate"
+		class="eu.aniketos.trustworthiness.impl.rules.service.QosRatingUpdateImpl"
+		init-method="initialize">
+		<property name="config" ref="configService"></property>
+		<property name="serviceEntityService" ref="serviceEntityService"></property>
+		<property name="qosEntityService" ref="qosEntityService"></property>
+		<property name="trustFactory" ref="trustFactory"></property>
+		<property name="ruleExecuter" ref="ruleExecutor"></property>
+		<property name="eventAdmin" ref="eventAdminService"/>
+	</bean>
+	
+	<bean name="secPropertyUpdate"
+		class="eu.aniketos.trustworthiness.impl.rules.service.SecurityRatingUpdateImpl"
+		init-method="initialize">
+		<property name="config" ref="configService"></property>
+		<property name="serviceEntityService" ref="serviceEntityService"></property>
+		<property name="securityEntityService" ref="securityEntityService"></property>
+		<property name="trustFactory" ref="trustFactory"></property>
+		<property name="ruleExecuter" ref="ruleExecutor"></property>
+		<property name="eventAdmin" ref="eventAdminService"/>
+	</bean>
+
+	<!-- <bean name="qosMetricJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="eu.aniketos.trustworthiness.impl.messaging.QoSMetricsScheduler" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="timeout" value="60" />
+			</map>
+		</property>
+	</bean> -->
+	
+	<bean id="dummy"
+		class="eu.aniketos.trustworthiness.impl.messaging.service.StatusServiceImpl" init-method="initialize"/>
 </beans>

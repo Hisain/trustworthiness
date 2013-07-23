@@ -9,7 +9,7 @@ import eu.aniketos.trustworthiness.ext.rules.model.event.ConsumerRatingEvent;
  * @author Hisain Elshaafi (TSSG)
  *
  */
-public interface ReputationMetricsService {
+public interface ReputationRatingsService {
 
 	/**
 	 * @param metric Map containing an evaluation of a trustworthiness property

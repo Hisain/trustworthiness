@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import eu.aniketos.trustworthiness.ext.messaging.SecurityMetricsService;
+import eu.aniketos.trustworthiness.ext.messaging.SecurityPropertiesService;
 
 /**
  * @author Hisain Elshaafi (TSSG)
@@ -15,12 +15,12 @@ public class SecurityMetricsTest {
 
 	private static Logger logger = Logger.getLogger(SecurityMetricsTest.class);
 
-	private SecurityMetricsService securityMetrics;
+	private SecurityPropertiesService securityMetrics;
 
 	/**
 	 * @param securityMetics
 	 */
-	public SecurityMetricsTest(SecurityMetricsService securityMetics) {
+	public SecurityMetricsTest(SecurityPropertiesService securityMetics) {
 		super();
 		this.securityMetrics = securityMetics;
 	}
@@ -40,7 +40,7 @@ public class SecurityMetricsTest {
 			metric.put("subproperty", "encryption");
 			metric.put("value", "1");
 			try {
-				securityMetrics.receiveMetrics(metric);
+				securityMetrics.receiveProperty(metric);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
@@ -60,7 +60,7 @@ public class SecurityMetricsTest {
 			metric.put("subproperty", "signing");
 			metric.put("value", "1");
 			try {
-				securityMetrics.receiveMetrics(metric);
+				securityMetrics.receiveProperty(metric);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
@@ -74,7 +74,7 @@ public class SecurityMetricsTest {
 			metric.put("subproperty", "encryption");
 			metric.put("value", "1");
 			try {
-				securityMetrics.receiveMetrics(metric);
+				securityMetrics.receiveProperty(metric);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
@@ -94,7 +94,7 @@ public class SecurityMetricsTest {
 			metric.put("subproperty", "signing");
 			metric.put("value", "1");
 			try {
-				securityMetrics.receiveMetrics(metric);
+				securityMetrics.receiveProperty(metric);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
@@ -108,7 +108,7 @@ public class SecurityMetricsTest {
 			metric.put("subproperty", "encryption");
 			metric.put("value", "1");
 			try {
-				securityMetrics.receiveMetrics(metric);
+				securityMetrics.receiveProperty(metric);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
@@ -128,7 +128,7 @@ public class SecurityMetricsTest {
 			metric.put("subproperty", "signing");
 			metric.put("value", "1");
 			try {
-				securityMetrics.receiveMetrics(metric);
+				securityMetrics.receiveProperty(metric);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
@@ -142,7 +142,7 @@ public class SecurityMetricsTest {
 			metric.put("subproperty", "encryption");
 			metric.put("value", "1");
 			try {
-				securityMetrics.receiveMetrics(metric);
+				securityMetrics.receiveProperty(metric);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
@@ -162,7 +162,7 @@ public class SecurityMetricsTest {
 			metric.put("subproperty", "signing");
 			metric.put("value", "0");
 			try {
-				securityMetrics.receiveMetrics(metric);
+				securityMetrics.receiveProperty(metric);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
