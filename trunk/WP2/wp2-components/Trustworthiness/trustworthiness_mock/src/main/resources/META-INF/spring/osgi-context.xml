@@ -8,13 +8,13 @@
 		interface="eu.aniketos.trustworthiness.ext.messaging.ITrustworthinessPrediction" />
 
 	<osgi:reference id="reputationMetric"
-		interface="eu.aniketos.trustworthiness.ext.messaging.ReputationMetricsService" />
+		interface="eu.aniketos.trustworthiness.ext.messaging.ReputationRatingsService" />
 
 	<osgi:reference id="qosMetric"
 		interface="eu.aniketos.trustworthiness.ext.messaging.QosMetricsService" />	
 	
 	<osgi:reference id="securityMetric"
-		interface="eu.aniketos.trustworthiness.ext.messaging.SecurityMetricsService" />
+		interface="eu.aniketos.trustworthiness.ext.messaging.SecurityPropertiesService" />
 
 	<osgi:reference id="serviceManagement"
 		interface="eu.aniketos.trustworthiness.ext.messaging.ServiceManagement" />

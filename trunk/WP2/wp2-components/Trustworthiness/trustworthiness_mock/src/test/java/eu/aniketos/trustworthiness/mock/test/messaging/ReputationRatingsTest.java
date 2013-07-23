@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
-import eu.aniketos.trustworthiness.ext.messaging.ReputationMetricsService;
+import eu.aniketos.trustworthiness.ext.messaging.ReputationRatingsService;
 import eu.aniketos.trustworthiness.ext.rules.model.event.ConsumerRatingEvent;
 import eu.aniketos.trustworthiness.mock.messaging.ConsumerRatingEventImpl;
 
@@ -20,12 +20,12 @@ public class ReputationRatingsTest {
 	private static Logger logger = Logger
 			.getLogger(ReputationRatingsTest.class);
 
-	private ReputationMetricsService repMetrics;
+	private ReputationRatingsService repMetrics;
 
 	/**
 	 * @param qosMetics
 	 */
-	public ReputationRatingsTest(ReputationMetricsService repMetrics) {
+	public ReputationRatingsTest(ReputationRatingsService repMetrics) {
 		super();
 		this.repMetrics = repMetrics;
 	}

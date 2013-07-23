@@ -4,8 +4,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+//import eu.aniketos.data.ISecurityProperty;
 import eu.aniketos.trustworthiness.configuration.ConfigurationManagement;
-import eu.aniketos.trustworthiness.ext.messaging.SecurityMetricsService;
+import eu.aniketos.trustworthiness.ext.messaging.SecurityPropertiesService;
 import eu.aniketos.trustworthiness.rules.service.MetricRatingUpdate;
 import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
 
@@ -13,10 +14,10 @@ import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
  * @author Hisain Elshaafi (TSSG)
  * 
  */
-public class SecurityMetricsServiceImpl implements SecurityMetricsService {
+public class SecurityPropertiesServiceImpl implements SecurityPropertiesService {
 
 	private static Logger logger = Logger
-			.getLogger(SecurityMetricsService.class);
+			.getLogger(SecurityPropertiesService.class);
 
 	private ConfigurationManagement config;
 
@@ -31,7 +32,7 @@ public class SecurityMetricsServiceImpl implements SecurityMetricsService {
 	 * eu.aniketos.trustworthiness.messaging.QosMetricsService
 	 * #receiveMetrics(java.util.Map)
 	 */
-	public void receiveMetrics(Map<String, String> metric) {
+	public void receiveProperty(Map<String, String> metric) {
 
 		if (metric == null
 				|| metric.size() == 0
@@ -60,6 +61,12 @@ public class SecurityMetricsServiceImpl implements SecurityMetricsService {
 			}
 		}
 	}
+	
+
+	/*public void receiveProperty(String serviceId, ISecurityProperty property, String state) {
+		// TODO Auto-generated method stub
+		
+	}*/
 
 	/**
 	 * required for Spring dependency injection
@@ -117,5 +124,6 @@ public class SecurityMetricsServiceImpl implements SecurityMetricsService {
 	public void setSecPropertyUpdate(MetricRatingUpdate secPropertyUpdate) {
 		this.secPropertyUpdate = secPropertyUpdate;
 	}
+
 
 }
