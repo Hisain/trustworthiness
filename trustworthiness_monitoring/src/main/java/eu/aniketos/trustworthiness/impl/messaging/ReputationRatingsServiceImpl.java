@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import eu.aniketos.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.trustworthiness.ext.messaging.IReputationRatingsService;
 import eu.aniketos.trustworthiness.ext.rules.model.event.ConsumerRatingEvent;
+import eu.aniketos.trustworthiness.impl.messaging.util.PropertyValidator;
 import eu.aniketos.trustworthiness.rules.service.ReputationRatingUpdate;
 import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
 
@@ -28,8 +29,7 @@ public class ReputationRatingsServiceImpl implements IReputationRatingsService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * eu.aniketos.trustworthiness.messaging.QosMetricsService
+	 * @see eu.aniketos.trustworthiness.messaging.QosMetricsService
 	 * #receiveMetrics(java.util.Map)
 	 */
 	public void receiveRatings(Map<String, String> rating) {
@@ -48,20 +48,21 @@ public class ReputationRatingsServiceImpl implements IReputationRatingsService {
 				|| !rating.containsKey("property")
 				|| rating.get("property") == null
 				|| rating.get("property") == ""
-				|| !rating.containsKey("type")
-				|| rating.get("type") == null
-				|| rating.get("type") == ""
+				|| !rating.containsKey("value")
+				|| rating.get("value") == null
+				|| rating.get("value") == ""
+				|| !PropertyValidator.isNumeric(rating.get("value"))
 				|| (rating.containsKey("subproperty") && (rating
 						.get("subproperty") == null || rating
 						.get("subproperty") == ""))) {
-			logger.warn("received consumer rating contains null or empty data");
+			logger.warn("received consumer rating contains null, empty or invalid data");
 			throw new RuntimeException(
-					"received consumer rating contains null or empty data");
+					"received consumer rating contains null, empty or invalid data");
 
 		} else {
 
 			try {
-				ratingUpdate.updateScore(rating);
+				ratingUpdate.generateTrustRating(rating);
 			} catch (Exception e) {
 				logger.error("Exception: " + e.getMessage());
 			}
@@ -74,19 +75,21 @@ public class ReputationRatingsServiceImpl implements IReputationRatingsService {
 				|| event.getConsumerId() == null
 				|| event.getTransactionId() == null
 				|| event.getProperty() == null || event.getValue() == null
-				|| event.getServiceId().length() == 0
-				|| event.getConsumerId().length() == 0
-				|| event.getTransactionId().length() == 0
-				|| event.getProperty().length() == 0
-				|| event.getValue().length() == 0) {
-			logger.warn("received consumer rating contains null or empty data");
+				|| event.getServiceId().isEmpty()
+				|| event.getConsumerId().isEmpty()
+				|| event.getTransactionId().isEmpty()
+				|| !event.getProperty().equalsIgnoreCase("reputation")
+				|| event.getProperty().isEmpty() || event.getValue().isEmpty()
+				|| !PropertyValidator.isNumeric(event.getValue())) {
+
+			logger.warn("received consumer rating contains null, empty or invalid data");
 			throw new RuntimeException(
-					"received consumer rating contains null or empty data");
+					"received consumer rating contains null, empty or invalid data");
 
 		} else {
 
 			try {
-				ratingUpdate.updateScore(event);
+				ratingUpdate.generateTrustRating(event);
 			} catch (Exception e) {
 				logger.error("Exception: " + e.getMessage());
 			}

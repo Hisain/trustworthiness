@@ -3,8 +3,8 @@
 
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>eu.aniketos.wp2.components</groupId>
-	<artifactId>wp2-components-trustworthiness</artifactId>
+	<groupId>eu.aniketos.trustworthiness</groupId>
+	<artifactId>trustworthiness</artifactId>
 	<version>1.0.0</version>
 	
 	 <parent>
@@ -170,7 +170,6 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-remote-resources-plugin</artifactId>
-				<version>1.0</version>
 				<dependencies>
 					<dependency>
 						<groupId>org.apache.cxf</groupId>
@@ -214,6 +213,8 @@
 		<module>trustworthiness_transactional</module>
 		<!-- <module>trustworthiness_test</module> -->
 		<module>trustworthiness_mock</module>
+		<module>trustworthiness_runtime_test</module>
+		<module>trustworthiness_remote_client</module>
 		<module>datasource_tests</module>
 		<module>log4jproperties</module>
 		<module>antlr-hibernate-fragment</module>

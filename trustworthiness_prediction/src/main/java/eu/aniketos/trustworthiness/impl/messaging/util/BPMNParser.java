@@ -154,11 +154,16 @@ public class BPMNParser {
 
 		Namespace n = definitions.getNamespace();
 		Element process = definitions.getChild("process", n);
-		String compositionPlanId = process.getAttribute("id").getValue();
+		Attribute idAttribute = process.getAttribute("id");
+
+		String compositionPlanId = null;
+		if (idAttribute != null)
+			compositionPlanId = idAttribute.getValue();
 
 		return compositionPlanId;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static List<String> getServicesList(String file) {
 
 		SAXBuilder builder = new SAXBuilder();
@@ -182,7 +187,7 @@ public class BPMNParser {
 		Namespace n = definitions.getNamespace();
 		Element process = definitions.getChild("process", n);
 
-		@SuppressWarnings("unchecked")
+
 		List<Element> list = process.getChildren("serviceTask", n);
 
 		List<String> serviceList = new Vector<String>();
@@ -196,14 +201,19 @@ public class BPMNParser {
 
 			List<Element> listField = extensionElements
 					.getChildren("field", ns);
+			boolean idFound = false;
 			for (Element field : listField) {
-				if (field.getAttributeValue("name").equals("id")) {
+				
+				if (field.getAttributeValue("name") != null
+						&& field.getAttributeValue("name").equals("id")) {
 					String serviceId = field.getChild("string", ns).getValue();
 					serviceList.add(serviceId);
+					idFound = true;
 				}
-
 			}
-
+			if (!idFound){
+				logger.warn("a component ID seems to be missing.");
+			}
 		}
 
 		return serviceList;
@@ -421,8 +431,6 @@ public class BPMNParser {
 
 		return serviceType;
 	}
-
-	
 
 	// extract Service from the BPMN based on serviceTask
 	public static String getService(String file, String serviceTaskID) {

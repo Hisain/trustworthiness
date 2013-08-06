@@ -131,7 +131,7 @@ public class Rating implements Serializable {
 	 * @return
 	 */
 	@NotNull
-	@Column(name="transaction_id")
+	@Column(name="transaction_id",unique=true)
 	public String getTransactionId() {
 		return transactionId;
 	}

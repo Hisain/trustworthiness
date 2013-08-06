@@ -2,7 +2,7 @@ package eu.aniketos.trustworthiness.impl.messaging;
 
 import org.apache.log4j.Logger;
 
-import eu.aniketos.trustworthiness.impl.rules.model.event.AlertEventImpl;
+import eu.aniketos.trustworthiness.impl.rules.model.event.RuleAlertEventImpl;
 import eu.aniketos.trustworthiness.rules.model.event.RuleAlertEvent;
 import eu.aniketos.trustworthiness.trust.management.TrustFactory;
 import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
@@ -47,20 +47,20 @@ public class NotificationServiceImpl implements INotification {
 
 		if (alert.getAlertType().equals("ThreatLevelChange")) {
 
-			RuleAlertEvent event = new AlertEventImpl(serviceId);
+			RuleAlertEvent event = new RuleAlertEventImpl(serviceId);
 
 			event.setEventDescription(alert.getAlertDesc());
-
+			
 			event.setProperty("threat");
 
 			// TODO: update ratings and trustworthiness as result of threat
 
 		} else if (alert.getAlertType().equals("ContractViolation")) {
 
-			RuleAlertEvent event = new AlertEventImpl(serviceId);
+			RuleAlertEvent event = new RuleAlertEventImpl(serviceId);
 
 			event.setEventDescription(alert.getAlertDesc());
-
+			
 			event.setProperty("contract_violation");
 
 			// TODO: update ratings and trustworthiness as result of violation

@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="serviceRegistrationMock"
-		class="eu.aniketos.trustworthiness.mock.messaging.ServiceRegistration"
+		class="eu.aniketos.trustworthiness.mock.monitoring.ServiceRegistration"
 		init-method="initialize">
 		<constructor-arg>
 			<ref bean="serviceManagement" />
@@ -12,7 +12,7 @@
 	</bean>
 	
 	<bean id="repMock"
-		class="eu.aniketos.trustworthiness.mock.messaging.ReputationRatings"
+		class="eu.aniketos.trustworthiness.mock.monitoring.ReputationRatings"
 		init-method="initialize">
 		<constructor-arg>
 			<ref bean="reputationMetric" />
@@ -20,7 +20,7 @@
 	</bean>
 	
 	<bean id="securityMock"
-		class="eu.aniketos.trustworthiness.mock.messaging.SecurityProperties"
+		class="eu.aniketos.trustworthiness.mock.monitoring.SecurityProperties"
 		init-method="initialize">
 		<constructor-arg>
 			<ref bean="securityMetric" />
@@ -28,16 +28,16 @@
 	</bean> 
 	
 	<bean id="qosTest"
-		class="eu.aniketos.trustworthiness.mock.messaging.QoSMetrics"
+		class="eu.aniketos.trustworthiness.mock.monitoring.QoSMetrics"
 		init-method="initialize">
 		<constructor-arg>
 			<ref bean="qosMetric" />
 		</constructor-arg>
 	</bean>
-	
+ 
 	
 	<bean id="twRequestMock"
-		class="eu.aniketos.trustworthiness.mock.trust.management.TrustworthinessRequest"
+		class="eu.aniketos.trustworthiness.mock.prediction.management.TrustworthinessRequest"
 		init-method="requestTrustworthiness">
 		<constructor-arg>
 			<ref bean="trustworthinessPredictionService" />
@@ -48,7 +48,7 @@
 	</bean> 
 	
 	<bean id="alertEventHandler"
-		class="eu.aniketos.trustworthiness.mock.trust.alerts.Notification">
+		class="eu.aniketos.trustworthiness.mock.prediction.alerts.Notification">
 	</bean>
 
 </beans>

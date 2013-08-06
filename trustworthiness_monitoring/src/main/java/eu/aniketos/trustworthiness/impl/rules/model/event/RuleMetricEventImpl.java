@@ -22,6 +22,7 @@ public class RuleMetricEventImpl implements RuleMetricEvent {
 	// proposed value in contractValue
 	private String contractValue;
 
+	// type of value e.g. percentage
 	private String type;
 
 	private String limit;

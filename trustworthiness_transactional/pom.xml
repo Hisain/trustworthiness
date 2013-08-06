@@ -7,8 +7,8 @@
 	<packaging>bundle</packaging>
 	<name>Aniketos Trustworthiness Transactional Service Bundle</name>
 	<parent>
-		<groupId>eu.aniketos.wp2.components</groupId>
-		<artifactId>wp2-components-trustworthiness</artifactId>
+		<groupId>eu.aniketos.trustworthiness</groupId>
+		<artifactId>trustworthiness</artifactId>
 		<version>1.0.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
@@ -147,12 +147,12 @@
 			<version>4.3.0</version>
 		</dependency>
 		<dependency>
-			<groupId>eu.aniketos.trustworthiness</groupId>
+			<groupId>eu.aniketos.trustworthiness.api</groupId>
 			<artifactId>trustworthiness-api</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>eu.aniketos.trustworthiness</groupId>
+			<groupId>eu.aniketos.trustworthiness.data</groupId>
 			<artifactId>trustworthiness-domain</artifactId>
 			<version>1.0.0</version>
 		</dependency>

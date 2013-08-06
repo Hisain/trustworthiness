@@ -9,6 +9,8 @@ import eu.aniketos.trustworthiness.trust.management.TrustFactory;
 import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
 
 /**
+ * Manages the structure of stored composite services
+ * 
  * @author Hisain Elshaafi (TSSG)
  *
  */

@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 
 import eu.aniketos.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.trustworthiness.ext.rules.model.event.TrustEvent;
-import eu.aniketos.trustworthiness.impl.rules.model.event.AlertEventImpl;
+import eu.aniketos.trustworthiness.impl.rules.model.event.RuleAlertEventImpl;
 import eu.aniketos.trustworthiness.impl.rules.model.event.RuleMetricEventImpl;
 import eu.aniketos.trustworthiness.impl.trust.pojo.Atomic;
 import eu.aniketos.trustworthiness.impl.trust.pojo.ThreatLevel;
@@ -203,7 +203,7 @@ public void initialize() {
 	 * eu.aniketos.trustworthiness.rules.service.MetricRatingUpdate
 	 * #updateScore(java.util.Map)
 	 */
-	public void updateScore(Map<String, String> event) throws Exception {
+	public void generateRating(Map<String, String> event) throws Exception {
 
 		String serviceId = event.get("serviceId");
 		Atomic service = null;
@@ -308,7 +308,7 @@ public void initialize() {
 
 		} else if (event.get("type").equalsIgnoreCase("alert")) {
 
-			ruleEvent = new AlertEventImpl(serviceId, property, subproperty,
+			ruleEvent = new RuleAlertEventImpl(serviceId, property, subproperty,
 					contractValue, type, limit, String.valueOf(1), timestamp);
 
 		}
@@ -331,7 +331,7 @@ public void initialize() {
 
 	}
 
-	public void updateScore(TrustEvent event) throws Exception {
+	public void generateRating(TrustEvent event) throws Exception {
 
 		String serviceId = event.getServiceId();
 		Atomic service = null;
