@@ -4,7 +4,7 @@ package eu.aniketos.trustworthiness.impl.rules
 import java.util.Map
 
 import eu.aniketos.trustworthiness.impl.rules.model.event.RuleMetricEventImpl
-import eu.aniketos.trustworthiness.impl.rules.model.event.AlertEventImpl
+import eu.aniketos.trustworthiness.impl.rules.model.event.RuleAlertEventImpl
 import eu.aniketos.trustworthiness.impl.rules.model.event.RuleConsumerRatingEventImpl
 
 
@@ -16,7 +16,7 @@ end
 declare RuleConsumerRatingEventImpl
 	@role( event )
 end
-declare AlertEventImpl
+declare RuleAlertEventImpl
 	@role( event )
 end
 

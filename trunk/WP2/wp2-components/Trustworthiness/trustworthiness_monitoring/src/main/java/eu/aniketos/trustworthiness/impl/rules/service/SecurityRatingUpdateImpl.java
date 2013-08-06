@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 
 import eu.aniketos.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.trustworthiness.ext.rules.model.event.TrustEvent;
-import eu.aniketos.trustworthiness.impl.rules.model.event.AlertEventImpl;
+import eu.aniketos.trustworthiness.impl.rules.model.event.RuleAlertEventImpl;
 import eu.aniketos.trustworthiness.impl.rules.model.event.RuleMetricEventImpl;
 import eu.aniketos.trustworthiness.impl.trust.pojo.Atomic;
 import eu.aniketos.trustworthiness.impl.trust.pojo.SecProperty;
@@ -198,7 +198,7 @@ public class SecurityRatingUpdateImpl implements MetricRatingUpdate {
 	 * eu.aniketos.trustworthiness.rules.service.MetricRatingUpdate
 	 * #updateScore(java.util.Map)
 	 */
-	public void updateScore(Map<String, String> event) throws Exception {
+	public void generateRating(Map<String, String> event) throws Exception {
 
 		String serviceId = event.get("serviceId");
 		Atomic service = null;
@@ -207,19 +207,6 @@ public class SecurityRatingUpdateImpl implements MetricRatingUpdate {
 			service = trustFactory.createService(serviceId);
 
 			serviceEntityService.addAtomic(service);
-		}
-
-		if (!event.containsKey("property")
-				|| (event.containsKey("subproperty") && event
-						.get("subproperty") == null)
-				|| !event.containsKey("type") || event.get("property") == null
-				|| event.get("type") == null) {
-
-			logger.warn("metric did not contain required event elements.");
-			logger.warn("message will be ignored.");
-			throw new Exception(
-					"metric did not contain required event elements. message will be ignored.");
-
 		}
 
 		/*
@@ -242,11 +229,6 @@ public class SecurityRatingUpdateImpl implements MetricRatingUpdate {
 		}
 
 		String metricValue = event.get("value");
-
-		if (metricValue == null) {
-			throw new Exception(
-					"metric did not contain required event elements. message will be ignored.");
-		}
 
 		String contractValue = properties.get(propertySub + ".value");
 		String type = properties.get(propertySub + ".type");
@@ -292,20 +274,11 @@ public class SecurityRatingUpdateImpl implements MetricRatingUpdate {
 			return;
 		}
 
-		TrustEvent ruleEvent = null;
-
-		if (event.get("type").equalsIgnoreCase("metric")) {
-
-			ruleEvent = new RuleMetricEventImpl(serviceId, property,
+		TrustEvent ruleEvent = new RuleMetricEventImpl(serviceId, property,
 					subproperty, contractValue, type, limit, metricValue,
 					timestamp);
 
-		} else if (event.get("type").equalsIgnoreCase("alert")) {
-
-			ruleEvent = new AlertEventImpl(serviceId, property, subproperty,
-					contractValue, type, limit, String.valueOf(1), timestamp);
-
-		}
+		
 
 		String eventDescription = null;
 		if (event.containsKey("eventDescription")) {
@@ -325,7 +298,7 @@ public class SecurityRatingUpdateImpl implements MetricRatingUpdate {
 
 	}
 
-	public void updateScore(TrustEvent event) throws Exception {
+	public void generateRating(TrustEvent event) throws Exception {
 
 		String serviceId = event.getServiceId();
 		Atomic service = null;

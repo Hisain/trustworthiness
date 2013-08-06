@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- <bean id="serviceManagementTest"
+		class="eu.aniketos.trustworthiness.runtime.test.monitoring.ServiceManagementTest"
+		init-method="initialize">
+		<constructor-arg>
+			<ref bean="serviceManagement" />
+		</constructor-arg>
+	</bean>
+	
+	<bean id="repMockTest"
+		class="eu.aniketos.trustworthiness.runtime.test.monitoring.ReputationRatingsTest"
+		init-method="initialize">
+		<constructor-arg>
+			<ref bean="reputationMetric" />
+		</constructor-arg>
+	</bean>-->
+	<!--
+	<bean id="securityMockTest"
+		class="eu.aniketos.trustworthiness.runtime.test.monitoring.SecurityPropertiesTest"
+		init-method="initialize">
+		<constructor-arg>
+			<ref bean="securityMetric" />
+		</constructor-arg>
+	</bean> 
+	
+	
+	<bean id="qosTest"
+		class="eu.aniketos.trustworthiness.runtime.test.monitoring.QoSMetricsTest"
+		init-method="initialize">
+		<constructor-arg>
+			<ref bean="qosMetric" />
+		</constructor-arg>
+	</bean>
+	
+	 
+	<bean id="twRequestMockTest"
+		class="eu.aniketos.trustworthiness.runtime.test.prediction.management.TrustworthinessRequestTest"
+		init-method="requestTrustworthiness">
+		<constructor-arg>
+			<ref bean="trustworthinessPredictionService" />
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="compositeTrustworthinessPredictionService" />
+		</constructor-arg>
+	</bean>  -->
+	<!--
+	<bean name="ratingAlertTest"
+		class="eu.aniketos.trustworthiness.runtime.test.monitoring.ReputationRatingAlertTest"
+		init-method="initialize">
+		<property name="serviceEntityService" ref="serviceEntityService"></property>
+		<property name="ratingEntityService" ref="ratingEntityService"></property>
+		<property name="trustFactory" ref="trustFactory"></property>
+		<property name="eventAdmin" ref="eventAdminService"/>
+	</bean>-->
+	
+	<bean id="AlertTriggerTest"
+		class="eu.aniketos.trustworthiness.runtime.test.prediction.alerts.AlertTrigger"
+		init-method="initialize">
+		<constructor-arg>
+			<ref bean="securityMetric" />
+		</constructor-arg>
+	</bean> 
+	
+	<bean id="alertEventHandler"
+		class="eu.aniketos.trustworthiness.runtime.test.prediction.alerts.NotificationTest">
+	</bean>
+
+</beans>

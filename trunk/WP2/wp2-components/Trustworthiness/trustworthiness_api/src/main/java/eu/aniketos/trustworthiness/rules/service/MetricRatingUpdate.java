@@ -14,12 +14,12 @@ public interface MetricRatingUpdate {
 	 * @param metric
 	 * @throws Exception
 	 */
-	void updateScore(Map<String, String> metric) throws Exception;
+	void generateRating(Map<String, String> metric) throws Exception;
 
 	/**
 	 * @param event
 	 * @throws Exception
 	 */
-	void updateScore(TrustEvent event) throws Exception;
+	void generateRating(TrustEvent event) throws Exception;
 
 }

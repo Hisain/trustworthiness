@@ -52,9 +52,9 @@ public class CompositeTrustworthinessPredictionServiceImpl implements
 		// return an exception if empty or null parameters
 		if (serviceId == null || componentServices == null
 				|| serviceId.length() == 0 || componentServices.size() == 0) {
-			logger.warn("received serviceId or components are null or empty");
-			throw new RuntimeException(
-					"received serviceId or components are null or empty");
+
+			logger.error("received composite serviceId or components are null or empty");
+			return null;
 		}
 
 		Composite cs = serviceEntityService.getComposite(serviceId);
@@ -74,13 +74,16 @@ public class CompositeTrustworthinessPredictionServiceImpl implements
 					Atomic service = serviceEntityService.getAtomic(s);
 
 					// return an exception if component service is unknown
-					if (service == null)
-						throw new RuntimeException("Could not find service "
-								+ s + " in the repository");
+					if (service == null) {
+						logger.error("Could not find component service " + s
+								+ " in the repository");
+						return null;
+					}
 
 					logger.debug("adding component " + service.getId());
 					services.add(service);
 				}
+
 				cs.setComponentServices(services);
 
 				serviceEntityService.addComposite(cs);
@@ -106,6 +109,12 @@ public class CompositeTrustworthinessPredictionServiceImpl implements
 
 	public Trustworthiness getCompositeTrustworthiness(ICompositionPlan plan) {
 
+		if (plan == null) {
+			logger.error("composition plan is null.");
+			return null;
+
+		}
+
 		SAXBuilder builder = new SAXBuilder();
 
 		Document doc = null;
@@ -123,13 +132,20 @@ public class CompositeTrustworthinessPredictionServiceImpl implements
 		} catch (IOException e) {
 			logger.error("IOException:" + e);
 		}
-		
+
 		if (logger.isDebugEnabled()) {
 			logger.debug("document " + doc);
 		}
 		String csId = BPMNParser.getProcessId(doc);
 
-		Composite cs = serviceEntityService.getComposite(csId);
+		Composite cs = null;
+
+		if (csId != null) {
+			cs = serviceEntityService.getComposite(csId);
+		} else {
+			logger.error("composition plan with no process ID.");
+			return null;
+		}
 
 		if (cs == null) {
 

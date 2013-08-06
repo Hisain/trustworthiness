@@ -5,7 +5,7 @@
 
 	<bean name="configBuilder"
 		class="org.apache.commons.configuration.DefaultConfigurationBuilder">
-		<constructor-arg value="configuration\\config.xml" />
+		<constructor-arg value="configuration/config.xml" />
 	</bean>
 
 	<bean id="configService"

@@ -76,9 +76,8 @@ public class ReputationRatingUpdateImpl implements ReputationRatingUpdate {
 		Object props = config.getConfig().getProperty("property.name");
 
 		if (props == null) {
-			
+
 			logger.warn("No properties found");
-			
 
 		} else if (props instanceof Collection) {
 
@@ -196,11 +195,10 @@ public class ReputationRatingUpdateImpl implements ReputationRatingUpdate {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * eu.aniketos.trustworthiness.rules.service.RatingUpdate
+	 * @see eu.aniketos.trustworthiness.rules.service.RatingUpdate
 	 * #updateScore(java.util.Map)
 	 */
-	public void updateScore(Map<String, String> event) throws Exception {
+	public void generateTrustRating(Map<String, String> event) throws Exception {
 
 		String serviceId = event.get("serviceId");
 		Atomic service = null;
@@ -214,8 +212,7 @@ public class ReputationRatingUpdateImpl implements ReputationRatingUpdate {
 		if (!event.containsKey("property")
 				|| (event.containsKey("subproperty") && event
 						.get("subproperty") == null)
-				|| !event.containsKey("type") || event.get("property") == null
-				|| event.get("type") == null) {
+				|| event.get("property") == null) {
 
 			logger.warn("metric did not contain required event elements.");
 			logger.warn("message will be ignored.");
@@ -294,15 +291,9 @@ public class ReputationRatingUpdateImpl implements ReputationRatingUpdate {
 			return;
 		}
 
-		RuleConsumerRatingEvent ruleEvent = null;
-
-		if (event.get("type").equalsIgnoreCase("metric")) {
-
-			ruleEvent = new RuleConsumerRatingEventImpl(serviceId, consumerId,
-					transactionId, property, subproperty, contractValue, type,
-					limit, eventValue, timestamp);
-
-		}
+		RuleConsumerRatingEvent ruleEvent = new RuleConsumerRatingEventImpl(
+				serviceId, consumerId, transactionId, property, subproperty,
+				contractValue, type, limit, eventValue, timestamp);
 
 		String eventDescription = null;
 		if (event.containsKey("eventDescription")) {
@@ -320,7 +311,7 @@ public class ReputationRatingUpdateImpl implements ReputationRatingUpdate {
 
 	}
 
-	public void updateScore(ConsumerRatingEvent event) throws Exception {
+	public void generateTrustRating(ConsumerRatingEvent event) throws Exception {
 
 		String serviceId = event.getServiceId();
 		Atomic service = null;

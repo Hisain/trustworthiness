@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 //import eu.aniketos.data.ISecurityProperty;
 import eu.aniketos.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.trustworthiness.ext.messaging.ISecurityPropertiesService;
+import eu.aniketos.trustworthiness.impl.messaging.util.PropertyValidator;
 import eu.aniketos.trustworthiness.rules.service.MetricRatingUpdate;
 import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
 
@@ -42,20 +43,20 @@ public class SecurityPropertiesServiceImpl implements ISecurityPropertiesService
 				|| !metric.containsKey("property")
 				|| metric.get("property") == null
 				|| metric.get("property") == ""
-				|| !metric.containsKey("type")
-				|| metric.get("type") == null
-				|| metric.get("type") == ""
+				|| metric.get("value") == null
+				|| metric.get("value") == ""
+				|| !PropertyValidator.isNumeric(metric.get("value"))
 				|| (metric.containsKey("subproperty") && (metric
 						.get("subproperty") == null || metric
 						.get("subproperty") == ""))) {
-			logger.warn("received metric contains null or empty data");
+			logger.warn("received metric contains null, empty or invalid data");
 			throw new RuntimeException(
-					"received metric contains null or empty data");
+					"received metric contains null, empty or invalid data");
 
 		} else {
 
 			try {
-				secPropertyUpdate.updateScore(metric);
+				secPropertyUpdate.generateRating(metric);
 			} catch (Exception e) {
 				logger.error("Exception: " + e.getMessage());
 			}

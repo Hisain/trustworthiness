@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import eu.aniketos.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.trustworthiness.ext.messaging.IQosMetricsService;
 import eu.aniketos.trustworthiness.ext.rules.model.event.TrustEvent;
+import eu.aniketos.trustworthiness.impl.messaging.util.PropertyValidator;
 import eu.aniketos.trustworthiness.rules.service.MetricRatingUpdate;
 import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
 
@@ -27,8 +28,7 @@ public class QoSMetricsServiceImpl implements IQosMetricsService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * eu.aniketos.trustworthiness.messaging.QosMetricsService
+	 * @see eu.aniketos.trustworthiness.messaging.QosMetricsService
 	 * #receiveMetrics(java.util.Map)
 	 */
 	public void receiveMetrics(Map<String, String> metric) {
@@ -41,20 +41,21 @@ public class QoSMetricsServiceImpl implements IQosMetricsService {
 				|| !metric.containsKey("property")
 				|| metric.get("property") == null
 				|| metric.get("property") == ""
-				|| !metric.containsKey("type")
-				|| metric.get("type") == null
-				|| metric.get("type") == ""
+				|| !metric.containsKey("value")
+				|| metric.get("value") == null
+				|| metric.get("value") == ""
+				|| !PropertyValidator.isNumeric(metric.get("value"))
 				|| (metric.containsKey("subproperty") && (metric
 						.get("subproperty") == null || metric
 						.get("subproperty") == ""))) {
-			logger.warn("received metric contains null or empty data");
+			logger.warn("received metric contains null, empty or invalid data");
 			throw new RuntimeException(
-					"received metric contains null or empty data");
+					"received metric contains null, empty or invalid data");
 
 		} else {
 
 			try {
-				qosUpdate.updateScore(metric);
+				qosUpdate.generateRating(metric);
 			} catch (Exception e) {
 				logger.error("Exception: " + e.getMessage());
 			}
@@ -64,20 +65,23 @@ public class QoSMetricsServiceImpl implements IQosMetricsService {
 	public void processQoSMetric(TrustEvent event) {
 
 		if (event == null || event.getServiceId() == null
-				|| event.getProperty() == null || event.getValue() == null) {
-			logger.warn("received metric contains null or empty data");
+				|| event.getServiceId().isEmpty()
+				|| event.getProperty() == null || event.getProperty().isEmpty()
+				|| event.getValue() == null || event.getValue().isEmpty()
+				|| !PropertyValidator.isNumeric(event.getValue())) {
+
+			logger.warn("received metric contains null, empty or invalid data");
 			throw new RuntimeException(
-					"received metric contains null or empty data");
+					"received metric contains null, empty or invalid data");
 
 		} else {
 
 			try {
-				qosUpdate.updateScore(event);
+				qosUpdate.generateRating(event);
 			} catch (Exception e) {
 				logger.error("Exception: " + e.getMessage());
 			}
 		}
-
 	}
 
 	/**
