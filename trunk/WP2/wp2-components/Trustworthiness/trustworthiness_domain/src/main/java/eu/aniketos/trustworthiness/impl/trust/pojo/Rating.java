@@ -1,6 +1,32 @@
 /**
  *
  */
+/**
+ * Copyright (c) 2013, Waterford Institute of Technology
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met
+ *    - Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    - Redistributions in binary form must reproduce the above copyright
+ *      notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
+ *    - Neither the name of Waterford Institute of Technology nor the
+ *      names of its contributors may be used to endorse or promote products
+ *      derived from this software without specific prior written permission.
+ *      
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL WATERFORD INSTITUTE OF TECHNOLOGY BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package eu.aniketos.trustworthiness.impl.trust.pojo;
 
 import java.io.Serializable;
@@ -20,13 +46,12 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
 /**
  * @author Hisain Elshaafi (TSSG)
- *
+ * 
  */
 @Entity
-@org.hibernate.annotations.Proxy(lazy=false)  
+@org.hibernate.annotations.Proxy(lazy = false)
 @Table(name = "RATING")
 public class Rating implements Serializable {
 
@@ -38,22 +63,21 @@ public class Rating implements Serializable {
 	private String id;
 
 	private Service service;
-	
+
 	private String consumerId;
-	
+
 	private String transactionId;
 
 	private double score;
 
-	//@Length(max = 25)
+	// @Length(max = 25)
 	private String property;
 
-	//@Length(max = 50)
+	// @Length(max = 50)
 	private long recency;
 
 	// description of triggering event
 	private String eventDescription;
-	
 
 	/*
 	 * recencyWt and propertyWt is weight of score regardless of other scores
@@ -94,7 +118,7 @@ public class Rating implements Serializable {
 	 * @return
 	 */
 	@Id
-	@Column(name="id")
+	@Column(name = "id")
 	public String getId() {
 		return id;
 	}
@@ -109,12 +133,12 @@ public class Rating implements Serializable {
 	/**
 	 * @return
 	 * 
-	 * TODO: test after change from service to service
+	 *         TODO: test after change from service to service
 	 */
 	@NotNull
 	@ManyToOne
 	// (cascade = { CascadeType.ALL })
-	@JoinColumn(name="service_id")
+	@JoinColumn(name = "service_id")
 	public Service getService() {
 		return service;
 	}
@@ -126,12 +150,11 @@ public class Rating implements Serializable {
 		this.service = service;
 	}
 
-	
 	/**
 	 * @return
 	 */
 	@NotNull
-	@Column(name="transaction_id",unique=true)
+	@Column(name = "transaction_id", unique = true)
 	public String getTransactionId() {
 		return transactionId;
 	}
@@ -147,7 +170,7 @@ public class Rating implements Serializable {
 	 * @return
 	 */
 	@NotNull
-	@Column(name="consumer_id")
+	@Column(name = "consumer_id")
 	public String getConsumerId() {
 		return consumerId;
 	}
@@ -208,7 +231,7 @@ public class Rating implements Serializable {
 	/**
 	 * @return
 	 */
-	@Column(name="event_description")
+	@Column(name = "event_description")
 	public String getEventDescription() {
 		return eventDescription;
 	}
@@ -281,23 +304,24 @@ public class Rating implements Serializable {
 		 * equivalence by id
 		 */
 		Rating castOther = (Rating) other;
-		return new EqualsBuilder().append(id, castOther.getId()).append(service,
-				castOther.getService()).append(score, castOther.getScore())
-				.append(recency, castOther.getRecency()).append(property,
-						castOther.getProperty()).isEquals();
+		return new EqualsBuilder().append(id, castOther.getId())
+				.append(service, castOther.getService())
+				.append(score, castOther.getScore())
+				.append(recency, castOther.getRecency())
+				.append(property, castOther.getProperty()).isEquals();
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(441293447, 2056268651).append(id).append(
-				service).append(score).append(recency).append(property)
+		return new HashCodeBuilder(441293447, 2056268651).append(id)
+				.append(service).append(score).append(recency).append(property)
 				.toHashCode();
 	}
 
 	public String toString() {
 		return new ToStringBuilder(this).append("id", id)
-				.append("service", service).append("score", score).append(
-						"recency", recency).append("property", property)
+				.append("service", service).append("score", score)
+				.append("recency", recency).append("property", property)
 				.toString();
 	}
 

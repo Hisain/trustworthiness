@@ -1,3 +1,29 @@
+/**
+ * Copyright (c) 2013, Waterford Institute of Technology
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met
+ *    - Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    - Redistributions in binary form must reproduce the above copyright
+ *      notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
+ *    - Neither the name of Waterford Institute of Technology nor the
+ *      names of its contributors may be used to endorse or promote products
+ *      derived from this software without specific prior written permission.
+ *      
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL WATERFORD INSTITUTE OF TECHNOLOGY BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package eu.aniketos.trustworthiness.impl.trust.pojo;
 
 import java.util.HashSet;
@@ -12,14 +38,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OrderBy;
 
 @Entity
-@org.hibernate.annotations.Proxy(lazy=false)
+@org.hibernate.annotations.Proxy(lazy = false)
 @DiscriminatorValue("composite")
 public class Composite extends Service {
 
 	private static final long serialVersionUID = -1915945322854410539L;
-	
-	private Set<Atomic>componentServices = new HashSet<Atomic>();
-	
+
+	private Set<Atomic> componentServices = new HashSet<Atomic>();
+
 	/**
 	 * 
 	 */
@@ -32,15 +58,15 @@ public class Composite extends Service {
 	 * @param serviceId
 	 */
 	public Composite(String serviceId) {
-		this.setId(serviceId);	
+		this.setId(serviceId);
 	}
-	
+
 	/**
 	 * @return
 	 */
-	@ManyToMany(fetch = FetchType.EAGER)//, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinTable(name = "LNK_SERVICE_COMPOSITE", joinColumns = @JoinColumn(name = "composite_id", referencedColumnName = "id"),
-	inverseJoinColumns = @JoinColumn(name = "atomic_id", referencedColumnName = "id"))
+	@ManyToMany(fetch = FetchType.EAGER)
+	// , cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "LNK_SERVICE_COMPOSITE", joinColumns = @JoinColumn(name = "composite_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "atomic_id", referencedColumnName = "id"))
 	@OrderBy("id")
 	public Set<Atomic> getComponentServices() {
 		return componentServices;
