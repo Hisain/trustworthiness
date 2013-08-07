@@ -1,35 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Copyright (c) 2013, Waterford Institute of Technology
+	All rights reserved.
+
+	Redistribution and use in source and binary forms, with or without
+	modification, are permitted provided that the following conditions are met:
+	- Redistributions of source code must retain the above copyright
+	notice, this list of conditions and the following disclaimer.
+	- Redistributions in binary form must reproduce the above copyright
+	notice, this list of conditions and the following disclaimer in the
+	documentation and/or other materials provided with the distribution.
+	- Neither the name of Waterford Institute of Technology nor the
+	names of its contributors may be used to endorse or promote products
+	derived from this software without specific prior written permission.
+
+	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+	IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+	THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+	ARE DISCLAIMED. IN NO EVENT SHALL WATERFORD INSTITUTE OF TECHNOLOGY BE LIABLE
+	FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+	DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+	OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+	CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+	OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+	USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-		
+
 	<bean name="serviceManagement"
 		class="eu.aniketos.trustworthiness.impl.messaging.ServiceManagementImpl">
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 		<property name="trustFactory" ref="trustFactory"></property>
 	</bean>
-	
+
 	<bean name="reputationMetric"
 		class="eu.aniketos.trustworthiness.impl.messaging.ReputationRatingsServiceImpl">
 		<property name="config" ref="configService"></property>
 		<property name="ratingUpdate" ref="ratingUpdate"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 	</bean>
-	
+
 	<bean name="qosMetric"
 		class="eu.aniketos.trustworthiness.impl.messaging.QoSMetricsServiceImpl">
 		<property name="config" ref="configService"></property>
 		<property name="qosUpdate" ref="qosUpdate"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 	</bean>
-		
+
 	<bean name="securityMetric"
 		class="eu.aniketos.trustworthiness.impl.messaging.SecurityPropertiesServiceImpl">
 		<property name="config" ref="configService"></property>
 		<property name="secPropertyUpdate" ref="secPropertyUpdate"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 	</bean>
-	
+
 	<bean name="notification"
 		class="eu.aniketos.trustworthiness.impl.messaging.NotificationServiceImpl">
 		<property name="trustFactory" ref="trustFactory"></property>
@@ -41,11 +67,13 @@
 	</bean>
 
 	<bean name="knowledgeBaseFactory"
-		class="eu.aniketos.trustworthiness.impl.rules.model.KnowledgeBaseFactoryService" init-method="create">
+		class="eu.aniketos.trustworthiness.impl.rules.model.KnowledgeBaseFactoryService"
+		init-method="create">
 	</bean>
 
 	<bean name="sessionLookup"
-		class="eu.aniketos.trustworthiness.impl.rules.persistence.JPAKnowledgeSessionLookup" init-method="init">
+		class="eu.aniketos.trustworthiness.impl.rules.persistence.JPAKnowledgeSessionLookup"
+		init-method="init">
 		<constructor-arg>
 			<ref bean="knowledgeBaseFactory" />
 		</constructor-arg>
@@ -65,9 +93,9 @@
 		<property name="ratingEntityService" ref="ratingEntityService"></property>
 		<property name="trustFactory" ref="trustFactory"></property>
 		<property name="ruleExecuter" ref="ruleExecutor"></property>
-		<property name="eventAdmin" ref="eventAdminService"/>
+		<property name="eventAdmin" ref="eventAdminService" />
 	</bean>
-	
+
 	<bean name="qosUpdate"
 		class="eu.aniketos.trustworthiness.impl.rules.service.QosRatingUpdateImpl"
 		init-method="initialize">
@@ -76,9 +104,9 @@
 		<property name="qosEntityService" ref="qosEntityService"></property>
 		<property name="trustFactory" ref="trustFactory"></property>
 		<property name="ruleExecuter" ref="ruleExecutor"></property>
-		<property name="eventAdmin" ref="eventAdminService"/>
+		<property name="eventAdmin" ref="eventAdminService" />
 	</bean>
-	
+
 	<bean name="secPropertyUpdate"
 		class="eu.aniketos.trustworthiness.impl.rules.service.SecurityRatingUpdateImpl"
 		init-method="initialize">
@@ -87,18 +115,20 @@
 		<property name="securityEntityService" ref="securityEntityService"></property>
 		<property name="trustFactory" ref="trustFactory"></property>
 		<property name="ruleExecuter" ref="ruleExecutor"></property>
-		<property name="eventAdmin" ref="eventAdminService"/>
+		<property name="eventAdmin" ref="eventAdminService" />
 	</bean>
 
 	<!-- <bean name="qosMetricJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-		<property name="jobClass" value="eu.aniketos.trustworthiness.impl.messaging.QoSMetricsScheduler" />
+		<property name="jobClass" value="eu.aniketos.trustworthiness.impl.messaging.QoSMetricsScheduler"
+		/>
 		<property name="jobDataAsMap">
-			<map>
-				<entry key="timeout" value="60" />
-			</map>
+		<map>
+		<entry key="timeout" value="60" />
+		</map>
 		</property>
-	</bean> -->
-	
+		</bean> -->
+
 	<bean id="dummy"
-		class="eu.aniketos.trustworthiness.impl.messaging.service.StatusServiceImpl" init-method="initialize"/>
+		class="eu.aniketos.trustworthiness.impl.messaging.service.StatusServiceImpl"
+		init-method="initialize" />
 </beans>

@@ -1,3 +1,29 @@
+/**
+* Copyright (c) 2013, Waterford Institute of Technology
+* All rights reserved.
+*
+* Redistribution and use in source and binary forms, with or without
+* modification, are permitted provided that the following conditions are met
+*    - Redistributions of source code must retain the above copyright
+*      notice, this list of conditions and the following disclaimer.
+*    - Redistributions in binary form must reproduce the above copyright
+*      notice, this list of conditions and the following disclaimer in the
+* documentation and/or other materials provided with the distribution.
+*    - Neither the name of Waterford Institute of Technology nor the
+*      names of its contributors may be used to endorse or promote products
+*      derived from this software without specific prior written permission.
+*      
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+* DISCLAIMED. IN NO EVENT SHALL WATERFORD INSTITUTE OF TECHNOLOGY BE LIABLE FOR ANY
+* DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
 package eu.aniketos.trustworthiness.impl.trust.management.atomic;
 
 import java.math.BigDecimal;
@@ -201,7 +227,7 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 
 		Object properties = config.getConfig().getProperty("property.name");
 		String[] propsArray = {};
-		
+
 		if (properties == null) {
 
 			if (logger.isDebugEnabled()) {
@@ -216,9 +242,10 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 			}
 
 			@SuppressWarnings("unchecked")
-			Object[] propsObjArray = ((Collection<String>) properties).toArray();
-			propsArray = Arrays.copyOf(propsObjArray,
-					propsObjArray.length, String[].class);
+			Object[] propsObjArray = ((Collection<String>) properties)
+					.toArray();
+			propsArray = Arrays.copyOf(propsObjArray, propsObjArray.length,
+					String[].class);
 		}
 
 		for (String property : propsArray) {
@@ -274,19 +301,22 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		// TODO: separate reputation from qos
 		double trustworthinessScore = qosScore * securityScore;
 
-		BigDecimal securityBD = new BigDecimal(String.valueOf(securityScore))
-				.setScale(3, BigDecimal.ROUND_HALF_UP);
 		BigDecimal trustworthinessBD = new BigDecimal(
 				String.valueOf(trustworthinessScore)).setScale(3,
 				BigDecimal.ROUND_HALF_UP);
 
-		securityScore = Double.parseDouble(securityBD.toString());
 		trustworthinessScore = Double.parseDouble(trustworthinessBD.toString());
+
+		if (logger.isInfoEnabled()) {
+			logger.info("trustworthiness for " + serviceId + "="
+					+ trustworthinessScore);
+		}
 
 		TrustworthinessEntity trustworthinessEntity = trustworthinessEntityService
 				.getTrustworthiness(serviceId);
 		if (trustworthinessEntity == null) {
-			trustworthinessEntity = trustFactory.createTrustworthiness(serviceId);
+			trustworthinessEntity = trustFactory
+					.createTrustworthiness(serviceId);
 		}
 
 		trustworthinessEntity.setId(serviceId);
@@ -303,9 +333,15 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		trustworthinessEntity.setTrustworthinessScore(trustworthinessScore);
 
 		// send alert if trustworthiness > allowed change before alert
-		double scoreChange = Math.abs(trustworthinessScore
-				- trustworthinessEntity.getLastAlertScore());
-		if (scoreChange > config.getConfig().getDouble("trust_change_alert")) {
+		double lastAlert = trustworthinessEntity.getLastAlertScore();
+		double scoreChange = Math.abs(trustworthinessScore - lastAlert);
+
+		double threshold = config.getConfig().getDouble("trust_threshold");
+
+		double changeAlert = config.getConfig().getDouble("trust_change_alert");
+
+		if (scoreChange > changeAlert
+				|| (lastAlert > threshold && trustworthinessScore < threshold)) {
 
 			trustworthinessEntity.setLastAlertScore(trustworthinessScore);
 
@@ -318,8 +354,7 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 			props.put("alert.type", "TRUST_LEVEL_CHANGE");
 
 			// send alert if trustworthiness < threshold
-			if (trustworthinessScore < config.getConfig().getDouble(
-					"trust_threshold")) {
+			if (trustworthinessScore < threshold) {
 
 				props.put("alert.description", "UNTRUSTED_ATOMIC_SERVICE");
 
@@ -342,7 +377,8 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		}
 
 		logger.debug("updating service with results..");
-		trustworthinessEntityService.updateTrustworthiness(trustworthinessEntity);
+		trustworthinessEntityService
+				.updateTrustworthiness(trustworthinessEntity);
 
 		return trustworthinessEntity;
 	}
@@ -399,7 +435,8 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		TrustworthinessEntity trustworthinessEntity = trustworthinessEntityService
 				.getTrustworthiness(serviceId);
 		if (trustworthinessEntity == null) {
-			trustworthinessEntity = trustFactory.createTrustworthiness(serviceId);
+			trustworthinessEntity = trustFactory
+					.createTrustworthiness(serviceId);
 		}
 
 		trustworthinessEntity.setId(serviceId);
@@ -457,7 +494,8 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		}
 
 		logger.debug("updating service with results..");
-		trustworthinessEntityService.updateTrustworthiness(trustworthinessEntity);
+		trustworthinessEntityService
+				.updateTrustworthiness(trustworthinessEntity);
 
 		return trustworthinessEntity;
 	}
@@ -825,7 +863,8 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		TrustworthinessEntity trustworthinessEntity = trustworthinessEntityService
 				.getTrustworthiness(serviceId);
 		if (trustworthinessEntity == null) {
-			trustworthinessEntity = trustFactory.createTrustworthiness(serviceId);
+			trustworthinessEntity = trustFactory
+					.createTrustworthiness(serviceId);
 		}
 
 		trustworthinessEntity.setId(serviceId);
@@ -883,7 +922,8 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 		}
 
 		logger.debug("updating service with results..");
-		trustworthinessEntityService.updateTrustworthiness(trustworthinessEntity);
+		trustworthinessEntityService
+				.updateTrustworthiness(trustworthinessEntity);
 
 		return trustworthinessEntity;
 	}
@@ -908,7 +948,13 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 			}
 			totSecurity += secProp.getScore() * propertyWeight;
 		}
+
 		securityScore = 1 - Math.exp(-totSecurity);
+
+		BigDecimal securityBD = new BigDecimal(String.valueOf(securityScore))
+				.setScale(3, BigDecimal.ROUND_HALF_UP);
+		securityScore = Double.parseDouble(securityBD.toString());
+
 		return securityScore;
 	}
 
@@ -1061,7 +1107,8 @@ public class ServiceTrustUpdateMovingAvgImpl implements
 
 		double savedRepScore = trustworthinessEntity.getReputationScore();
 		double calcTime = trustworthinessEntity.getCalcTime();
-		double savedRepDeviation = trustworthinessEntity.getReputationDeviation();
+		double savedRepDeviation = trustworthinessEntity
+				.getReputationDeviation();
 		double savedTwWt = trustworthinessEntity.getReputationMovingWt();
 
 		/* current time in hrs */
