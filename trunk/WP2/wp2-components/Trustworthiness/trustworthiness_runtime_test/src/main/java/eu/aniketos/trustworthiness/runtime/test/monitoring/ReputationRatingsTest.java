@@ -72,7 +72,7 @@ public class ReputationRatingsTest {
 			logger.error(e.getMessage());
 		}
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 1000; i++) {
 
 			ConsumerRatingEvent event = new ConsumerRatingEventImpl();
 
@@ -92,232 +92,202 @@ public class ReputationRatingsTest {
 
 			event.setTimestamp(timestamp);
 
-			if (logger.isDebugEnabled()) {
+			/*if (logger.isDebugEnabled()) {
 				logger.debug(" timestamp=" + timestamp);
-			}
+			}*/
 
 			String eventDescription = "nice service, happy to do business with..";
 			event.setEventDescription(eventDescription);
 
 			try {
-				repMetrics.processReputationRating(event);
+				final ConsumerRatingEvent event1 = event;
+				Thread thread = new Thread() {
+
+					public void run() {
+						if (logger.isDebugEnabled()) {
+							logger.debug(" sending rating for transaction "
+									+ event1.getTransactionId());
+						}
+						repMetrics.processReputationRating(event1);
+
+					}
+
+				};
+				thread.start();
+				Thread.sleep(50);
+
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
 		}
 
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-
-			logger.error(e.getMessage());
-		}
-
-		// ////////////////////////////////////////
-
-		for (int i = 0; i < 3; i++) {
-
-			ConsumerRatingEvent event = new ConsumerRatingEventImpl();
-
-			event.setServiceId("testId05");
-
-			event.setConsumerId("c159");
-
-			event.setTransactionId("t235");
-
-			event.setProperty("reputation");
-
-			event.setValue(Double.toString(0.9 + r.nextDouble() / 10));
-
-			DateTime dt = new DateTime();
-			DateTimeFormatter fmt = ISODateTimeFormat.dateTimeNoMillis();
-			String timestamp = fmt.print(dt);
-
-			event.setTimestamp(timestamp);
-
-			if (logger.isDebugEnabled()) {
-				logger.debug(" timestamp=" + timestamp);
-			}
-
-			String eventDescription = "thanks..";
-			event.setEventDescription(eventDescription);
-
-			try {
-				repMetrics.processReputationRating(event);
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-			}
-		}
-
-		// ////////////////////////////////////////
-
-		// rating with null or empty service id
-		logger.info("rating with null or empty service id");
-
-		for (int i = 0; i < 1; i++) {
-
-			ConsumerRatingEvent event = new ConsumerRatingEventImpl();
-
-			event.setServiceId(null);
-
-			event.setConsumerId("c169");
-
-			event.setTransactionId("t236");
-
-			event.setProperty("reputation");
-
-			event.setValue(Double.toString(0.9 + r.nextDouble() / 10));
-
-			try {
-				repMetrics.processReputationRating(event);
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-			}
-		}
-
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-
-			logger.error(e.getMessage());
-		}
-
-		// ////////////////////////////////////////
-
-		// rating with null or empty service id
-		logger.info("rating with null or empty consumer id");
-
-		for (int i = 0; i < 1; i++) {
-
-			ConsumerRatingEvent event = new ConsumerRatingEventImpl();
-
-			event.setServiceId("testId05");
-
-			event.setConsumerId(null);
-
-			event.setTransactionId("t288");
-
-			event.setProperty("reputation");
-
-			event.setValue(Double.toString(0.9 + r.nextDouble() / 10));
-
-			try {
-				repMetrics.processReputationRating(event);
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-			}
-		}
-
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-
-			logger.error(e.getMessage());
-		}
-
-		// /////////////////////////////
-
-		// rating with null or empty service id
-		logger.info("rating with null or empty transaction id");
-
-		for (int i = 0; i < 1; i++) {
-
-			ConsumerRatingEvent event = new ConsumerRatingEventImpl();
-
-			event.setServiceId("testId05");
-
-			event.setConsumerId("c177");
-
-			event.setTransactionId(null);
-
-			event.setProperty("reputation");
-
-			event.setValue(Double.toString(0.9 + r.nextDouble() / 10));
-
-			try {
-				repMetrics.processReputationRating(event);
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-			}
-		}
-
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-
-			logger.error(e.getMessage());
-		}
-
-		// ////////////////////////////////////////
-
-		logger.info("sending metric as null");
-
-		for (int i = 0; i < 2; i++) {
-
-			ConsumerRatingEvent event = null;
-
-			try {
-				repMetrics.processReputationRating(event);
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-			}
-		}
-
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-
-			logger.error(e.getMessage());
-		}
-
-		// ////////////////////////////////////////
-
-		logger.info("sending metric as empty");
-
-		for (int i = 0; i < 2; i++) {
-
-			ConsumerRatingEvent event = new ConsumerRatingEventImpl("", "", "",
-					"", "", "");
-
-			try {
-				repMetrics.processReputationRating(event);
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-			}
-		}
-
-		// ////////////////////////////////////////
-
-		logger.info("invalid timestamp");
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-
-			logger.error(e.getMessage());
-		}
-
-		for (int i = 0; i < 3; i++) {
-
-			ConsumerRatingEvent event = new ConsumerRatingEventImpl();
-
-			event.setServiceId("testId10");
-
-			event.setConsumerId("c155");
-
-			event.setTransactionId("t237");
-
-			event.setProperty("reputation");
-
-			event.setValue(Double.toString(0.9 + r.nextDouble() / 10));
-
-			event.setTimestamp("34523453z");
-
-			try {
-				repMetrics.processReputationRating(event);
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-			}
-		}
+		/*
+		 * try { Thread.sleep(1000); } catch (InterruptedException e) {
+		 * 
+		 * logger.error(e.getMessage()); }
+		 * 
+		 * // ////////////////////////////////////////
+		 * 
+		 * for (int i = 0; i < 3; i++) {
+		 * 
+		 * ConsumerRatingEvent event = new ConsumerRatingEventImpl();
+		 * 
+		 * event.setServiceId("testId05");
+		 * 
+		 * event.setConsumerId("c159");
+		 * 
+		 * event.setTransactionId("t235");
+		 * 
+		 * event.setProperty("reputation");
+		 * 
+		 * event.setValue(Double.toString(0.9 + r.nextDouble() / 10));
+		 * 
+		 * DateTime dt = new DateTime(); DateTimeFormatter fmt =
+		 * ISODateTimeFormat.dateTimeNoMillis(); String timestamp =
+		 * fmt.print(dt);
+		 * 
+		 * event.setTimestamp(timestamp);
+		 * 
+		 * if (logger.isDebugEnabled()) { logger.debug(" timestamp=" +
+		 * timestamp); }
+		 * 
+		 * String eventDescription = "thanks..";
+		 * event.setEventDescription(eventDescription);
+		 * 
+		 * try { repMetrics.processReputationRating(event); } catch (Exception
+		 * e) { logger.error(e.getMessage()); } }
+		 * 
+		 * // ////////////////////////////////////////
+		 * 
+		 * // rating with null or empty service id
+		 * logger.info("rating with null or empty service id");
+		 * 
+		 * for (int i = 0; i < 1; i++) {
+		 * 
+		 * ConsumerRatingEvent event = new ConsumerRatingEventImpl();
+		 * 
+		 * event.setServiceId(null);
+		 * 
+		 * event.setConsumerId("c169");
+		 * 
+		 * event.setTransactionId("t236");
+		 * 
+		 * event.setProperty("reputation");
+		 * 
+		 * event.setValue(Double.toString(0.9 + r.nextDouble() / 10));
+		 * 
+		 * try { repMetrics.processReputationRating(event); } catch (Exception
+		 * e) { logger.error(e.getMessage()); } }
+		 * 
+		 * try { Thread.sleep(1000); } catch (InterruptedException e) {
+		 * 
+		 * logger.error(e.getMessage()); }
+		 * 
+		 * // ////////////////////////////////////////
+		 * 
+		 * // rating with null or empty service id
+		 * logger.info("rating with null or empty consumer id");
+		 * 
+		 * for (int i = 0; i < 1; i++) {
+		 * 
+		 * ConsumerRatingEvent event = new ConsumerRatingEventImpl();
+		 * 
+		 * event.setServiceId("testId05");
+		 * 
+		 * event.setConsumerId(null);
+		 * 
+		 * event.setTransactionId("t288");
+		 * 
+		 * event.setProperty("reputation");
+		 * 
+		 * event.setValue(Double.toString(0.9 + r.nextDouble() / 10));
+		 * 
+		 * try { repMetrics.processReputationRating(event); } catch (Exception
+		 * e) { logger.error(e.getMessage()); } }
+		 * 
+		 * try { Thread.sleep(1000); } catch (InterruptedException e) {
+		 * 
+		 * logger.error(e.getMessage()); }
+		 * 
+		 * // /////////////////////////////
+		 * 
+		 * // rating with null or empty service id
+		 * logger.info("rating with null or empty transaction id");
+		 * 
+		 * for (int i = 0; i < 1; i++) {
+		 * 
+		 * ConsumerRatingEvent event = new ConsumerRatingEventImpl();
+		 * 
+		 * event.setServiceId("testId05");
+		 * 
+		 * event.setConsumerId("c177");
+		 * 
+		 * event.setTransactionId(null);
+		 * 
+		 * event.setProperty("reputation");
+		 * 
+		 * event.setValue(Double.toString(0.9 + r.nextDouble() / 10));
+		 * 
+		 * try { repMetrics.processReputationRating(event); } catch (Exception
+		 * e) { logger.error(e.getMessage()); } }
+		 * 
+		 * try { Thread.sleep(1000); } catch (InterruptedException e) {
+		 * 
+		 * logger.error(e.getMessage()); }
+		 * 
+		 * // ////////////////////////////////////////
+		 * 
+		 * logger.info("sending metric as null");
+		 * 
+		 * for (int i = 0; i < 2; i++) {
+		 * 
+		 * ConsumerRatingEvent event = null;
+		 * 
+		 * try { repMetrics.processReputationRating(event); } catch (Exception
+		 * e) { logger.error(e.getMessage()); } }
+		 * 
+		 * try { Thread.sleep(1000); } catch (InterruptedException e) {
+		 * 
+		 * logger.error(e.getMessage()); }
+		 * 
+		 * // ////////////////////////////////////////
+		 * 
+		 * logger.info("sending metric as empty");
+		 * 
+		 * for (int i = 0; i < 2; i++) {
+		 * 
+		 * ConsumerRatingEvent event = new ConsumerRatingEventImpl("", "", "",
+		 * "", "", "");
+		 * 
+		 * try { repMetrics.processReputationRating(event); } catch (Exception
+		 * e) { logger.error(e.getMessage()); } }
+		 * 
+		 * // ////////////////////////////////////////
+		 * 
+		 * logger.info("invalid timestamp"); try { Thread.sleep(1000); } catch
+		 * (InterruptedException e) {
+		 * 
+		 * logger.error(e.getMessage()); }
+		 * 
+		 * for (int i = 0; i < 3; i++) {
+		 * 
+		 * ConsumerRatingEvent event = new ConsumerRatingEventImpl();
+		 * 
+		 * event.setServiceId("testId10");
+		 * 
+		 * event.setConsumerId("c155");
+		 * 
+		 * event.setTransactionId("t237");
+		 * 
+		 * event.setProperty("reputation");
+		 * 
+		 * event.setValue(Double.toString(0.9 + r.nextDouble() / 10));
+		 * 
+		 * event.setTimestamp("34523453z");
+		 * 
+		 * try { repMetrics.processReputationRating(event); } catch (Exception
+		 * e) { logger.error(e.getMessage()); } }
+		 */
 
 	}
 }

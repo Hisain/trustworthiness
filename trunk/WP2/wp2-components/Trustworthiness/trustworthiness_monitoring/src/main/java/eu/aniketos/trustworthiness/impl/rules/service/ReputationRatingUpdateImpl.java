@@ -491,6 +491,7 @@ public class ReputationRatingUpdateImpl implements ReputationRatingUpdate {
 			Dictionary props = new Properties();
 			props.put("service.id", serviceId);
 			props.put("score.id", rating.getId());
+			props.put("event.type", "reputation");
 
 			Event osgiEvent = new Event(
 					"eu/aniketos/trustworthiness/monitoring/reputation", props);

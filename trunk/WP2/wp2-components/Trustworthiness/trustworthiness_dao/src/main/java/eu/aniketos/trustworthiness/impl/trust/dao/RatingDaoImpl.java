@@ -29,7 +29,10 @@ package eu.aniketos.trustworthiness.impl.trust.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.orm.jpa.support.JpaDaoSupport;
 
 import eu.aniketos.trustworthiness.trust.dao.RatingDao;
@@ -65,7 +68,7 @@ public class RatingDaoImpl extends JpaDaoSupport implements RatingDao {
 			getJpaTemplate().flush();
 
 			if (logger.isDebugEnabled()) {
-				logger.debug("score saved");
+				logger.debug("score saved " + rating.getTransactionId());
 			}
 		} catch (Exception e) {
 			logger.error("addRating: " + e.getMessage());
@@ -86,7 +89,7 @@ public class RatingDaoImpl extends JpaDaoSupport implements RatingDao {
 			getJpaTemplate().flush();
 
 			if (logger.isDebugEnabled()) {
-				logger.debug("score saved");
+				logger.debug("score saved " + rating.getTransactionId());
 			}
 		} catch (Exception e) {
 			logger.error("updateRating: " + e.getMessage());
@@ -167,6 +170,78 @@ public class RatingDaoImpl extends JpaDaoSupport implements RatingDao {
 			logger.error("deleteRating: " + e.getMessage());
 		}
 
+	}
+
+	public Rating getRating(String ratingId) {
+
+		Rating rating = null;
+
+		try {
+
+			rating = (Rating) getJpaTemplate().getReference(Rating.class,
+					ratingId);
+			getJpaTemplate().flush();
+
+		} catch (EntityNotFoundException enf) {
+
+			logger.warn("getRating: " + enf.getMessage());
+
+		} catch (DataAccessException e) {
+
+			logger.error("getRating: " + e.getMessage());
+		}
+
+		if (logger.isDebugEnabled()) {
+
+			if (rating != null) {
+
+				logger.debug("getRating: found rating: " + ratingId);
+
+			} else {
+				logger.debug("getRating: rating " + ratingId + " not found");
+			}
+		}
+		return rating;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Rating> getRatingByConsumerId(String consumerId) {
+		
+		List<Rating> serviceRatings = new ArrayList<Rating>();
+
+		List<Object> results = null;
+		try {
+			// 
+			results = (ArrayList<Object>) getJpaTemplate().find(
+					"from Rating s where s.consumerId = ?", consumerId);
+			getJpaTemplate().flush();
+			
+		} catch (Exception e) {
+			logger.warn("loadRatings: " + e.getMessage());
+		}
+
+		if (results != null) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("results  " + results.size());
+			}
+
+			for (Object result : results) {
+
+				Rating rating = (Rating) result;
+				serviceRatings.add(rating);
+			}
+		} else {
+			logger.warn("query returned null");
+		}
+
+		if (serviceRatings != null) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("loaded scores " + serviceRatings.size());
+				logger.debug("found scores");
+			}
+		}
+
+		return serviceRatings;
 	}
 
 }

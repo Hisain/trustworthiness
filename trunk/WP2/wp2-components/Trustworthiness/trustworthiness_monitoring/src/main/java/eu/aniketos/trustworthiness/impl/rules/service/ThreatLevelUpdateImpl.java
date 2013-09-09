@@ -34,6 +34,7 @@ import java.util.HashMap;
 //import java.util.Iterator;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -49,10 +50,10 @@ import org.apache.log4j.Logger;
 import eu.aniketos.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.trustworthiness.ext.rules.model.event.TrustEvent;
 import eu.aniketos.trustworthiness.impl.rules.model.event.RuleAlertEventImpl;
-import eu.aniketos.trustworthiness.impl.rules.model.event.RuleMetricEventImpl;
 import eu.aniketos.trustworthiness.impl.trust.pojo.Atomic;
 import eu.aniketos.trustworthiness.impl.trust.pojo.ThreatLevel;
-import eu.aniketos.trustworthiness.rules.service.MetricRatingUpdate;
+import eu.aniketos.trustworthiness.rules.model.event.AlertEvent;
+import eu.aniketos.trustworthiness.rules.service.AlertRatingUpdate;
 import eu.aniketos.trustworthiness.rules.service.RuleExecuter;
 import eu.aniketos.trustworthiness.trust.management.TrustFactory;
 import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
@@ -62,7 +63,7 @@ import eu.aniketos.trustworthiness.trust.service.ThreatEntityService;
  * @author Hisain Elshaafi (TSSG)
  * 
  */
-public class ThreatLevelUpdateImpl implements MetricRatingUpdate {
+public class ThreatLevelUpdateImpl implements AlertRatingUpdate {
 
 	private static Logger logger = Logger
 			.getLogger(ThreatLevelUpdateImpl.class);
@@ -237,23 +238,6 @@ public class ThreatLevelUpdateImpl implements MetricRatingUpdate {
 			serviceEntityService.addAtomic(service);
 		}
 
-		if (!event.containsKey("property")
-				|| (event.containsKey("subproperty") && event
-						.get("subproperty") == null)
-				|| !event.containsKey("type") || event.get("property") == null
-				|| event.get("type") == null) {
-
-			logger.warn("metric did not contain required event elements.");
-			logger.warn("message will be ignored.");
-			throw new Exception(
-					"metric did not contain required event elements. message will be ignored.");
-
-		}
-
-		/*
-		 * TODO: organise with type of metric, content, names, etc
-		 */
-
 		String property = event.get("property");
 		String propertySub = property;
 		String subproperty = null;
@@ -269,13 +253,7 @@ public class ThreatLevelUpdateImpl implements MetricRatingUpdate {
 			logger.debug(propertySub);
 		}
 
-		String metricValue = event.get("value");
-
-		if (metricValue == null) {
-			throw new Exception(
-					"metric did not contain required event elements. message will be ignored.");
-		}
-
+		String alertValue = event.get("value");
 		String contractValue = properties.get(propertySub + ".value");
 		String type = properties.get(propertySub + ".type");
 		String limit = properties.get(propertySub + ".limit");
@@ -320,21 +298,8 @@ public class ThreatLevelUpdateImpl implements MetricRatingUpdate {
 			return;
 		}
 
-		TrustEvent ruleEvent = null;
-
-		if (event.get("type").equalsIgnoreCase("metric")) {
-
-			ruleEvent = new RuleMetricEventImpl(serviceId, property,
-					subproperty, contractValue, type, limit, metricValue,
-					timestamp);
-
-		} else if (event.get("type").equalsIgnoreCase("alert")) {
-
-			ruleEvent = new RuleAlertEventImpl(serviceId, property,
-					subproperty, contractValue, type, limit, String.valueOf(1),
-					timestamp);
-
-		}
+		TrustEvent ruleEvent = new RuleAlertEventImpl(serviceId, property,
+				subproperty, contractValue, type, limit, alertValue, timestamp);
 
 		String eventDescription = null;
 		if (event.containsKey("eventDescription")) {
@@ -354,7 +319,7 @@ public class ThreatLevelUpdateImpl implements MetricRatingUpdate {
 
 	}
 
-	public void generateRating(TrustEvent event) throws Exception {
+	public void generateRating(AlertEvent event) throws Exception {
 
 		String serviceId = event.getServiceId();
 		Atomic service = null;
@@ -364,10 +329,6 @@ public class ThreatLevelUpdateImpl implements MetricRatingUpdate {
 
 			serviceEntityService.addAtomic(service);
 		}
-
-		/*
-		 * TODO: organise with type of metric, content, names, etc
-		 */
 
 		String property = event.getProperty();
 		String propertySub = property;
@@ -382,6 +343,10 @@ public class ThreatLevelUpdateImpl implements MetricRatingUpdate {
 		if (logger.isDebugEnabled()) {
 			logger.debug(propertySub);
 		}
+
+		// TODO
+		String importance = event.getImportance();
+		String eventId = event.getEventId();
 
 		String eventTimestamp = event.getTimestamp();
 		String timestamp = null;
@@ -411,8 +376,6 @@ public class ThreatLevelUpdateImpl implements MetricRatingUpdate {
 			timestamp = Long.toString(System.currentTimeMillis() / 3600000);
 		}
 
-		// TODO: should do some checking of validity of fields
-
 		String contractValue = properties.get(propertySub + ".value");
 		String type = properties.get(propertySub + ".type");
 		String limit = properties.get(propertySub + ".limit");
@@ -426,14 +389,14 @@ public class ThreatLevelUpdateImpl implements MetricRatingUpdate {
 		// if property is missing quit
 		if (contractValue == null || type == null || limit == null) {
 			logger.warn("property " + property
-					+ " for the metric is missing in configuration.");
+					+ " for the alert is missing in configuration.");
 			return;
 		}
 
-		String metricValue = event.getValue();
+		String alertValue = event.getValue();
 
-		RuleMetricEventImpl ruleEvent = new RuleMetricEventImpl(serviceId,
-				property, subproperty, contractValue, type, limit, metricValue,
+		RuleAlertEventImpl ruleEvent = new RuleAlertEventImpl(serviceId,
+				property, subproperty, contractValue, type, limit, alertValue,
 				timestamp);
 
 		String eventDescription = event.getEventDescription();
@@ -480,16 +443,19 @@ public class ThreatLevelUpdateImpl implements MetricRatingUpdate {
 		logger.debug("now firing rules for score update");
 
 		// TODO: update the rules with threat rules
-		/*
-		 * Collection<?> results = ruleExecuter.execute(facts, ruleEvent
-		 * .getThreatName().toLowerCase(), "Score", "score"); Iterator<?>
-		 * scoreIterator = results.iterator();
-		 * 
-		 * if (scoreIterator.hasNext()) { scoreMap = (Map) scoreIterator.next();
-		 * 
-		 * logger.debug(scoreMap.entrySet()); } else {
-		 * logger.warn("no score retrieved from rule"); }
-		 */
+
+		Collection<?> results = ruleExecuter.execute(facts,
+				ruleEvent.getProperty(), "Score", "score");
+		Iterator<?> scoreIterator = results.iterator();
+
+		if (scoreIterator.hasNext()) {
+			scoreMap = (Map) scoreIterator.next();
+
+			logger.debug(scoreMap.entrySet());
+			
+		} else {
+			logger.warn("no score retrieved from rule");
+		}
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("size of retrieved score map " + scoreMap.size());
@@ -630,4 +596,5 @@ public class ThreatLevelUpdateImpl implements MetricRatingUpdate {
 	public void setEventAdmin(EventAdmin eventAdmin) {
 		this.eventAdmin = eventAdmin;
 	}
+
 }

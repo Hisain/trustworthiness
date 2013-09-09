@@ -65,5 +65,11 @@ public interface QoSMetricDao {
 	 *            deletes a score from database
 	 */
 	public abstract void deleteMetric(QoSMetric qosMetric);
+			
+	/**
+	 * @param metricId
+	 * @return
+	 */
+	public abstract QoSMetric getMetric(String metricId);
 
 }

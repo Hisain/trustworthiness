@@ -59,6 +59,7 @@ public class TrustworthinessPredictionServiceImpl implements
 	public Trustworthiness getTrustworthiness(String serviceId) {
 
 		if (serviceId == null) {
+			
 			logger.warn("received serviceId is null");
 			throw new RuntimeException("received serviceId is null");
 

@@ -35,7 +35,7 @@
 		<constructor-arg>
 			<ref bean="serviceManagement" />
 		</constructor-arg>
-	</bean>
+	</bean>-->
 	
 	<bean id="repMockTest"
 		class="eu.aniketos.trustworthiness.runtime.test.monitoring.ReputationRatingsTest"
@@ -43,7 +43,7 @@
 		<constructor-arg>
 			<ref bean="reputationMetric" />
 		</constructor-arg>
-	</bean>-->
+	</bean>
 	<!--
 	<bean id="securityMockTest"
 		class="eu.aniketos.trustworthiness.runtime.test.monitoring.SecurityPropertiesTest"
@@ -61,9 +61,9 @@
 			<ref bean="qosMetric" />
 		</constructor-arg>
 	</bean>
-	
+	-->
 	 
-	<bean id="twRequestMockTest"
+	<!-- <bean id="twRequestMockTest"
 		class="eu.aniketos.trustworthiness.runtime.test.prediction.management.TrustworthinessRequestTest"
 		init-method="requestTrustworthiness">
 		<constructor-arg>
@@ -72,7 +72,7 @@
 		<constructor-arg>
 			<ref bean="compositeTrustworthinessPredictionService" />
 		</constructor-arg>
-	</bean>  -->
+	</bean> -->  
 	<!--
 	<bean name="ratingAlertTest"
 		class="eu.aniketos.trustworthiness.runtime.test.monitoring.ReputationRatingAlertTest"
@@ -83,16 +83,63 @@
 		<property name="eventAdmin" ref="eventAdminService"/>
 	</bean>-->
 	
-	<bean id="AlertTriggerTest"
+	<!-- <bean id="alertService"
+		class="eu.aniketos.trustworthiness.runtime.test.monitoring.notification.NotificationServiceImpl"
+		init-method="startSession">
+		
+	</bean> -->
+	
+	
+	
+	<!-- <bean id="threatRatingsTest"
+		class="eu.aniketos.trustworthiness.runtime.test.monitoring.ThreatRatingsTest"
+		init-method="initialize">
+		<constructor-arg>
+			<ref bean="alertService" />
+		</constructor-arg>
+	</bean>  -->
+	<!--
+	<bean id="alertTriggerTest"
 		class="eu.aniketos.trustworthiness.runtime.test.prediction.alerts.AlertTrigger"
 		init-method="initialize">
 		<constructor-arg>
 			<ref bean="securityMetric" />
 		</constructor-arg>
-	</bean> 
+	</bean>  -->
+	
+	<!-- <bean id="twPerformanceTest"
+		class="eu.aniketos.trustworthiness.runtime.test.prediction.management.TrustworthinessPerformanceTest"
+		init-method="requestTrustworthiness">
+		<constructor-arg>
+			<ref bean="trustworthinessPredictionService" />
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="compositeTrustworthinessPredictionService" />
+		</constructor-arg>
+	</bean> -->
+	
+	<!-- <bean id="twScalabilityTest"
+		class="eu.aniketos.trustworthiness.runtime.test.prediction.management.TrustworthinessScalabilityTest"
+		init-method="requestTrustworthiness">
+		<constructor-arg>
+			<ref bean="trustworthinessPredictionService" />
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="compositeTrustworthinessPredictionService" />
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="qosMetric" />
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="reputationMetric" />
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="securityMetric" />
+		</constructor-arg>
+	</bean> -->
 	
 	<bean id="alertEventHandler"
-		class="eu.aniketos.trustworthiness.runtime.test.prediction.alerts.NotificationTest">
+		class="eu.aniketos.trustworthiness.runtime.test.prediction.alerts.AlertTest">
 	</bean>
 
 </beans>

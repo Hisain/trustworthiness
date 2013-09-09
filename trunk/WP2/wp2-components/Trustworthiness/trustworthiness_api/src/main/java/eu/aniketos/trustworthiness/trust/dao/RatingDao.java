@@ -65,5 +65,17 @@ public interface RatingDao {
 	 *            deletes a score from database
 	 */
 	public abstract void deleteRating(Rating rating);
+	
+	/**
+	 * @param ratingId
+	 * @return
+	 */
+	public abstract Rating getRating(String ratingId);
+	
+	/**
+	 * @param consumerId
+	 * @return
+	 */
+	public abstract List<Rating> getRatingByConsumerId(String consumerId);
 
 }

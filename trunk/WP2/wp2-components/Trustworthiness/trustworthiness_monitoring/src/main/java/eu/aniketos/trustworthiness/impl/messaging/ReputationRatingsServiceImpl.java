@@ -30,7 +30,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import eu.aniketos.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.trustworthiness.ext.messaging.IReputationRatingsService;
 import eu.aniketos.trustworthiness.ext.rules.model.event.ConsumerRatingEvent;
 import eu.aniketos.trustworthiness.impl.messaging.util.PropertyValidator;
@@ -44,13 +43,13 @@ import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
 public class ReputationRatingsServiceImpl implements IReputationRatingsService {
 
 	private static Logger logger = Logger
-			.getLogger(IReputationRatingsService.class);
-
-	private ConfigurationManagement config;
+			.getLogger(ReputationRatingsServiceImpl.class);
 
 	private ReputationRatingUpdate ratingUpdate;
 
 	private ServiceEntityService serviceEntityService;
+	
+	private PropertyValidator validator;
 
 	/*
 	 * (non-Javadoc)
@@ -60,6 +59,7 @@ public class ReputationRatingsServiceImpl implements IReputationRatingsService {
 	 */
 	public void receiveRatings(Map<String, String> rating) {
 
+		logger.debug("received new rating ");
 		if (rating == null
 				|| rating.size() == 0
 				|| !rating.containsKey("serviceId")
@@ -68,6 +68,7 @@ public class ReputationRatingsServiceImpl implements IReputationRatingsService {
 				|| !rating.containsKey("consumerId")
 				|| rating.get("consumerId") == null
 				|| rating.get("consumerId") == ""
+				|| !validator.isValidConsumer(rating.get("consumerId"))
 				|| !rating.containsKey("transactionId")
 				|| rating.get("transactionId") == null
 				|| rating.get("transactionId") == ""
@@ -77,13 +78,12 @@ public class ReputationRatingsServiceImpl implements IReputationRatingsService {
 				|| !rating.containsKey("value")
 				|| rating.get("value") == null
 				|| rating.get("value") == ""
-				|| !PropertyValidator.isNumeric(rating.get("value"))
+				|| !validator.isNumeric(rating.get("value"))
 				|| (rating.containsKey("subproperty") && (rating
 						.get("subproperty") == null || rating
 						.get("subproperty") == ""))) {
 			logger.warn("received consumer rating contains null, empty or invalid data");
-			throw new RuntimeException(
-					"received consumer rating contains null, empty or invalid data");
+			
 
 		} else {
 
@@ -97,6 +97,7 @@ public class ReputationRatingsServiceImpl implements IReputationRatingsService {
 
 	public void processReputationRating(ConsumerRatingEvent event) {
 
+		logger.debug("received new rating " + event.getTransactionId());
 		if (event == null || event.getServiceId() == null
 				|| event.getConsumerId() == null
 				|| event.getTransactionId() == null
@@ -106,11 +107,11 @@ public class ReputationRatingsServiceImpl implements IReputationRatingsService {
 				|| event.getTransactionId().isEmpty()
 				|| !event.getProperty().equalsIgnoreCase("reputation")
 				|| event.getProperty().isEmpty() || event.getValue().isEmpty()
-				|| !PropertyValidator.isNumeric(event.getValue())) {
+				|| !validator.isValidConsumer(event.getConsumerId())
+				|| !validator.isNumeric(event.getValue())) {
 
 			logger.warn("received consumer rating contains null, empty or invalid data");
-			throw new RuntimeException(
-					"received consumer rating contains null, empty or invalid data");
+		
 
 		} else {
 
@@ -123,24 +124,7 @@ public class ReputationRatingsServiceImpl implements IReputationRatingsService {
 
 	}
 
-	/**
-	 * required for Spring dependency injection
-	 * 
-	 * @param config
-	 *            set configuration field
-	 */
-	public void setConfig(ConfigurationManagement config) {
-		this.config = config;
-	}
-
-	/**
-	 * required for Spring dependency injection
-	 * 
-	 * @return configuration field
-	 */
-	public ConfigurationManagement getConfig() {
-		return config;
-	}
+	
 
 	/**
 	 * required for Spring dependency injection
@@ -178,6 +162,20 @@ public class ReputationRatingsServiceImpl implements IReputationRatingsService {
 	 */
 	public void setRatingUpdate(ReputationRatingUpdate ratingUpdate) {
 		this.ratingUpdate = ratingUpdate;
+	}
+
+	/**
+	 * required for Spring dependency injection
+	 */
+	public PropertyValidator getValidator() {
+		return validator;
+	}
+
+	/**
+	 * required for Spring dependency injection
+	 */
+	public void setValidator(PropertyValidator validator) {
+		this.validator = validator;
 	}
 
 }

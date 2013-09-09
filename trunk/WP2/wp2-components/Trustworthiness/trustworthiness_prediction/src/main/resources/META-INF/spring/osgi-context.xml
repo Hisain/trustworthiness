@@ -56,7 +56,7 @@
 	<osgi:service ref="status"
 		interface="eu.aniketos.trustworthiness.messaging.service.StatusService" />
 
-	<osgi:service ref="trustFactory"
+	<osgi:reference id="trustFactory"
 		interface="eu.aniketos.trustworthiness.trust.management.TrustFactory" />
 
 	<osgi:service ref="trustworthinessPredictionService"

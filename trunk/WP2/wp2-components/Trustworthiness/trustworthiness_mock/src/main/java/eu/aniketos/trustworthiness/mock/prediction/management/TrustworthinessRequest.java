@@ -114,9 +114,13 @@ public class TrustworthinessRequest {
 				.getCompositeTrustworthiness(plan);
 
 		if (logger.isDebugEnabled()) {
+			if (trustworthiness==null){
+				logger.debug("received trustworthiness null");
+			} else {
 			logger.debug("received trustworthiness for composite service "
 					+ trustworthiness.getServiceId() + " = "
 					+ trustworthiness.getTrustworthinessScore());
+			}
 		}
 
 		// ////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -149,9 +153,13 @@ public class TrustworthinessRequest {
 				.getCompositeTrustworthiness(plan1);
 
 		if (logger.isDebugEnabled()) {
+			if (trustworthiness2==null){
+				logger.debug("received trustworthiness null");
+			} else {
 			logger.debug("received trustworthiness for composite service "
 					+ trustworthiness2.getServiceId() + " = "
 					+ trustworthiness2.getTrustworthinessScore());
+			}
 		}
 	}
 }

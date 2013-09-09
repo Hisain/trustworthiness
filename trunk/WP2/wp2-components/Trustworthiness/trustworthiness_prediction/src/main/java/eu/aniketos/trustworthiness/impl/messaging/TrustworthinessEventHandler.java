@@ -30,6 +30,8 @@ import org.apache.log4j.Logger;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
+import eu.aniketos.trustworthiness.impl.trust.management.atomic.ServiceTrustUpdateMovingAvgImpl;
+import eu.aniketos.trustworthiness.impl.trust.management.atomic.ServiceTrustUpdateRecursiveImpl;
 import eu.aniketos.trustworthiness.trust.management.atomic.ServiceTrustUpdatePolicy;
 
 /**
@@ -82,6 +84,7 @@ public class TrustworthinessEventHandler implements EventHandler {
 		if (!topicName.endsWith("alert")) {
 
 			String serviceId = (String) event.getProperty("service.id");
+			String eventType = (String) event.getProperty("event.type");
 			String scoreId = (String) event.getProperty("score.id");
 
 			if (logger.isDebugEnabled()) {
@@ -91,10 +94,12 @@ public class TrustworthinessEventHandler implements EventHandler {
 
 			try {
 
-				trustUpdate.updateTrust(serviceId);
+				
+				trustUpdate.calculateTrust(serviceId, eventType, scoreId);
+				
 
 			} catch (Exception e) {
-				logger.error(e.getMessage());
+				logger.error("Exception in handleEvent()" + e.getMessage());
 			}
 		}
 	}

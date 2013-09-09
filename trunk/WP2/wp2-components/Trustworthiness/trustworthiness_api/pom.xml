@@ -42,7 +42,7 @@
 
 	<properties>
 		<bundle.require.bundle>
-			trustworthiness-ext-api,trustworthiness-domain;bundle-version="1.0.0",org.apache.felix.eventadmin;bundle-version="${felix.eventadmin.version}"
+			trustworthiness-ext-api,trustworthiness-domain;bundle-version="1.0.0",aniketos-notification-interface,org.apache.felix.eventadmin;bundle-version="${felix.eventadmin.version}"
 		</bundle.require.bundle>
 		<bundle.import.package>
 			org.osgi.framework;version="1.3.0",*
@@ -89,6 +89,12 @@
 			<groupId>org.apache.felix</groupId>
 			<artifactId>org.apache.felix.eventadmin</artifactId>
 			<version>${felix.eventadmin.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>eu.aniketos.notification</groupId>
+			<artifactId>aniketos-notification-interface</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<type>bundle</type>
 		</dependency>
 	</dependencies>
 

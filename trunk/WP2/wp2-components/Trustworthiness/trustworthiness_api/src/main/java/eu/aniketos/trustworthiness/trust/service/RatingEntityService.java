@@ -62,5 +62,17 @@ public interface RatingEntityService {
 	 *            Rating object to delete
 	 */
 	public abstract void deleteRating(Rating rating);
+	
+	/**
+	 * @param ratingId
+	 * @return
+	 */
+	public abstract Rating getRating(String ratingId);
+
+	/**
+	 * @param consumerId
+	 * @return
+	 */
+	public abstract List<Rating> getRatingByConsumerId(String consumerId);
 
 }

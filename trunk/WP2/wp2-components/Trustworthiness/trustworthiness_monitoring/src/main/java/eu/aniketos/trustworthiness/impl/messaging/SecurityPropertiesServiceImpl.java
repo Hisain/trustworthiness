@@ -30,8 +30,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-//import eu.aniketos.data.ISecurityProperty;
-import eu.aniketos.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.trustworthiness.ext.messaging.ISecurityPropertiesService;
 import eu.aniketos.trustworthiness.impl.messaging.util.PropertyValidator;
 import eu.aniketos.trustworthiness.rules.service.MetricRatingUpdate;
@@ -45,13 +43,13 @@ public class SecurityPropertiesServiceImpl implements
 		ISecurityPropertiesService {
 
 	private static Logger logger = Logger
-			.getLogger(ISecurityPropertiesService.class);
-
-	private ConfigurationManagement config;
+			.getLogger(SecurityPropertiesServiceImpl.class);
 
 	private MetricRatingUpdate secPropertyUpdate;
 
 	private ServiceEntityService serviceEntityService;
+	
+	private PropertyValidator validator;
 
 	/*
 	 * (non-Javadoc)
@@ -71,7 +69,7 @@ public class SecurityPropertiesServiceImpl implements
 				|| metric.get("property") == ""
 				|| metric.get("value") == null
 				|| metric.get("value") == ""
-				|| !PropertyValidator.isNumeric(metric.get("value"))
+				|| !validator.isNumeric(metric.get("value"))
 				|| (metric.containsKey("subproperty") && (metric
 						.get("subproperty") == null || metric
 						.get("subproperty") == ""))) {
@@ -87,32 +85,6 @@ public class SecurityPropertiesServiceImpl implements
 				logger.error("Exception: " + e.getMessage());
 			}
 		}
-	}
-
-	/*
-	 * public void receiveProperty(String serviceId, ISecurityProperty property,
-	 * String state) { // TODO Auto-generated method stub
-	 * 
-	 * }
-	 */
-
-	/**
-	 * required for Spring dependency injection
-	 * 
-	 * @param config
-	 *            set configuration field
-	 */
-	public void setConfig(ConfigurationManagement config) {
-		this.config = config;
-	}
-
-	/**
-	 * required for Spring dependency injection
-	 * 
-	 * @return configuration field
-	 */
-	public ConfigurationManagement getConfig() {
-		return config;
 	}
 
 	/**
@@ -153,4 +125,17 @@ public class SecurityPropertiesServiceImpl implements
 		this.secPropertyUpdate = secPropertyUpdate;
 	}
 
+	/**
+	 * required for Spring dependency injection
+	 */
+	public PropertyValidator getValidator() {
+		return validator;
+	}
+
+	/**
+	 * required for Spring dependency injection
+	 */
+	public void setValidator(PropertyValidator validator) {
+		this.validator = validator;
+	}
 }

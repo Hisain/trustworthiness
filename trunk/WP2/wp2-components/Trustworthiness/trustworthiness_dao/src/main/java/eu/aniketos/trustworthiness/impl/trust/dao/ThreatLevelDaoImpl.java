@@ -151,7 +151,7 @@ public class ThreatLevelDaoImpl extends JpaDaoSupport implements ThreatLevelDao 
 		try {
 			// TODO: needs checking
 			results = (ArrayList<Object>) getJpaTemplate()
-					.find("from ThreatLevel s where s.service = ? and s.property = ?",
+					.find("from ThreatLevel s where s.service = ? and s.threatName = ?",
 							serviceId, threatLevel);
 			getJpaTemplate().flush();
 			// em.createQuery("s from ThreatLevel s, Agent a where s.agent = a and a.name='"+agentName+"'")

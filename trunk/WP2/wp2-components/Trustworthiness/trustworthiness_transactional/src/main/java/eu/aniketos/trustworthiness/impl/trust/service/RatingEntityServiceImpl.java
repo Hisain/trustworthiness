@@ -54,6 +54,7 @@ public class RatingEntityServiceImpl implements RatingEntityService {
 	 * (eu.aniketos.trustworthiness.impl.trust.pojo.Rating)
 	 */
 	public void addRating(Rating rating) {
+		
 		ratingDao.addRating(rating);
 
 	}
@@ -66,6 +67,7 @@ public class RatingEntityServiceImpl implements RatingEntityService {
 	 * (eu.aniketos.trustworthiness.impl.trust.pojo.Rating)
 	 */
 	public void updateRating(Rating rating) {
+		
 		ratingDao.updateRating(rating);
 
 	}
@@ -78,6 +80,7 @@ public class RatingEntityServiceImpl implements RatingEntityService {
 	 */
 	@Transactional(readOnly = true)
 	public List<Rating> getRatingsByServiceId(String source) {
+		
 		return ratingDao.getRatingsByServiceId(source);
 	}
 
@@ -89,14 +92,26 @@ public class RatingEntityServiceImpl implements RatingEntityService {
 	 * (eu.aniketos.trustworthiness.impl.trust.pojo.Rating)
 	 */
 	public void deleteRating(Rating rating) {
+		
 		ratingDao.deleteRating(rating);
 
 	}
+	
+	public Rating getRating(String ratingId) {
+		
+		return ratingDao.getRating(ratingId);
+	}
 
+	public List<Rating> getRatingByConsumerId(String consumerId) {
+		
+		return ratingDao.getRatingByConsumerId(consumerId);
+	}
+	
 	/**
 	 * @return rating DAO object
 	 */
 	public RatingDao getRatingDao() {
+		
 		return ratingDao;
 	}
 
@@ -105,7 +120,12 @@ public class RatingEntityServiceImpl implements RatingEntityService {
 	 *            rating DAO object
 	 */
 	public void setRatingDao(RatingDao ratingDao) {
+		
 		this.ratingDao = ratingDao;
 	}
+
+	
+
+	
 
 }

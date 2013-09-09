@@ -45,8 +45,8 @@ public class NotificationServiceImpl implements INotification {
 
 	public void alert(Notification alert) {
 
-		if (alert == null || alert.getService() == null
-				|| alert.getService().length() == 0
+		if (alert == null || alert.getServiceId() == null
+				|| alert.getServiceId().length() == 0
 				|| alert.getAlertType() == null
 				|| alert.getAlertType().length() == 0) {
 
@@ -56,7 +56,7 @@ public class NotificationServiceImpl implements INotification {
 					"received alert contains null or empty data");
 		}
 
-		String serviceId = alert.getService();
+		String serviceId = alert.getServiceId();
 
 		if ((serviceEntityService.getAtomic(serviceId)) == null) {
 			logger.warn("The service in notification is not registered.");
