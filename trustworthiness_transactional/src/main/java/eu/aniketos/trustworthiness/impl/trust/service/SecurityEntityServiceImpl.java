@@ -94,6 +94,11 @@ public class SecurityEntityServiceImpl implements SecurityEntityService {
 		secPropertyDao.deleteSecProperty(secProperty);
 
 	}
+	
+	public SecProperty getSecProperty(String secPropertyId) {
+
+		return secPropertyDao.getSecProperty(secPropertyId);
+	}
 
 	/**
 	 * @return score DAO object
@@ -109,5 +114,7 @@ public class SecurityEntityServiceImpl implements SecurityEntityService {
 	public void setSecPropertyDao(SecPropertyDao secPropertyDao) {
 		this.secPropertyDao = secPropertyDao;
 	}
+
+	
 
 }

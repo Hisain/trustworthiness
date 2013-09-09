@@ -477,6 +477,7 @@ public class QosRatingUpdateImpl implements MetricRatingUpdate {
 			Dictionary props = new Properties();
 			props.put("service.id", serviceId);
 			props.put("score.id", metricRating.getId());
+			props.put("event.type", "qos");
 
 			Event osgiEvent = new Event(
 					"eu/aniketos/trustworthiness/monitoring/qos", props);

@@ -29,11 +29,15 @@ package eu.aniketos.trustworthiness.impl.trust.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.orm.jpa.support.JpaDaoSupport;
 
 import eu.aniketos.trustworthiness.trust.dao.QoSMetricDao;
 import eu.aniketos.trustworthiness.impl.trust.pojo.QoSMetric;
+import eu.aniketos.trustworthiness.impl.trust.pojo.Rating;
 
 /**
  * Data Access Object for source scores
@@ -163,6 +167,38 @@ public class QoSMetricDaoImpl extends JpaDaoSupport implements QoSMetricDao {
 			logger.error("deleteRating: " + e.getMessage());
 		}
 
+	}
+
+	public QoSMetric getMetric(String metricId) {
+
+		QoSMetric metric = null;
+
+		try {
+
+			metric = (QoSMetric) getJpaTemplate().getReference(QoSMetric.class,
+					metricId);
+			getJpaTemplate().flush();
+
+		} catch (EntityNotFoundException enf) {
+
+			logger.warn("getMetric: " + enf.getMessage());
+
+		} catch (DataAccessException e) {
+
+			logger.error("getMetric: " + e.getMessage());
+		}
+
+		if (logger.isDebugEnabled()) {
+
+			if (metric != null) {
+
+				logger.debug("getMetric: found rating: " + metricId);
+
+			} else {
+				logger.debug("getMetric: rating " + metricId + " not found");
+			}
+		}
+		return metric;
 	}
 
 }

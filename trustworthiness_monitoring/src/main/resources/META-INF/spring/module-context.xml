@@ -37,21 +37,21 @@
 
 	<bean name="reputationMetric"
 		class="eu.aniketos.trustworthiness.impl.messaging.ReputationRatingsServiceImpl">
-		<property name="config" ref="configService"></property>
+		<property name="validator" ref="propertyValidator"></property>
 		<property name="ratingUpdate" ref="ratingUpdate"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 	</bean>
 
 	<bean name="qosMetric"
 		class="eu.aniketos.trustworthiness.impl.messaging.QoSMetricsServiceImpl">
-		<property name="config" ref="configService"></property>
+		<property name="validator" ref="propertyValidator"></property>
 		<property name="qosUpdate" ref="qosUpdate"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 	</bean>
 
 	<bean name="securityMetric"
 		class="eu.aniketos.trustworthiness.impl.messaging.SecurityPropertiesServiceImpl">
-		<property name="config" ref="configService"></property>
+		<property name="validator" ref="propertyValidator"></property>
 		<property name="secPropertyUpdate" ref="secPropertyUpdate"></property>
 		<property name="serviceEntityService" ref="serviceEntityService"></property>
 	</bean>
@@ -117,6 +117,17 @@
 		<property name="ruleExecuter" ref="ruleExecutor"></property>
 		<property name="eventAdmin" ref="eventAdminService" />
 	</bean>
+	
+	<bean name="threatUpdate"
+		class="eu.aniketos.trustworthiness.impl.rules.service.ThreatLevelUpdateImpl"
+		init-method="initialize">
+		<property name="config" ref="configService"></property>
+		<property name="serviceEntityService" ref="serviceEntityService"></property>
+		<property name="threatEntityService" ref="threatEntityService"></property>
+		<property name="trustFactory" ref="trustFactory"></property>
+		<property name="ruleExecuter" ref="ruleExecutor"></property>
+		<property name="eventAdmin" ref="eventAdminService" />
+	</bean>
 
 	<!-- <bean name="qosMetricJob" class="org.springframework.scheduling.quartz.JobDetailBean">
 		<property name="jobClass" value="eu.aniketos.trustworthiness.impl.messaging.QoSMetricsScheduler"
@@ -128,7 +139,21 @@
 		</property>
 		</bean> -->
 
+	<bean id="notificationClient"
+		class="eu.aniketos.trustworthiness.impl.messaging.NotificationClient"
+		init-method="initialize">
+		<property name="config" ref="configService"></property>
+		<property name="threatUpdate" ref="threatUpdate"></property>
+	</bean>
+	
+	<bean id="propertyValidator"
+		class="eu.aniketos.trustworthiness.impl.messaging.util.PropertyValidator">
+		<constructor-arg><ref bean="ratingEntityService" /></constructor-arg>
+		<constructor-arg><ref bean="configService" /></constructor-arg>
+	</bean>
+
 	<bean id="dummy"
 		class="eu.aniketos.trustworthiness.impl.messaging.service.StatusServiceImpl"
 		init-method="initialize" />
+
 </beans>

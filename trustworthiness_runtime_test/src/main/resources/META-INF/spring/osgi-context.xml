@@ -39,8 +39,8 @@
 	<osgi:reference id="trustFactory"
 		interface="eu.aniketos.trustworthiness.trust.management.TrustFactory" />
 		
-	<osgi:reference id="trustworthinessPredictionService"
-		interface="eu.aniketos.trustworthiness.ext.messaging.ITrustworthinessPrediction" />
+<!-- 	<osgi:reference id="trustworthinessPredictionService"
+		interface="eu.aniketos.trustworthiness.ext.messaging.ITrustworthinessPrediction" /> -->
 
 	<osgi:reference id="reputationMetric"
 		interface="eu.aniketos.trustworthiness.ext.messaging.IReputationRatingsService" />
@@ -54,9 +54,9 @@
 	<osgi:reference id="serviceManagement"
 		interface="eu.aniketos.trustworthiness.ext.messaging.IServiceManagement" />
 
-	<osgi:reference id="compositeTrustworthinessPredictionService"
+	<!-- <osgi:reference id="compositeTrustworthinessPredictionService"
 		interface="eu.aniketos.trustworthiness.ext.messaging.ICompositeTrustworthinessPrediction" />
-
+ -->
 	<osgi:service ref="alertEventHandler" interface="org.osgi.service.event.EventHandler">
 		<osgi:service-properties>
 			<entry key="event.topics" value="eu/aniketos/trustworthiness/prediction/alert" />

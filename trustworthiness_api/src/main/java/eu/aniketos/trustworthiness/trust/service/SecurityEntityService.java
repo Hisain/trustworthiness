@@ -57,7 +57,18 @@ public interface SecurityEntityService {
 	 */
 	public abstract List<SecProperty> getSecPropertiesByServiceId(
 			final String serviceId);
+	
+	/**
+	 * @param secPropertyId
+	 * @return
+	 */
+	public abstract SecProperty getSecProperty(String secPropertyId);
 
+	/**
+	 * @param serviceId
+	 * @param property
+	 * @return
+	 */
 	public abstract SecProperty getSecProperty(String serviceId, String property);
 
 	/**

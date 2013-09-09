@@ -29,10 +29,14 @@ package eu.aniketos.trustworthiness.impl.trust.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.orm.jpa.support.JpaDaoSupport;
 
 import eu.aniketos.trustworthiness.trust.dao.SecPropertyDao;
+import eu.aniketos.trustworthiness.impl.trust.pojo.QoSMetric;
 import eu.aniketos.trustworthiness.impl.trust.pojo.SecProperty;
 
 /**
@@ -213,6 +217,39 @@ public class SecPropertyDaoImpl extends JpaDaoSupport implements SecPropertyDao 
 			logger.error("deleteSecProperty: " + e.getMessage());
 		}
 
+	}
+
+	public SecProperty getSecProperty(String secPropertyId) {
+		
+		SecProperty serviceSecProperty = null;
+		
+		try {
+
+			serviceSecProperty = (SecProperty) getJpaTemplate().getReference(SecProperty.class,
+					secPropertyId);
+			
+			getJpaTemplate().flush();
+
+		} catch (EntityNotFoundException enf) {
+
+			logger.warn("getSecProperty: " + enf.getMessage());
+
+		} catch (DataAccessException e) {
+
+			logger.error("getSecProperty: " + e.getMessage());
+		}
+
+		if (logger.isDebugEnabled()) {
+
+			if (serviceSecProperty != null) {
+
+				logger.debug("getSecProperty: found rating: " + serviceSecProperty);
+
+			} else {
+				logger.debug("getSecProperty: rating " + serviceSecProperty + " not found");
+			}
+		}
+		return serviceSecProperty;
 	}
 
 }

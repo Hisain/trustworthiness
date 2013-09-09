@@ -37,6 +37,17 @@ import eu.aniketos.trustworthiness.impl.trust.pojo.TrustworthinessEntity;
  */
 public interface ServiceTrustUpdatePolicy {
 
+	
+	/**
+	 * updates scores based on new filter score
+	 * 
+	 * @param score
+	 *            a service rating score
+	 * @throws Exception
+	 */
+	public abstract TrustworthinessEntity calculateTrust(String serviceId, String eventType, String ratingId)
+			throws Exception;
+	
 	/**
 	 * updates scores based on new filter score
 	 * 

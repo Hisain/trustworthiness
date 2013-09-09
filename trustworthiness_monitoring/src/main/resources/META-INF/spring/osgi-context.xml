@@ -46,6 +46,9 @@
 
 	<osgi:reference id="securityEntityService"
 		interface="eu.aniketos.trustworthiness.trust.service.SecurityEntityService" />
+		
+	<osgi:reference id="threatEntityService"
+		interface="eu.aniketos.trustworthiness.trust.service.ThreatEntityService" />
 
 
 

@@ -26,12 +26,11 @@
  */
 package eu.aniketos.trustworthiness.rules.model.event;
 
-import eu.aniketos.trustworthiness.ext.rules.model.event.TrustEvent;
 
 /**
  * @author Hisain Elshaafi (TSSG) interface for trustworthiness rules events
  */
-public interface RuleAlertEvent extends TrustEvent {
+public interface RuleAlertEvent extends AlertEvent {
 
 	/**
 	 * @return

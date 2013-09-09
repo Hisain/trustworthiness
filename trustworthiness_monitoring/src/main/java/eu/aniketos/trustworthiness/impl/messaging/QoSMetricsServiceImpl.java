@@ -30,7 +30,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import eu.aniketos.trustworthiness.configuration.ConfigurationManagement;
 import eu.aniketos.trustworthiness.ext.messaging.IQosMetricsService;
 import eu.aniketos.trustworthiness.ext.rules.model.event.TrustEvent;
 import eu.aniketos.trustworthiness.impl.messaging.util.PropertyValidator;
@@ -43,14 +42,14 @@ import eu.aniketos.trustworthiness.trust.service.ServiceEntityService;
  */
 public class QoSMetricsServiceImpl implements IQosMetricsService {
 
-	private static Logger logger = Logger.getLogger(IQosMetricsService.class);
-
-	private ConfigurationManagement config;
+	private static Logger logger = Logger.getLogger(QoSMetricsServiceImpl.class);
 
 	private MetricRatingUpdate qosUpdate;
 
 	private ServiceEntityService serviceEntityService;
 
+	private PropertyValidator validator;
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -70,7 +69,7 @@ public class QoSMetricsServiceImpl implements IQosMetricsService {
 				|| !metric.containsKey("value")
 				|| metric.get("value") == null
 				|| metric.get("value") == ""
-				|| !PropertyValidator.isNumeric(metric.get("value"))
+				|| !validator.isNumeric(metric.get("value"))
 				|| (metric.containsKey("subproperty") && (metric
 						.get("subproperty") == null || metric
 						.get("subproperty") == ""))) {
@@ -94,7 +93,7 @@ public class QoSMetricsServiceImpl implements IQosMetricsService {
 				|| event.getServiceId().isEmpty()
 				|| event.getProperty() == null || event.getProperty().isEmpty()
 				|| event.getValue() == null || event.getValue().isEmpty()
-				|| !PropertyValidator.isNumeric(event.getValue())) {
+				|| !validator.isNumeric(event.getValue())) {
 
 			logger.warn("received metric contains null, empty or invalid data");
 			throw new RuntimeException(
@@ -110,24 +109,6 @@ public class QoSMetricsServiceImpl implements IQosMetricsService {
 		}
 	}
 
-	/**
-	 * required for Spring dependency injection
-	 * 
-	 * @param config
-	 *            set configuration field
-	 */
-	public void setConfig(ConfigurationManagement config) {
-		this.config = config;
-	}
-
-	/**
-	 * required for Spring dependency injection
-	 * 
-	 * @return configuration field
-	 */
-	public ConfigurationManagement getConfig() {
-		return config;
-	}
 
 	/**
 	 * required for Spring dependency injection
@@ -165,6 +146,20 @@ public class QoSMetricsServiceImpl implements IQosMetricsService {
 	 */
 	public void setQosUpdate(MetricRatingUpdate qosUpdate) {
 		this.qosUpdate = qosUpdate;
+	}
+	
+	/**
+	 * required for Spring dependency injection
+	 */
+	public PropertyValidator getValidator() {
+		return validator;
+	}
+
+	/**
+	 * required for Spring dependency injection
+	 */
+	public void setValidator(PropertyValidator validator) {
+		this.validator = validator;
 	}
 
 }

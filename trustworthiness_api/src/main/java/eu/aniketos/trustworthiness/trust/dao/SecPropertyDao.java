@@ -58,8 +58,19 @@ public interface SecPropertyDao {
 	public abstract List<SecProperty> getSecPropertiesByServiceId(
 			final String serviceId);
 
+	/**
+	 * @param serviceId
+	 * @param secProperty
+	 * @return
+	 */
 	public abstract SecProperty getSecProperty(String serviceId,
 			String secProperty);
+	
+	/**
+	 * @param secPropertyId
+	 * @return
+	 */
+	public abstract SecProperty getSecProperty(String secPropertyId);
 
 	/**
 	 * @param score

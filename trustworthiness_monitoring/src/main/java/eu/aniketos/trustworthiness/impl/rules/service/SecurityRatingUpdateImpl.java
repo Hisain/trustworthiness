@@ -479,7 +479,8 @@ public class SecurityRatingUpdateImpl implements MetricRatingUpdate {
 			Dictionary props = new Properties();
 			props.put("service.id", serviceId);
 			props.put("score.id", sec.getId());
-
+			props.put("event.type", "security");
+			
 			Event osgiEvent = new Event(
 					"eu/aniketos/trustworthiness/monitoring/security", props);
 			eventAdmin.sendEvent(osgiEvent);

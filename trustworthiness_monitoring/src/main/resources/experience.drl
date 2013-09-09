@@ -287,18 +287,18 @@ rule performance
 		
 end
 
-rule sla
+rule ContractViolation
 	no-loop
 	#
 	when
 		#	
-		$sme : RuleMetricEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
+		$sme : RuleAlertEventImpl($serviceId : serviceId, $property : property, $subproperty : subproperty,  $contractValue : contractValue, $type : type, $limit : limit, $value : value, $timestamp : timestamp) 
 		$scoreMap : Map( this["_type_"] == "Score" )
 		
 	then 
 		#
 		modify ($scoreMap) {
-		put ("score", calcQosMetric($value, $contractValue, $type, $limit)), 
+		put ("score", calcAlert($value, $contractValue, $type, $limit)), 
 		put ("recency", $timestamp),
 		put ("property", $property)
 		};

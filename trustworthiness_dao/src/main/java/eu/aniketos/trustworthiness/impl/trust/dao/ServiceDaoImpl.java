@@ -32,6 +32,7 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.orm.jpa.support.JpaDaoSupport;
 
 import eu.aniketos.trustworthiness.trust.dao.ServiceDao;
@@ -144,7 +145,9 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 			results = (ArrayList<Object>) getJpaTemplate().find("from Service");
 			getJpaTemplate().flush();
 
-		} catch (Exception e) {
+		} catch (EntityNotFoundException enf) {
+			logger.warn("getAtomic: " + enf.getMessage());
+		} catch (DataAccessException e) {
 			logger.error(e.getMessage());
 		}
 
@@ -182,17 +185,23 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 			getJpaTemplate().flush();
 
 		} catch (EntityNotFoundException enf) {
+
 			logger.warn("getAtomic: " + enf.getMessage());
-		} catch (Exception e) {
+
+		} catch (DataAccessException e) {
 
 			logger.error("getAtomic: " + e.getMessage());
 		}
-		if (service != null) {
-			if (logger.isDebugEnabled()) {
+
+		if (logger.isDebugEnabled()) {
+
+			if (service != null) {
+
 				logger.debug("getAtomic: found service: " + id);
+
+			} else {
+				logger.debug("getAtomic: service " + id + " not found");
 			}
-		} else {
-			logger.debug("getAtomic: service " + id + " not found");
 		}
 		return service;
 	}
@@ -217,7 +226,7 @@ public class ServiceDaoImpl extends JpaDaoSupport implements ServiceDao {
 		} catch (EntityNotFoundException enf) {
 			logger.warn("getComposite: " + enf.getMessage());
 
-		} catch (Exception e) {
+		} catch (DataAccessException e) {
 			logger.error("getComposite: " + e.getMessage());
 		}
 

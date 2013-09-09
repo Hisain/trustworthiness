@@ -70,6 +70,10 @@ public class QoSMetricEntityServiceImpl implements QoSMetricEntityService {
 		return qosDao;
 	}
 
+	public QoSMetric getMetric(String metricId) {
+		return qosDao.getMetric(metricId);
+	}
+	
 	/**
 	 * @param qosDao
 	 *            metric DAO object
@@ -77,5 +81,6 @@ public class QoSMetricEntityServiceImpl implements QoSMetricEntityService {
 	public void setQosDao(QoSMetricDao qosDao) {
 		this.qosDao = qosDao;
 	}
+
 
 }

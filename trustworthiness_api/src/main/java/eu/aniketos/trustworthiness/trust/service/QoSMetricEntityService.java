@@ -63,4 +63,9 @@ public interface QoSMetricEntityService {
 	 */
 	public abstract void deleteMetric(QoSMetric metric);
 
+	/**
+	 * @param metricId
+	 * @return
+	 */
+	public abstract QoSMetric getMetric(String metricId);
 }

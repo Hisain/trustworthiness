@@ -55,7 +55,11 @@ public class RuleAlertEventImpl implements RuleAlertEvent {
 	private String timestamp;
 
 	private String eventDescription;
+
+	private String eventId;
 	
+	private String importance;
+
 	/**
 	 * @param serviceId
 	 *            atomic or composite serviceId object
@@ -217,6 +221,34 @@ public class RuleAlertEventImpl implements RuleAlertEvent {
 		// 
 		this.eventDescription = eventDescription;
 		
+	}
+	
+	/**
+	 * @return
+	 */
+	public String getEventId() {
+		return eventId;
+	}
+
+	/**
+	 * @param eventId
+	 */
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getImportance() {
+		return importance;
+	}
+
+	/**
+	 * @param importance
+	 */
+	public void setImportance(String importance) {
+		this.importance = importance;
 	}
 
 }

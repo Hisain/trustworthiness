@@ -30,6 +30,7 @@ import javax.persistence.EntityNotFoundException;
 
 import org.apache.log4j.Logger;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.orm.jpa.support.JpaDaoSupport;
 
 import eu.aniketos.trustworthiness.trust.dao.TrustworthinessDao;
@@ -57,7 +58,7 @@ public class TrustworthinessDaoImpl extends JpaDaoSupport implements
 			getJpaTemplate().flush();
 
 			logger.debug("addTrustworthiness: trustworthiness saved");
-		} catch (Exception e) {
+		} catch (DataAccessException e) {
 			logger.error("addTrustworthiness: " + e.getMessage());
 		}
 	}
@@ -69,7 +70,7 @@ public class TrustworthinessDaoImpl extends JpaDaoSupport implements
 			getJpaTemplate().flush();
 
 			logger.debug("updateTrustworthiness: trustworthiness saved");
-		} catch (Exception e) {
+		} catch (DataAccessException e) {
 			logger.error("updateTrustworthiness: " + e.getMessage());
 		}
 	}
@@ -84,19 +85,25 @@ public class TrustworthinessDaoImpl extends JpaDaoSupport implements
 			getJpaTemplate().flush();
 
 		} catch (EntityNotFoundException enf) {
+
 			logger.warn("getTrustworthiness: " + enf.getMessage());
-		} catch (Exception e) {
+
+		} catch (DataAccessException e) {
 
 			logger.error("getTrustworthiness: " + e.getMessage());
 		}
-		if (trustworthinessEntity != null) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("getTrustworthiness: found service: " + id);
-			}
-		} else {
-			logger.debug("getTrustworthiness: service " + id + " not found");
-		}
 
+		if (logger.isDebugEnabled()) {
+
+			if (trustworthinessEntity != null) {
+
+				logger.debug("getTrustworthiness: found service: " + id);
+
+			} else {
+				logger.debug("getTrustworthiness: service " + id + " not found");
+			}
+		}
+		
 		return trustworthinessEntity;
 	}
 
@@ -116,7 +123,7 @@ public class TrustworthinessDaoImpl extends JpaDaoSupport implements
 				logger.debug("deleteTrustworthiness: deleted record for trustworthiness "
 						+ serviceName);
 			}
-		} catch (Exception e) {
+		} catch (DataAccessException e) {
 			logger.error("deleteTrustworthiness: " + e.getMessage());
 		}
 	}
